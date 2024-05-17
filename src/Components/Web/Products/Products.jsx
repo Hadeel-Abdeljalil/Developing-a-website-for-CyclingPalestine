@@ -247,16 +247,10 @@ export default function Products() {
 
         </div>
       </div>
-      <hr />
-
-      <h2 className="text-center py-4 fw-bolder">
-        ما مدى رضاك عن منتجنا؟
-      </h2>
-      <ReviewOrders productId={productId} />
-      <hr />
-
-      <h2 className="text-center py-5 fw-bolder ">ماذا يقول عملاؤنا</h2>
+      <h2 className="text-end me-4 py-5 fw-bolder ">ماذا يقول عملاؤنا</h2>
       <SwiperReviews data={data} />
+      <ReviewOrders productId={productId} />
     </div>
+    
   );
 }
