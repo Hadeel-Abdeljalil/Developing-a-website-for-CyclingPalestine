@@ -1,0 +1,7 @@
+.custom-image {
+  width: 100%; /* Image will take full width of the container */
+  height: 350px !important; /* Maintain aspect ratio */
+}
+
+
+

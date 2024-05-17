@@ -1,0 +1,16 @@
+.active{
+    border-bottom: 3px solid #5F8559 !important; 
+    transition: border-bottom 0.1s ;
+    padding-bottom: 0% !important;
+  }
+  
+.nav{
+    background-color: #9eb39b !important;
+    transition: background-color 0.3s !important;
+}
+.dir{
+  direction: rtl;
+}
+.bg-nav{
+  background-color: white;
+}

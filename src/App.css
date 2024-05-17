@@ -1,0 +1,14 @@
+.message-box {
+    position: absolute;
+    bottom: 60px; 
+    right: 0;
+    background-color: #fff;
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+  }
+  .bg-colorx{
+    background-color: #25d366;
+  }

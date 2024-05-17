@@ -1,0 +1,35 @@
+.shadow-bottom {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* You can adjust the shadow values as needed */
+  }
+.input{
+    direction: rtl;
+    padding: 9px 5px;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    transition: 0.5s;
+    outline: none;
+    font-size: 10pt;
+    font-weight: 100;
+    width: 100%;
+}
+
+
+.input::placeholder {
+    color: #797979 !important; 
+}
+
+.trip-link:focus{
+    color: #5F8559;
+}
+.dir{
+    direction: rtl;
+}
+.dir2{
+    direction: ltr;
+}
+.active{
+    color: #5F8559 !important;
+}
+.border-color{
+    border-color: #5F8559 !important;
+}
