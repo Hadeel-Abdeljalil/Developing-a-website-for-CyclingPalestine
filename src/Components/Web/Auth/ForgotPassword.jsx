@@ -24,7 +24,7 @@ export default function ForgotPassword() {
         theme: "light",
     };
     const onSubmit = async users => {
-        const { data } = await axios.patch(`https://ecommerce-node4-five.vercel.app/auth/forgotPassword`, users);
+        const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}auth/forgotPassword`, users);
         if (data.message == 'success') {
 
             toast.success(`تم تغيير كلمة السر بنجاح`, toastConfig);

@@ -27,7 +27,7 @@ export default function AllProducts() {
   const fetchProducts = async () => {
     try {
       const { data } = await axios.get(
-        `https://ecommerce-node4-five.vercel.app/products?page=${currentPage}&&limit=${limit}&&sort=${sort}
+        `${import.meta.env.VITE_API_URL}products?page=${currentPage}&&limit=${limit}&&sort=${sort}
             &&price[gte]=${gtePrice}&&price[lte]=${ltePrice}${categoryFilter ? `&categoryId=${categoryFilter}` : ''}`);
       //console.log(data);
       setProduct(data);

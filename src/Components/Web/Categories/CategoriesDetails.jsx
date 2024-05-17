@@ -15,7 +15,7 @@ export default function CategoriesDetails() {
 
   const getCategoryDetails = async () => {
     try {
-      const { data } = await axios.get(`https://ecommerce-node4-five.vercel.app/products/category/${categoryId}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}products/category/${categoryId}`);
       return data.products;
     } catch (error) {
       console.error("Error fetching category:", error);

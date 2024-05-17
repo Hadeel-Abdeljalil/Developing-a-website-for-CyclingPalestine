@@ -28,7 +28,6 @@ export default function App() {
 
   return (
     <div>
-      <RouterProvider router={router} />
       <a
         href="https://wa.me/972568642671"
         className="position-fixed bottom-0 end-0 m-5 bg-colorx position-absolute text-white rounded-circle p-3 whatsapp-hover"
@@ -44,6 +43,8 @@ export default function App() {
           </div>
         )}
       </a>
+      <RouterProvider router={router} />
+
     </div>
   );
 }

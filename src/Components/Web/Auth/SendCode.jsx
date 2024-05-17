@@ -15,7 +15,7 @@ export default function SendCode() {
     };
     const navigate = useNavigate();
     const onSubmit = async users => {
-        const { data } = await axios.patch(`https://ecommerce-node4-five.vercel.app/auth/sendcode`, users);
+        const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}auth/sendcode`, users);
         if (data.message == 'success') {
             toast.success(`تم إرسال الكود بنجاح`, {
                 position: "top-right",
