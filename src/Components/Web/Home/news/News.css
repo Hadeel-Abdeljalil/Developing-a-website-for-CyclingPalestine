@@ -1,7 +1,10 @@
 .border-c {
-    border-right: 5px solid #5F8559;
+    width: 75%;
+    height: fit-content !important;
 }
 
-.swiper-slide {
-    text-align: right;
+
+.hi{
+    height: fit-content !important;
+    border-right: 5px solid #5F8559;
 }

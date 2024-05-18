@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Scrollbar } from 'swiper/modules';
 import 'swiper/css';
 import './News.css'
+import './NewsMedia.css'
 
 export default function News() {
   return (
@@ -11,7 +12,7 @@ export default function News() {
       <section className="notice">
         <div className="container d-flex">
 
-          <div className=" w-75 border-c ">
+          <div className="  border-c ">
             <Swiper
               modules={[Scrollbar, Autoplay]}
               spaceBetween={70}
@@ -21,7 +22,7 @@ export default function News() {
             >
               {
                 DataNews.length ? DataNews.map((news, index) => (
-                  <SwiperSlide key={index}>
+                  <SwiperSlide key={index} className='text-end hi '>
                     <div className='me-5'>
                       <p>{news.date}</p>
                       <h1>{news.name}</h1>

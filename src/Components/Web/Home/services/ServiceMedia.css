@@ -1,0 +1,12 @@
+@media screen and (max-width:1000px) {
+    .services {
+        margin-top: 0;
+        background-image: url('../../../../public/images/road.jpg');
+        background-position: center;
+        height: 100%;
+    }
+    .service{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
