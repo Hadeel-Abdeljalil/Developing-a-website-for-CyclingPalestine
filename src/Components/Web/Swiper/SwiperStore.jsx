@@ -1,16 +1,17 @@
 import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
+import { Link } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import './SwiperStore.css'
-import { Link } from 'react-router-dom';
+import './SwiperMedia.css'
 
 export default function SwiperStoare() {
   return (
-    <>
+    <div className='h-100'>
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, Autoplay]}
         spaceBetween={70}
@@ -19,7 +20,7 @@ export default function SwiperStoare() {
         loop={true}
         autoplay={{ delay: 5000 }}
         pagination={{ clickable: true }}
-        className='h-100 d-flex align-content-center header '
+        className=' d-flex align-content-center header  h-100 w-100'
 
       >
         <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="../../../../public/images/back.jpg" alt="" />
@@ -45,6 +46,6 @@ export default function SwiperStoare() {
         </SwiperSlide>
         
       </Swiper>
-    </>
+    </div>
   );
 }

@@ -30,7 +30,7 @@ export default function App() {
     <div>
       <a
         href="https://wa.me/972568642671"
-        className="position-fixed bottom-0 end-0 m-5 bg-colorx position-absolute text-white rounded-circle p-3 whatsapp-hover"
+        className="position-fixed bottom-0 end-0 me-2 mb-3 bg-colorx position-absolute text-white rounded-circle p-3 whatsapp-hover"
         target="_blank" // This ensures it opens in a new tab
         rel="noopener noreferrer" // This improves security
         onMouseEnter={handleMouseEnter}

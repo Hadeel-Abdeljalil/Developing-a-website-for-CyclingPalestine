@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faFacebookF, faYoutube, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import Typed from 'typed.js';
 import SwiperStoare from '../../Swiper/SwiperStore.jsx';
+import './Header.css'
+import './HeaderMedia.css'
 export default function Header() {
     const typedElement = useRef(null);
 
@@ -24,7 +26,7 @@ export default function Header() {
     }, []);
 
     return (
-        <section className=" vh-100 mb-5  m-0 p-0 ">
+        <section className=" headerm mb-5  m-0 p-0 ">
         <SwiperStoare/>
            {/* <div className=" d-flex flex-column justify-content-center vh-100 ">
            <h1 className="fw-bold font-style">YOUR PERFECT RIDE IN <span ref={typedElement} className="auto-type"></span> </h1>

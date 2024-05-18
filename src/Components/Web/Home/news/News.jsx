@@ -1,26 +1,42 @@
 import React from 'react'
+import { DataNews } from './DataNews.jsx'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Scrollbar } from 'swiper/modules';
+import 'swiper/css';
+import './News.css'
 
 export default function News() {
   return (
     <>
-    <section className="notice">
+      <section className="notice">
         <div className="container d-flex">
-          <div className="cornar" />
-          <div className="w-50 m-5">
-            <p>25/07/2023</p>
-            <h1>منعنا من قبل قوات الاحتلال الدخول الى دير سمعان !</h1>
-            <p>
-              اليوم وخلال الجولة منعتنا قوات الاحتلال الاسرائيلي من دخول منطقة دير
-              سمعان الأثرية بحجة انها منطقة عسكرية وقريبة من المستوطنات وهذه
-              المنطقة تعتبر منطقة ترفيهية للمستوطنين وبعد احتجاز ساعة قرروا
-              ادخالنا للمنطقة بمرافقة قوات الاحتلال لحماية المستوطنين وعدم
-              الاحتكاك معهم . هذا الواقع الذي نعيش به لا يمكننا التحرك بارضنا
-              بحرية.
-            </p>
+
+          <div className=" w-75 border-c ">
+            <Swiper
+              modules={[Scrollbar, Autoplay]}
+              spaceBetween={70}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{ delay: 9000 }}
+            >
+              {
+                DataNews.length ? DataNews.map((news, index) => (
+                  <SwiperSlide key={index}>
+                    <div className='me-5'>
+                      <p>{news.date}</p>
+                      <h1>{news.name}</h1>
+                      <p>
+                        {news.details}
+                      </p>
+                    </div>
+                  </SwiperSlide>
+                )) : ''
+              }
+            </Swiper>
           </div>
-        </div>
+          </div>
+
       </section>
-      
     </>
   )
 }
