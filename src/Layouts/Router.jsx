@@ -19,10 +19,10 @@ import ForgotPassword from '../Components/Web/Auth/ForgotPassword';
 import Order from '../Components/Web/Order/Order';
 import UserOrders from '../Components/Web/Profile/UserOrders';
 import AllProducts from './../Components/Web/AllProducts/AllProducts';
-import PrevTrips from '../Components/Web/Trips/prevTrips.jsx';
-import NextTrips from '../Components/Web/Trips/nextTrips.jsx';
 import Trips from '../Components/Web/Trips/Trips.jsx';
 import TripDetails from '../Components/Web/Trips/TripDetails.jsx';
+import PrevTrips from './../Components/Web/Trips/PrevTrips';
+import NextTrips from './../Components/Web/Trips/NextTrips';
 
 export const router = createBrowserRouter([
 
