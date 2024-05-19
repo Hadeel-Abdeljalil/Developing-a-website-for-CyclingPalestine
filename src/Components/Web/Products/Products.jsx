@@ -6,7 +6,6 @@ import { CartContext } from '../Context/FeatureCart';
 import { UserContext } from '../Context/FeatureUser';
 import SwiperReviews from './SwiperReviews';
 import ReviewOrders from './ReviewOrders';
-import ReactImageMagnify from 'react-image-magnify';
 import { BiCart } from 'react-icons/bi';
 import './Products.css'
 import { BsHeart } from 'react-icons/bs';
@@ -188,60 +187,8 @@ export default function Products() {
            
             </div>
             <div className='col-lg-6 d-flex '>
-              <div >
-                <ReactImageMagnify
-                  smallImage={{
-                    alt: 'Wristwatch by Ted Baker London',
-                    isFluidWidth: false,
-                    src: selectedImage,
-                    width: 500,
-                    height: 600,
-                  }}
-                  largeImage={{
-                    src: selectedImage,
-                    width: 1200,
-                    height: 1800
-                  }}
-                  enlargedImageContainerDimensions={{
-                    width: 300,
-                    height: 400
-                  }}
-                  isHintEnabled={true}
-                  hintTextMouse='قم بالتمرير للتكبير'
-                  enlargedImagePosition='over'
-                  imageClassName='shadow-lg product-image '
-                />
-              </div>
-              <div>
-                {product.subImages && product.subImages.length > 0 && (
-                  <>
-                    <div className='mt-2 ms-2'>
-                      <img
-                        src={product.mainImage.secure_url}
-                        alt={`main image`}
-                        className={`sub-image`}
-                        style={{ opacity: imageOpacity["main"] }}
-                        onClick={() => handleImageClick(product.mainImage.secure_url, "main")}
-                      />
-                    </div>
-                    {product.subImages.map((subImage, index) => (
-                      <div key={index} className='mt-2 ms-2'>
-                        <img
-                          src={subImage.secure_url}
-                          alt={`sub image ${index}`}
-                          className={`sub-image`}
-                          style={{ opacity: imageOpacity[index] }}
-                          onClick={() => handleImageClick(subImage.secure_url, index)}
-                        />
-                      </div>
-                    ))}
-                  </>
-                )}
-                {!product.subImages || product.subImages.length === 0 && (
-                  <div>Sub images not found</div>
-                )}
-              </div>
             </div>
+
           </div>
 
 
