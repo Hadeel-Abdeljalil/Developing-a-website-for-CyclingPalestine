@@ -19,14 +19,14 @@ export default function TripDetails() {
   return (
     <div className='container mt-5 pt-5 vh-100'>
       <div className='d-flex justify-content-center'>
-        <div className='container-fluid w-75 '>
+        <div className='container-fluid w-75 h-100'>
           <Swiper
             modules={[Pagination, Scrollbar, Autoplay]}
             spaceBetween={55} // Remove padding between slides
             slidesPerView={1.75}
             centeredSlides={true}
             loop={true}
-            autoplay={{ delay: 2000 }}
+            autoplay={{ delay: 3000 }}
             className="mySwiper"
             onSwiper={(swiper) => {
             }}
@@ -45,6 +45,11 @@ export default function TripDetails() {
               </SwiperSlide>
             )) : <h2 className='dir'>لا يوجد فئات</h2>}
           </Swiper>
+          <div className=' mt-4 d-flex  justify-content-end align-items-center '>
+          <p>{trip.date}</p>
+          <h1 className=' '>{trip.name}</h1>
+          </div>
+          <p className='dir'>{trip.text}</p>
         </div>
       </div>
     </div>

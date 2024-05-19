@@ -51,7 +51,7 @@ export default function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav m-auto mb-3 mb-lg-0">
+          <ul className="navbar-nav m-auto mb-3 mb-lg-0 dir">
             <li className="nav-item me-4 ">
               <NavLink className="nav-link border-nav" activeclassname="active" to="/">
                 الرئيسية
@@ -117,8 +117,8 @@ export default function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
-                        الإعدادات
+                      <a className="dropdown-item" href="/profile/orders">
+                        طلباتي
                       </a>
                     </li>
                     <li>

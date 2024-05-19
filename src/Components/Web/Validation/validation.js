@@ -1,12 +1,16 @@
 import * as yup from 'yup'
-export const registerSchema =yup.object({
-    email: yup.string().email('بريد إلكتروني غير صالح').required('البريد الإلكتروني مطلوب'),
-    userName: yup.string().required('اسم المستخدم مطلوب').min(3, 'اسم المستخدم يجب أن يكون على الأقل 3 حروف').max(20, 'يجب أن لا يزيد عدد الحروف عن 20 حرف').matches(/^[a-zA-Z0-9_-]+$/, 'يمكن أن يحتوي اسم المستخدم فقط على أحرف وأرقام وشرطات سفلية وواصلات'),
-    password: yup.string().required('كلمة المرور مطلوبة').min(8, 'يجب أن تكون كلمة المرور 8 أحرف على الأقل').matches(/[a-zA-Z]/, 'كلمة المرور يجب أن تحتوي على حرف واحد على الأقل').matches(/[0-9]/, 'يجب أن تحتوي كلمة المرور على الأقل رقماً واحداً'),
-  })
+export const registerSchema = yup.object({
+   email: yup.string().email('بريد إلكتروني غير صالح').required('البريد الإلكتروني مطلوب'),
+   userName: yup.string().required('اسم المستخدم مطلوب').min(3, 'اسم المستخدم يجب أن يكون على الأقل 3 حروف').max(20, 'يجب أن لا يزيد عدد الحروف عن 20 حرف').matches(/^[a-zA-Z0-9_-]+$/, 'يمكن أن يحتوي اسم المستخدم فقط على أحرف وأرقام وشرطات سفلية وواصلات'),
+   password: yup.string().required('كلمة المرور مطلوبة').min(8, 'يجب أن تكون كلمة المرور 8 أحرف على الأقل').matches(/[a-zA-Z]/, 'كلمة المرور يجب أن تحتوي على حرف واحد على الأقل').matches(/[0-9]/, 'يجب أن تحتوي كلمة المرور على الأقل رقماً واحداً'),
+   cPassword: yup.string()
+     .oneOf([yup.ref('password'), null], 'يجب أن تتطابق كلمة المرور')
+     .required('يجب تأكيد كلمة المرور'),
+ });
+ 
   export const loginSchema =yup.object({
     email: yup.string().email('بريد إلكتروني غير صالح').required('البريد الإلكتروني مطلوب'),
-    password: yup.string().required('كلمة المرور مطلوبة').min(8, 'يجب أن تكون كلمة المرور 8 أحرف على الأقل').matches(/[a-zA-Z]/, 'كلمة المرور يجب أن تحتوي على حرف واحد على الأقل').matches(/[0-9]/, 'يجب أن تحتوي كلمة المرور على الأقل رقماً واحداً'),
+    password: yup.string().required('كلمة المرور مطلوبة').min(8, 'يجب أن تكون كلمة المرور 8 أحرف على الأقل'),
   })
 
  export const SendCodeSchema  = yup.object({

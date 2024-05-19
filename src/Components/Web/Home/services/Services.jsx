@@ -7,7 +7,7 @@ export default function Services() {
     <>
       <section className="services" id="services"> {/* Removed unnecessary classes */}
         <div className="container text-center"> {/* Added text-center class for center alignment */}
-          <div className="row "> {/* Added row class */}
+          <div className="row pt-5"> {/* Added row class */}
             <div className="col-lg-4 mb-4"> {/* Adjusted column size and added margin bottom */}
               <Link to="/products" className="service-link"> {/* Moved Link component outside of div */}
                 <div className="service">

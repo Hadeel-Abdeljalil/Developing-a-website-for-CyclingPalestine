@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function Input({ type, id, name, title, value, errors, placeholder, onChange, onBlur, touched, autocomplete }) {
+export default function Input({ type, id, name, title, value, errors, placeholder, onChange, onBlur, touched, autoComplete }) {
 
   return (
     <React.Fragment>
       <input
-        className='input-style mt-2 '
+        className='input-style mt-2'
         type={type}
         id={id}
         name={name}
@@ -14,7 +14,7 @@ export default function Input({ type, id, name, title, value, errors, placeholde
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
-        autoComplete={autocomplete}
+        autoComplete={autoComplete}  
       />
       {touched[name] && errors[name] && <p className='validation-message text-end w-100 m-0'>{errors[name]}</p>}
     </React.Fragment>
