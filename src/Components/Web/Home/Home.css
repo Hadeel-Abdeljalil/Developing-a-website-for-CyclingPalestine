@@ -132,7 +132,7 @@ font-family: "Inria Serif", serif;
 }
 
 .contact-us{
-        background-image: linear-gradient(rgba(106, 131, 102, 0.85), rgba(106, 131, 102, 0.85)), url('../../../../public/images/contact.jpg');
+    background-image: linear-gradient(rgba(106, 131, 102, 0.85), rgba(106, 131, 102, 0.85)), url('../../../../public/images/contact.jpg');
     background-size: cover;
     background-attachment: fixed;
 }

@@ -23,21 +23,21 @@ export default function SwiperStoare() {
         className=' d-flex align-content-center header  h-100 w-100'
 
       >
-        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/back.jpg" alt="" />
+        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/back.jpg" alt="swiper-slide" />
         <span className='swiper-text'>
           <h1 className='swiper-text2 '> استعد لاستكشاف الطرقات الجديدة واكتشاف المناظر الخلابة على عجلتك</h1>
           <Link to="/trips">        <button className='btn border border-white bg-transparent text-white rounded-5 fw-bold store-header-botton mt-2'>شارك معنا</button>
           </Link>
         </span>        </SwiperSlide>
         
-        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/contact-us.jpg" alt="" />
+        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/contact-us.jpg" alt="swiper-slide" />
         <span className='swiper-text'>
           <h1 className='swiper-text2'>استكشف فريقنا ورؤيتنا</h1>
           <Link to="/about">        <button className='btn border border-white bg-transparent text-white rounded-5 fw-bold store-header-botton mt-2'>شاهد الآن</button>
           </Link>
         </span>
         </SwiperSlide>
-        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/train.jpg" alt="" />
+        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/train.jpg" alt="swiper-slide" />
         <span className='swiper-text'>
           <h1 className='swiper-text2'>كل ما تحتاجه لرحلتك الأمثل</h1>
           <Link to="/products">        <button className='btn border border-white bg-transparent text-white rounded-5 fw-bold store-header-botton mt-2'>تسوق الآن</button>

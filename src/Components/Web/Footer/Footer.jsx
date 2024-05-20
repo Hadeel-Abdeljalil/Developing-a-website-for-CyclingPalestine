@@ -9,7 +9,7 @@ export default function Footer() {
     <footer className="footer ">
       <div className="container">
         <div className="footer-img">
-          <img src="../../../../public/images/footerLogo.jpg" alt="restaurant_logo" />
+          <img src="/images/footerLogo.jpg" alt="restaurant_logo" />
         </div>
         <p><span>©</span> 2021 Palestine on Bicycle. All Rights Reserved.</p>
         <div className="social-media mt-3 d-flex justify-content-center w-100">
