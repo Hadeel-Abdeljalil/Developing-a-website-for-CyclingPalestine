@@ -44,17 +44,24 @@ export default function Register() {
     
             if (data.message === 'success') {
                 formik.resetForm();
-                toast.success('تم إنشاء الحساب بنجاح', toastConfig);
+                toast.success(' يرجى التحقق من بريدك الإلكتروني لتأكيد الحساب.', toastConfig);
             } else {
-                toast.error('حدث خطأ أثناء إنشاء الحساب. الرجاء المحاولة مرة أخرى.', toastConfig);
+                toast.error('حدث خطأ أثناء إنشاء الحساب. الرجاء المحاولة مرة أخرى أو قد يكون الحساب موجود مسبقا.', toastConfig);
                 console.error('Server Response:', data);
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Axios Error:', error.response?.data || error.message);
-                if (error.response?.data?.validationError) {
-                    console.error('Validation Errors:', error.response.data.validationError);
-                    toast.error(`Validation Error: ${error.response.data.validationError.map(err => err.details.map(detail => detail.message).join(', ')).join(', ')}`, toastConfig);
+                if (error.response?.status === 400 && error.response.data?.validationError) {
+                    const validationErrors = error.response.data.validationError.map(err => err.details.map(detail => detail.message).join(', ')).join(', ');
+                    console.error('Validation Errors:', validationErrors);
+                    toast.error(`Validation Error: ${validationErrors}`, toastConfig);
+                } else if (error.response?.status === 409) {
+                    // Conflict error, possibly indicating that the account already exists
+                    toast.error('الحساب موجود مسبقًا. الرجاء تسجيل الدخول أو استخدام بريد إلكتروني آخر.', toastConfig);
+                } else if (error.response?.status === 500) {
+                    // Server error
+                    toast.error('حدث خطأ في الخادم. الرجاء المحاولة مرة أخرى لاحقًا.', toastConfig);
                 } else {
                     toast.error(`Error: ${error.response?.data?.message || error.message}`, toastConfig);
                 }
@@ -64,6 +71,7 @@ export default function Register() {
             }
         }
     };
+    
     
 
     const formik = useFormik({
