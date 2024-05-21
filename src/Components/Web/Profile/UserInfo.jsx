@@ -8,8 +8,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function UserInfo() {
-  const { userData, userToken } = useContext(UserContext);
+  const { userData, userToken, setUserData } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingInfo, setIsEditingInfo] = useState(false);
 
   const toastConfig = {
     position: "top-right",
@@ -25,6 +27,11 @@ export default function UserInfo() {
   const formik = useFormik({
     initialValues: {
       image: null,
+      userName: userData.userName || '',
+      birthdate: userData.birthdate || '',
+      gender: userData.gender || '',
+      phone: userData.phone || '',
+      Address: userData.Address || '',
     },
     onSubmit: async (values) => {
       setIsLoading(true);
@@ -40,7 +47,6 @@ export default function UserInfo() {
 
         const { data } = response;
 
-        // Log the response for debugging
         console.log('Server response:', data);
 
         if (data.message === 'success') {
@@ -52,7 +58,7 @@ export default function UserInfo() {
         }
       } catch (error) {
         toast.error('خطأ في تحميل الصورة');
-        console.error('Error uploading image:', error); // Specific error logging
+        console.error('Error uploading image:', error);
       } finally {
         setIsLoading(false);
       }
@@ -61,6 +67,41 @@ export default function UserInfo() {
 
   const handleFileChange = (event) => {
     formik.setFieldValue('image', event.target.files[0]);
+  };
+
+  const handleInfoChange = async (values) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.patch(
+        `https://cycling-palestine.onrender.com/user/updateProfile/${userData._id}`,
+        {
+          userName: values.userName,
+          birthdate: values.birthdate,
+          gender: values.gender,
+          phone: values.phone,
+          Address: values.Address,
+        },
+        { headers: { Authorization: `Rufaidah__${userToken}` } }
+      );
+
+      const { data } = response;
+
+      console.log('Server response:', data);
+
+      if (data.message === 'success') {
+        setUserData({ ...userData, ...values });
+        toast.success('تم تحديث المعلومات بنجاح', toastConfig);
+      } else {
+        toast.warn('لم يتم تحديث المعلومات');
+        console.log('Server response message:', data.message);
+      }
+    } catch (error) {
+      toast.error('خطأ في تحديث المعلومات');
+      console.error('Error updating info:', error);
+    } finally {
+      setIsLoading(false);
+      setIsEditingInfo(false);
+    }
   };
 
   return (
@@ -80,16 +121,30 @@ export default function UserInfo() {
             </div>
             <div className='w-25 me-3'>
               <p className='mt-3'>إضفاء الطابع الشخصي على حسابك مع صورة. ستظهر صورة ملفك الشخصي</p>
-              <input type='file' name='image' onChange={handleFileChange} /> {/* Add name attribute */}
-              <button type="submit" disabled={isLoading || !formik.isValid} className='btn border-black'>{isLoading ? 'جاري التحميل...' : 'غيَر الصورة'}</button>
+              <input type='file' name='image' onChange={handleFileChange} />
+              <button type="submit" disabled={isLoading || !formik.isValid} className='btn border-black mt-1'>{isLoading ? 'جاري التحميل...' : 'غيَر الصورة'}</button>
             </div>
           </form>
         </div>
         <hr />
         <div className='mx-3 d-flex justify-content-between'>
           <p>الإسم الكامل</p>
-          <p>{userData.userName}</p>
-          <Link className='text-info'>تغيير الاسم</Link>
+          {isEditingName ? (
+            <div>
+              <input
+                type="text"
+                defaultValue={userData.userName}
+                onBlur={(e) => handleInfoChange({ userName: e.target.value })}
+                autoFocus
+              />
+              <button onClick={() => setIsEditingName(false)}>إلغاء</button>
+            </div>
+          ) : (
+            <>
+              <p>{userData.userName}</p>
+              <button className='text-info border-0 bg-transparent mb-3' onClick={() => setIsEditingName(true)}>تغيير الاسم</button>
+            </>
+          )}
         </div>
       </div>
       <div className='border rounded-2 bg-white shadowx mt-3'>
@@ -98,7 +153,7 @@ export default function UserInfo() {
             <div className='border-bottom w-100'>
               <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
                 <p>المعلومات الشخصية</p>
-                <Link className='text-info pb-3'>تعديل</Link>
+                <button className='text-info border-0 bg-transparent mb-3' onClick={() => setIsEditingInfo(true)}>تعديل</button>
               </div>
             </div>
           </div>
@@ -113,17 +168,134 @@ export default function UserInfo() {
               </div>
             </div>
           </div>
-          <div className='d-flex align-items-center'>
-            <div className='border-bottom w-100'>
-              <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
-                <p className='opacity-50'>رقم الهاتف</p>
-                <p className='opacity-50'>{userData.phone ? userData.phone : 'لا يوجد'}</p>
-                <Link className='pb-3 opacity-50'>
-                  <BsArrowLeft />
-                </Link>
+          {isEditingInfo ? (
+            <form onSubmit={formik.handleSubmit}>
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <label className='opacity-50'>تاريخ الميلاد</label>
+                    <input
+                      type='date'
+                      name='birthdate'
+                      value={formik.values.birthdate}
+                      onChange={formik.handleChange}
+                      className='form-control'
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <label className='opacity-50'>الجنس </label>
+                    <select
+                      name='gender'
+                      value={formik.values.gender}
+                      onChange={formik.handleChange}
+                      className='form-control'
+                    >
+                      <option value=''>اختيار</option>
+                      <option value='male'>ذكر</option>
+                      <option value='female'>أنثى</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <label className='opacity-50'>رقم الهاتف</label>
+                    <input
+                      type='text'
+                      name='phone'
+                      value={formik.values.phone}
+                      onChange={formik.handleChange}
+                      className='form-control'
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <label className='opacity-50'>العنوان</label>
+                    <input
+                      type='text'
+                      name='Address'
+                      value={formik.values.Address}
+                      onChange={formik.handleChange}
+                      className='form-control'
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className='d-flex justify-content-end'>
+                <button
+                  type='button'
+                  className='btn btn-secondary mt-3 me-2'
+                  onClick={() => setIsEditingInfo(false)}
+                >
+                  إلغاء
+                </button>
+                <button
+                  type='submit'
+                  className='btn btn-primary mt-3'
+                  disabled={isLoading}
+                  onClick={() => handleInfoChange(formik.values)}
+                >
+                  {isLoading ? 'جاري التحديث...' : 'تحديث'}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <p className='opacity-50'>تاريخ الميلاد</p>
+                    <p>{userData.birthdate ? (new Date(userData.birthdate)).toISOString().split('T')[0] : 'لا يوجد'}</p>
+                    <Link className='pb-3 opacity-50'>
+                      <BsArrowLeft />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <p className='opacity-50'>الجنس </p>
+                    <p>{userData.gender || 'لا يوجد'}</p>
+                    <Link className='pb-3 opacity-50'>
+                      <BsArrowLeft />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <p className='opacity-50'>رقم الهاتف</p>
+                    <p>{userData.phone || 'لا يوجد'}</p>
+                    <Link className='pb-3 opacity-50'>
+                      <BsArrowLeft />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <p className='opacity-50'>العنوان </p>
+                    <p>{userData.Address || 'لا يوجد'}</p>
+                    <Link className='pb-3 opacity-50'>
+                      <BsArrowLeft />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
