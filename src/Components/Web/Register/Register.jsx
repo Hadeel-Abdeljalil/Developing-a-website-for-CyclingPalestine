@@ -36,7 +36,7 @@ export default function Register() {
                 cPassword: users.cPassword,
             };
     
-            const { data } = await axios.post(`https://ecommerce-node4-five.vercel.app/auth/signup`, payload, {
+            const { data } = await axios.post(`https://cycling-palestine.onrender.com/auth/signup?test=true`, payload, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
