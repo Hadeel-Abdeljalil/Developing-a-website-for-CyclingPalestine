@@ -2,13 +2,14 @@ import React, { useContext, useState } from 'react';
 import { UserContext } from '../Context/FeatureUser';
 import { IoMdKey } from 'react-icons/io';
 import { BsArrowLeft } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function UserInfo() {
-  const { userData, userToken, setUserData } = useContext(UserContext);
+  const navigate =useNavigate();
+  let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
@@ -104,6 +105,35 @@ export default function UserInfo() {
     }
   };
 
+  
+
+  const handleDeleteAccount = async () => {
+    const confirmDeletion = window.confirm('هل أنت متأكد أنك تريد حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي.');
+
+    if (confirmDeletion) {
+      try {
+        const response = await axios.delete(
+          `${import.meta.env.VITE_API_URL}user/deleteAccount/${userData._id}`,
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
+        );
+    
+        if (response.status === 200) {
+          alert('تم حذف الحساب بنجاح');
+          localStorage.removeItem('userToken');
+          setUserToken(null);
+          setUserData(null);
+          navigate("/login")
+        } else {
+          alert('فشل في حذف الحساب');
+        }
+      } catch (error) {
+        console.error('There was an error deleting the account!', error);
+        alert('حدث خطأ أثناء حذف الحساب!');
+      }
+    }
+  };
+  
+
   return (
     <div className='h-100 py-5'>
       <div className='d-flex justify-content-between mx-4 mb-3'>
@@ -173,26 +203,26 @@ export default function UserInfo() {
               <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
                   <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
-                    <label className='opacity-50'>تاريخ الميلاد</label>
+                    <label className='opacity-50  w-25'>تاريخ الميلاد</label>
                     <input
                       type='date'
                       name='birthdate'
                       value={formik.values.birthdate}
                       onChange={formik.handleChange}
-                      className='form-control'
+                      className='form-control m-2'
                     />
                   </div>
                 </div>
               </div>
               <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
-                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
-                    <label className='opacity-50'>الجنس </label>
+                  <div className='mx-3  d-flex justify-content-between align-items-center'>
+                    <label className='opacity-50 w-25'>الجنس </label>
                     <select
                       name='gender'
                       value={formik.values.gender}
                       onChange={formik.handleChange}
-                      className='form-control'
+                      className='form-control bg-transparent text-dark m-2'
                     >
                       <option value=''>اختيار</option>
                       <option value='male'>ذكر</option>
@@ -204,27 +234,27 @@ export default function UserInfo() {
               <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
                   <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
-                    <label className='opacity-50'>رقم الهاتف</label>
+                    <label className='opacity-50 w-25'>رقم الهاتف</label>
                     <input
                       type='text'
                       name='phone'
                       value={formik.values.phone}
                       onChange={formik.handleChange}
-                      className='form-control'
+                      className='form-control m-2'
                     />
                   </div>
                 </div>
               </div>
               <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
-                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
-                    <label className='opacity-50'>العنوان</label>
+                  <div className='mx-3  d-flex justify-content-between align-items-center'>
+                    <label className='opacity-50 w-25'>العنوان</label>
                     <input
                       type='text'
                       name='Address'
                       value={formik.values.Address}
                       onChange={formik.handleChange}
-                      className='form-control'
+                      className='form-control m-2'
                     />
                   </div>
                 </div>
@@ -232,14 +262,14 @@ export default function UserInfo() {
               <div className='d-flex justify-content-end'>
                 <button
                   type='button'
-                  className='btn btn-secondary mt-3 me-2'
+                  className='btn btn-secondary mt-3 my-3 mx-1 '
                   onClick={() => setIsEditingInfo(false)}
                 >
                   إلغاء
                 </button>
                 <button
                   type='submit'
-                  className='btn btn-primary mt-3'
+                  className='btn btn-primary mt-3 my-3 mx-1 ms-3'
                   disabled={isLoading}
                   onClick={() => handleInfoChange(formik.values)}
                 >
@@ -298,6 +328,12 @@ export default function UserInfo() {
           )}
         </div>
       </div>
+      <div className='mx-5 mt-2 d-flex'>
+          <Link to='#' className='text-danger' onClick={handleDeleteAccount}>
+            حذف الحساب الشخصي 
+          </Link>
+          <p className='small'>سيتم حذف جميع بياناتك بشكل نهائي </p>
+        </div>
     </div>
   );
 }
