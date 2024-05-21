@@ -44,13 +44,16 @@ export default function Login() {
                 //saveCurrentUser();
                 toast.success("تم تسجيل الدخول بنجاح", toastConfig);
                 navigate('/')
+            }else if(data == "password in not correct"){
+                toast.info("بيانات غير صحيحة", toastConfig)
             }
             //console.log(data); 
             else {
                 toast.error(" الحساب غير موجود  ", toastConfig);
+                console.log(data)
             }
         } catch (error) {
-            toast.error(" بيانات غير صحيحة  ", toastConfig);
+            toast.error("  يرجى المحاولة مرة أخرى ", toastConfig);
         }
 
 

@@ -37,14 +37,13 @@ export default function SwiperStoare() {
           </Link>
         </span>
         </SwiperSlide>
-        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/train.jpg" alt="swiper-slide" />
+        <SwiperSlide className=' h-100 w-100'><img className='h-100 w-100' src="/images/x3.jpeg" alt="swiper-slide" />
         <span className='swiper-text'>
           <h1 className='swiper-text2'>كل ما تحتاجه لرحلتك الأمثل</h1>
           <Link to="/products">        <button className='btn border border-white bg-transparent text-white rounded-5 fw-bold store-header-botton mt-2'>تسوق الآن</button>
           </Link>
         </span>
         </SwiperSlide>
-        
       </Swiper>
     </div>
   );
