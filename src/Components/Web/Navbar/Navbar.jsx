@@ -34,7 +34,7 @@ export default function Navbar() {
     <nav className={`navbar navbar-expand-lg fixed-top bg-nav ${navbar ? ' mt-0 nav x ' : ''}`}>
       <div className="container h-100">
         <span className="navbar-brand mb-0 h1 font-style">
-          CYCLING IN PALESTINE
+          CYCLING PALESTINE
           <FontAwesomeIcon icon={faRoute} />
         </span>
 

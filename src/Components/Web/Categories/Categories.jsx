@@ -9,7 +9,7 @@ export default function Categories() {
 
   
   const getCategories = async ()=>{
-     const {data} = await axios.get(`${import.meta.env.VITE_API_URL}categories/active?limit=7`);
+     const {data} = await axios.get(`${import.meta.env.VITE_API_URL}category/getActive`);
      return data.categories;
     }
   // const handleCategoryChange = (categoryName) => {

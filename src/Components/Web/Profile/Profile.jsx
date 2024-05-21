@@ -32,7 +32,7 @@ export default function Profile() {
                                 <div className="  w-100   mb-3 text-decoration-none">
                                     <div className=' w-100 d-flex align-items-center'>
                                         <div className=" ">
-                                            <img className='rounded-circle image-sidebar' src={userData.image.secure_url} />
+                                            <img className='rounded-circle image-sidebar' src={userData.image? userData.image: '/images/profile.jpeg'} />
                                         </div>
                                         <div className='me-2'>
                                             <p className=" text-dark mb-0 mt-3 ">{userData.userName} </p>

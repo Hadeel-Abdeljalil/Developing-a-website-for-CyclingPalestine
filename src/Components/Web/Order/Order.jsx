@@ -35,9 +35,9 @@ export default function Order() {
         const token = localStorage.getItem('userToken');
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}order`,
+                `${import.meta.env.VITE_API_URL}order/`,
                 { phone: formik.values.phone, address: formik.values.address },
-                { headers: { Authorization: `Tariq__${token}` } }
+                { headers: { Authorization: `Rufaidah__${token}` } }
             );
 
             if (data.message == 'success') {

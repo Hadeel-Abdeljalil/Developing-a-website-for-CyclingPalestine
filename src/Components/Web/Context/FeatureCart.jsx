@@ -29,7 +29,7 @@ export function CartContextProvider({children}){
    const addToCartContext = async (productId) => {
     try {
         const token = localStorage.getItem('userToken');
-        const { data } = await axios.post(`${import.meta.env.VITE_API_URL}cart`, { productId }, { headers: { Authorization: `Tariq__${token}` } });
+        const { data } = await axios.post(`${import.meta.env.VITE_API_URL}cart`, { productId }, { headers: { Authorization: `Rufaidah__${token}` } });
         
         if (data.message === 'success') {
             toast.success('تم إضافة المنتج بنجاح على السلة ', toastConfig);

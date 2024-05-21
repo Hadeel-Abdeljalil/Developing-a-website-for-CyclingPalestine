@@ -1,15 +1,15 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-
 export let UserContext = createContext(null);
 export default function UserContextProvider({ children }) {
     const [userToken, setUserToken] = useState(null);
     let [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState("true");
+
     const getUserData = async () => {
         if (userToken) {
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}user/profile`,
-                { headers: { Authorization: `Tariq__${userToken}` } }
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}user/getProfile`,
+                { headers: { Authorization: `Rufaidah__${userToken}` } }
             )
             setUserData(data.user);
             setLoading(false);
@@ -22,9 +22,10 @@ export default function UserContextProvider({ children }) {
     }, [userToken, userData]);
 
     const getUserOrdersContext = async () => {
+
         if (userToken) {
-            const { data } = await axios.get(`https://ecommerce-node4-five.vercel.app/order`,
-                { headers: { Authorization: `Tariq__${userToken}` } }
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}order/`,
+                { headers: { Authorization: `Rufaidah__${userToken}` } }
             )
 
             setLoading(false);
