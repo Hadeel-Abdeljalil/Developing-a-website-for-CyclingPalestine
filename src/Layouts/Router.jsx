@@ -22,6 +22,11 @@ import Trips from '../Components/Web/Trips/Trips.jsx';
 import TripDetails from '../Components/Web/Trips/TripDetails.jsx';
 import PrevTrips from './../Components/Web/Trips/PrevTrips';
 import NextTrips from './../Components/Web/Trips/NextTrips';
+import Orders from '../Components/Dashboard/Home/Orders/Orders.jsx';
+import Users from '../Components/Dashboard/Home/Users/Users.jsx';
+import TripsA from './../Components/Dashboard/Home/Trips/Trips';
+import CategoriesA from './../Components/Dashboard/Home/Categories/Categories';
+import ProductsA from './../Components/Dashboard/Home/Products/Products';
 
 export const router = createBrowserRouter([
   {
@@ -139,6 +144,26 @@ export const router = createBrowserRouter([
       {
         path: 'home',
         element: <HomeDash />
+      },
+      {
+        path:'users',
+        element:<Users/>
+      },
+      {
+        path:'trips',
+        element:<TripsA/>
+      },
+      {
+        path:'categories',
+        element:<CategoriesA/>
+      },
+      {
+        path:'orders',
+        element:<Orders/>
+      },
+      {
+        path:'products',
+        element:<ProductsA/>
       },
     
       {
