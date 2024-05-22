@@ -160,7 +160,7 @@ export default function UserInfo() {
         <div className='mx-3 d-flex justify-content-between'>
           <p>الإسم الكامل</p>
           {isEditingName ? (
-            <div>
+            <>
               <input
                 type="text"
                 defaultValue={userData.userName}
@@ -168,7 +168,7 @@ export default function UserInfo() {
                 autoFocus
               />
               <button onClick={() => setIsEditingName(false)}>إلغاء</button>
-            </div>
+            </>
           ) : (
             <>
               <p>{userData.userName}</p>

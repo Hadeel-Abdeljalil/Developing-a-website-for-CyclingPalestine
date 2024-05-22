@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Home() {
   return (
-    <div>Home Dash</div>
+    <div className="">Home Dash</div>
   )
 }

@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import WebLayout from './WebLayout';
 import Home from '../Components/Web/Home/Home';
 import Categories from '../Components/Web/Categories/Categories.jsx';
-import CategoriesDashboard from '../Components/Dashboard/CategoriesDashboard/CategoriesDashboard';
 import HomeDash from '../Components/Dashboard/Home/Home';
 import Register from '../Components/Web/Register/Register';
 import Login from '../Components/Web/Login/Login';
@@ -25,18 +24,13 @@ import PrevTrips from './../Components/Web/Trips/PrevTrips';
 import NextTrips from './../Components/Web/Trips/NextTrips';
 
 export const router = createBrowserRouter([
-
-
   {
     path: 'register',
     element: <Register />
   },
   {
     path: 'login',
-    element:
-      //<ProtectedRoute auth='signin'>
-      <Login />
-    //</ProtectedRoute>
+    element: <Login />
   },
   {
     path: 'sendCode',
@@ -45,18 +39,19 @@ export const router = createBrowserRouter([
   {
     path: 'forgotPassword',
     element: <ForgotPassword />
-  }, {
+  },
+  {
     path: 'profile',
-    element:
-      <ProtectedRoute>
+    element: (
+      <ProtectedRoute auth='user'>
         <Profile />
-      </ProtectedRoute>,
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
         element: <UserInfo />
       },
-
       {
         path: 'orders',
         element: <UserOrders />
@@ -65,54 +60,55 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <WebLayout />,
+    element:(<ProtectedRoute auth='user'>
+       <WebLayout />
+    </ProtectedRoute>),
     children: [
       {
         index: true,
         element: <Home />
       },
       {
-        path:'trips/',
-        element:<Trips/>,
+        path: 'trips',
+        element: <Trips />,
         children: [
           {
             index: true,
             element: <NextTrips />
           },
-          { path: 'nextTrips',
-          element: <NextTrips />
+          {
+            path: 'nextTrips',
+            element: <NextTrips />
           },
           {
             path: 'prevTrips',
             element: <PrevTrips />
           },
-         
         ]
       },
       {
-        path:'/trip/:tripId',
-        element:<TripDetails/>,
+        path: 'trip/:tripId',
+        element: <TripDetails />
       },
       {
-        path:'tripView',
-        element:<TripDetails/>,
+        path: 'tripView',
+        element: <TripDetails />
       },
       {
         path: 'categories',
         element: <Categories />
       },
-
       {
         path: 'order',
         element: <Order />
       },
       {
         path: '*',
-        element: <h2>page not found --- web</h2>
+        element: <h2>Page not found --- web</h2>
       },
       {
-        path: 'products/',
-        element: <AllProducts />,
+        path: 'products',
+        element: <AllProducts />
       },
       {
         path: 'products/category/:categoryId',
@@ -123,31 +119,32 @@ export const router = createBrowserRouter([
         element: <Products />
       },
       {
-        path: '/cart',
-        element:
-          <ProtectedRoute>
+        path: 'cart',
+        element: (
+          <ProtectedRoute auth='user'>
             <Cart />
           </ProtectedRoute>
+        )
       },
     ]
   },
-
   {
     path: '/dashboard',
-    element: <DashboardLayout />,
-    children: [{
-      path: 'home',
-      element: <HomeDash />
-    }
-      , {
-      path: 'categories',
-      element: <CategoriesDashboard />
-    },
-    {
-      path: '*',
-      element: <h2>page not found --- dashboard</h2>
-    }
+    element: (
+      <ProtectedRoute auth='admin'>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: 'home',
+        element: <HomeDash />
+      },
+    
+      {
+        path: '*',
+        element: <h2>Page not found --- dashboard</h2>
+      }
     ]
-
   }
 ]);

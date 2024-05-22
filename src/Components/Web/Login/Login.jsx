@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
-import Input from '../../Shared/Input'
-import { useFormik } from 'formik'
+import React, { useContext } from 'react';
+import Input from '../../Shared/Input';
+import { useFormik } from 'formik';
 import { loginSchema } from '../Validation/validation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -8,9 +8,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/FeatureUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
-import './Login.css'
-import '../Home/media.css'
-
+import './Login.css';
+import '../Home/media.css';
 
 export default function Login() {
     const initialValues = {
@@ -18,7 +17,7 @@ export default function Login() {
         password: '',
     };
     const navigate = useNavigate();
-    let { userToken, setUserToken, userData } = useContext(UserContext);
+    let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
 
     if (userToken) {
         navigate(-1);
@@ -34,35 +33,39 @@ export default function Login() {
         theme: "light",
     };
 
-    const onSubmit = async users => {
-
+    const onSubmit = async (users) => {
         try {
             const { data } = await axios.post(`https://cycling-palestine.onrender.com/auth/login`, users);
-            if (data.message == 'success') {
+            if (data.message === 'success') {
                 localStorage.setItem('userToken', data.token);
+                localStorage.setItem('userRole', data.role); 
                 setUserToken(data.token);
-                //saveCurrentUser();
+                setUserData(data.user); 
+
                 toast.success("تم تسجيل الدخول بنجاح", toastConfig);
-                navigate('/')
-            }else if(data == "password in not correct"){
-                toast.info("بيانات غير صحيحة", toastConfig)
-            }
-            //console.log(data); 
-            else {
+                
+                if (userData.role === 'Admin') {
+                    navigate('/dashboard/home'); // Navigate to admin dashboard
+                } else {
+                    navigate('/'); // Navigate to user dashboard
+                }
+            } else if (data.message === "password in not correct") {
+                toast.info("بيانات غير صحيحة", toastConfig);
+            } else {
                 toast.error(" الحساب غير موجود  ", toastConfig);
-                console.log(data)
+                console.log(data);
             }
         } catch (error) {
-            toast.error("  يرجى المحاولة مرة أخرى ", toastConfig);
+            toast.error(" يرجى المحاولة مرة أخرى ", toastConfig);
         }
+    };
 
-
-    }
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit,
         validationSchema: loginSchema
-    })
+    });
+
     const inputs = [
         {
             type: 'email',
@@ -80,9 +83,11 @@ export default function Login() {
             placeholder: 'أدخل كلمة المرور',
             value: formik.values.password,
         },
-    ]
-    const renderInputs = inputs.map((input, index) =>
+    ];
+
+    const renderInputs = inputs.map((input, index) => (
         <Input
+            key={index}
             type={input.type}
             id={input.id}
             name={input.name}
@@ -94,39 +99,35 @@ export default function Login() {
             onBlur={formik.handleBlur}
             touched={formik.touched}
             autocomplete={input.name}
-            key={index}
-
         />
-    )
+    ));
+
     return (
         <div className='vh-100 d-flex'>
-            <div className="sign-img-shadow flex-grow-1 ">
+            <div className="sign-img-shadow flex-grow-1">
                 <div className="sign-img w-100 float-start vh-100"> </div>
             </div>
-            <div className="sign-width sign-in-form text-center m-5 ">
+            <div className="sign-width sign-in-form text-center m-5">
                 <img src="/images/bicycle.png" alt="bicycle logo" />
-
                 <h1 className="mb-5">تسجيل الدخول </h1>
                 <div className="social-icons">
                     <FontAwesomeIcon icon={faGooglePlusG} className="icon m-1 mb-0" />
                     <FontAwesomeIcon icon={faFacebookF} className="icon m-1 mb-0" />
                 </div>
-
                 <form onSubmit={formik.handleSubmit}>
                     <div className="d-flex align-items-center flex-column">
                         <p className="my-1">التسجيل باستخدام البريد أو الهاتف</p>
-                        <div className="text-end d-flex align-items-center flex-column input-width media-input-style ">
+                        <div className="text-end d-flex align-items-center flex-column input-width media-input-style">
                             {renderInputs}
                             <Link className='link' to='/sendCode'>نسيت كلمة المرور؟</Link>
-
                             <div className="form-group">
                                 <button
                                     className="button"
                                     type="submit"
-                                    disabled={!formik.isValid || Object.values(formik.values).some(value => !value)}>
+                                    disabled={!formik.isValid || Object.values(formik.values).some(value => !value)}
+                                >
                                     تسجيل الدخول
                                 </button>
-
                             </div>
                         </div>
                     </div>
@@ -139,5 +140,5 @@ export default function Login() {
                 </form>
             </div>
         </div>
-    )
+    );
 }
