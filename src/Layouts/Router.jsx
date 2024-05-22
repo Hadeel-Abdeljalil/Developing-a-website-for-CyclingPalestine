@@ -1,13 +1,13 @@
-import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { createBrowserRouter, useNavigate } from 'react-router-dom';
 import WebLayout from './WebLayout';
+import DashboardLayout from './DashboardLayout';
 import Home from '../Components/Web/Home/Home';
-import Categories from '../Components/Web/Categories/Categories.jsx';
 import HomeDash from '../Components/Dashboard/Home/Home';
 import Register from '../Components/Web/Register/Register';
 import Login from '../Components/Web/Login/Login';
-import DashboardLayout from './DashboardLayout';
 import Cart from '../Components/Web/Cart/Cart';
+import Categories from '../Components/Web/Categories/Categories.jsx';
 import CategoriesDetails from '../Components/Web/Categories/CategoriesDetails';
 import Products from '../Components/Web/Products/Products';
 import ProtectedRoute from '../Components/Web/ProtectedRoute/ProtectedRoute';
@@ -131,7 +131,7 @@ export const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: (
-      <ProtectedRoute auth='admin'>
+      <ProtectedRoute auth='Admin'>
         <DashboardLayout />
       </ProtectedRoute>
     ),
@@ -148,3 +148,27 @@ export const router = createBrowserRouter([
     ]
   }
 ]);
+
+// Define a function to check the user's role and redirect accordingly
+function CheckUserRole() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userRole = sessionStorage.getItem('userRole');
+    if (userRole === 'Admin') {
+      navigate('/dashboard/home');
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  return null;
+}
+
+// Wrap the router component with the CheckUserRole component
+export const RoutedApp = () => (
+  <>
+    <router />
+    <CheckUserRole />
+  </>
+);
