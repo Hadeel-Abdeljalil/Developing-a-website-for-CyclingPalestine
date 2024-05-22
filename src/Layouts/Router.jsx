@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { createBrowserRouter, useNavigate } from 'react-router-dom';
 import WebLayout from './WebLayout';
 import DashboardLayout from './DashboardLayout';
@@ -22,6 +22,7 @@ import Trips from '../Components/Web/Trips/Trips.jsx';
 import TripDetails from '../Components/Web/Trips/TripDetails.jsx';
 import PrevTrips from './../Components/Web/Trips/PrevTrips';
 import NextTrips from './../Components/Web/Trips/NextTrips';
+import { UserContext } from '../Components/Web/Context/FeatureUser.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -131,7 +132,7 @@ export const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: (
-      <ProtectedRoute auth='Admin'>
+      <ProtectedRoute auth='admin'>
         <DashboardLayout />
       </ProtectedRoute>
     ),
@@ -150,20 +151,26 @@ export const router = createBrowserRouter([
 ]);
 
 // Define a function to check the user's role and redirect accordingly
+// Define a function to check the user's role and redirect accordingly
 function CheckUserRole() {
+  const { userToken, userData } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'Admin') {
-      navigate('/dashboard/home');
-    } else {
-      navigate('/');
+    // Check if user is logged in and has data
+    if (userToken && userData) {
+      // Check user's role
+      if (userData.role === 'Admin') {
+        navigate('/dashboard/home');
+      } else {
+        navigate('/dashboard/home');
+      }
     }
-  }, [navigate]);
+  }, [userToken, userData, navigate]);
 
   return null;
 }
+
 
 // Wrap the router component with the CheckUserRole component
 export const RoutedApp = () => (
