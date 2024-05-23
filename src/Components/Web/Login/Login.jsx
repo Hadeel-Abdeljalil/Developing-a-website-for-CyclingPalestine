@@ -20,7 +20,7 @@ export default function Login() {
     let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
 
     if (userToken) {
-        navigate("/");
+        navigate(-1);
     }
     const toastConfig = {
         position: "top-right",
@@ -51,10 +51,7 @@ export default function Login() {
                 }
             } else if (data.message === "password in not correct") {
                 toast.info("بيانات غير صحيحة", toastConfig);
-            }else if (data.message === "please confirm your Email") {
-                toast.info(" الرجاء تأكيد حسابك ", toastConfig);
-            }
-             else {
+            } else {
                 toast.error(" الحساب غير موجود  ", toastConfig);
                 console.log(data);
             }

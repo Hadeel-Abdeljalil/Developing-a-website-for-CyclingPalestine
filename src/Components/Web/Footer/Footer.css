@@ -1,9 +1,9 @@
 .footer {
-    background-color: #9eb39b !important;
-    padding-top: 30px !important;
-    color: #000 !important;
+    background-color: #5F8559;
+    padding-top: 60px;
+    color: #fff;
     line-height: 45px;
-    padding-bottom: 0 !important;
+    padding-bottom: 50px;
     display: flex;
     text-align: center;
 }
@@ -13,8 +13,7 @@
     height: 160px;
 }
 .footer .icon{
-    color: #000 !important;
+    color: white;
     width: 3rem;
     height: 3rem;
-    border-color: #000 !important;
 }

@@ -20,7 +20,7 @@ export const registerSchema = yup.object({
 export const forgotPasswordSchema = yup.object({
    email:yup.string().required('البريد الإلكتروني مطلوب'),
    password:yup.string().required('كلمة السر مطلوبة').min(8,'يجب أن تكون كلمة المرور 8 أحرف على الأقل').max(30,'يجب أن تكون كلمة المرور  30 حرف  كحد أقصى'),
-   code:yup.string().required('كود التأكيد مطلوب ')
+   code:yup.string().required('كود التأكيد مطلوب ').length(4,'يجب أن تكون 4 رموز'),
 })
 
 export const orderSchema = yup.object({
