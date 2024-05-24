@@ -16,7 +16,7 @@ export default function Navbar() {
     localStorage.removeItem('userToken');
     setUserToken(null);
     setUserData(null);
-    navigate('/');
+    navigate('/login');
   };
 
   const [navbar, setNavbar] = useState(false);

@@ -44,7 +44,7 @@ export default function Login() {
                 //saveCurrentUser();
                 toast.success("تم تسجيل الدخول بنجاح", toastConfig);
                 navigate('/')
-            }else if(data == "password in not correct"){
+            }else if(data == "password is not correct"){
                 toast.info("بيانات غير صحيحة", toastConfig)
             }
             //console.log(data); 
