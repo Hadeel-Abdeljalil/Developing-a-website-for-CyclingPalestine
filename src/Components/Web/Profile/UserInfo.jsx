@@ -47,7 +47,7 @@ export default function UserInfo() {
         );
 
         const { data } = response;
-
+        console.log(userToken)
         console.log('Server response:', data);
 
         if (data.message === 'success') {

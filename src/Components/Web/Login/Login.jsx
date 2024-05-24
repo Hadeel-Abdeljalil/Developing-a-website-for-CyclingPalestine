@@ -49,9 +49,9 @@ export default function Login() {
                 } else {
                     navigate('/'); // Navigate to user dashboard
                 }
-            } else if (data.message === "password is not correct") {
+            } else if (data === "password is not correct") {
                 toast.info("بيانات غير صحيحة", toastConfig);
-            }else if (data.message === "please confirm your Email") {
+            }else if (data === "please confirm your Email") {
                 toast.info(" الرجاء تأكيد حسابك ", toastConfig);
             }
              else {
@@ -60,6 +60,7 @@ export default function Login() {
             }
         } catch (error) {
             toast.error(" يرجى المحاولة مرة أخرى ", toastConfig);
+            console.log(data);
         }
     };
 
