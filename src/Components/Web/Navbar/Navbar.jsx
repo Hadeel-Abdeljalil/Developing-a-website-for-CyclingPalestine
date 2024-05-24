@@ -11,6 +11,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
   let { count } = useContext(CartContext);
+  const role=userData?.role;
 
   const logOut = () => {
     localStorage.removeItem('userToken');
@@ -141,7 +142,7 @@ export default function Navbar() {
         
       </div>
       {
-            userData.role ==='Admin'?(<Link to={'/dashboard/home'}>
+            role ==='Admin'?(<Link to={'/dashboard/home'}>
             <button className='btn btn-outline-dark me-2'>dashboard </button>
           </Link>): ''
           }
