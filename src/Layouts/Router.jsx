@@ -28,6 +28,7 @@ import CategoriesA from './../Components/Dashboard/Home/Categories/Categories';
 import Orders from './../Components/Dashboard/Home/Orders/Orders';
 import ProductsA from './../Components/Dashboard/Home/Products/Products';
 import ProfileHome from '../Components/Web/Profile/ProfileHome.jsx';
+import AdminProtectedRouter from '../Components/Web/ProtectedRoute/AdminProtectedRouter.jsx';
 
 export const router = createBrowserRouter([
 
@@ -144,9 +145,11 @@ export const router = createBrowserRouter([
 
   {
     path: '/dashboard',
-    element: <ProtectedRoute>
+    element: <AdminProtectedRouter>
+      <ProtectedRoute>
       <DashboardLayout />
-    </ProtectedRoute>,
+    </ProtectedRoute>
+    </AdminProtectedRouter>,
     children: [
       {
         path: 'home',
