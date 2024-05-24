@@ -145,7 +145,7 @@ export const router = createBrowserRouter([
 
   {
     path: '/dashboard',
-    element: <AdminProtectedRouter>
+    element: <AdminProtectedRouter >
       <ProtectedRoute>
       <DashboardLayout />
     </ProtectedRoute>

@@ -86,6 +86,7 @@ export default function Navbar() {
               </li>
             ) : null}
           </ul>
+         
           <ul className="navbar-nav">
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -134,8 +135,17 @@ export default function Navbar() {
               </ul>
             </li>
           </ul>
+          
+
         </div>
+        
       </div>
+      {
+            userData.role ==='Admin'?(<Link to={'/dashboard/home'}>
+            <button className='btn btn-outline-dark me-2'>dashboard </button>
+          </Link>): ''
+          }
+      
     </nav>
   );
 }
