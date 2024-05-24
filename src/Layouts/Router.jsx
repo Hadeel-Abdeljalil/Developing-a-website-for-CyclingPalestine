@@ -1,13 +1,13 @@
-import React, { useContext, useEffect } from 'react';
-import { createBrowserRouter, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 import WebLayout from './WebLayout';
-import DashboardLayout from './DashboardLayout';
 import Home from '../Components/Web/Home/Home';
+import Categories from '../Components/Web/Categories/Categories.jsx';
 import HomeDash from '../Components/Dashboard/Home/Home';
 import Register from '../Components/Web/Register/Register';
 import Login from '../Components/Web/Login/Login';
+import DashboardLayout from './DashboardLayout';
 import Cart from '../Components/Web/Cart/Cart';
-import Categories from '../Components/Web/Categories/Categories.jsx';
 import CategoriesDetails from '../Components/Web/Categories/CategoriesDetails';
 import Products from '../Components/Web/Products/Products';
 import ProtectedRoute from '../Components/Web/ProtectedRoute/ProtectedRoute';
@@ -22,7 +22,11 @@ import Trips from '../Components/Web/Trips/Trips.jsx';
 import TripDetails from '../Components/Web/Trips/TripDetails.jsx';
 import PrevTrips from './../Components/Web/Trips/PrevTrips';
 import NextTrips from './../Components/Web/Trips/NextTrips';
-import { UserContext } from '../Components/Web/Context/FeatureUser.jsx';
+import Orders from '../Components/Dashboard/Home/Orders/Orders.jsx';
+import Users from '../Components/Dashboard/Home/Users/Users.jsx';
+import TripsA from './../Components/Dashboard/Home/Trips/Trips';
+import CategoriesA from './../Components/Dashboard/Home/Categories/Categories';
+import ProductsA from './../Components/Dashboard/Home/Products/Products';
 
 export const router = createBrowserRouter([
   {
@@ -141,6 +145,26 @@ export const router = createBrowserRouter([
         path: 'home',
         element: <HomeDash />
       },
+      {
+        path:'users',
+        element:<Users/>
+      },
+      {
+        path:'trips',
+        element:<TripsA/>
+      },
+      {
+        path:'categories',
+        element:<CategoriesA/>
+      },
+      {
+        path:'orders',
+        element:<Orders/>
+      },
+      {
+        path:'products',
+        element:<ProductsA/>
+      },
     
       {
         path: '*',
@@ -149,33 +173,3 @@ export const router = createBrowserRouter([
     ]
   }
 ]);
-
-// Define a function to check the user's role and redirect accordingly
-// Define a function to check the user's role and redirect accordingly
-function CheckUserRole() {
-  const { userToken, userData } = useContext(UserContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check if user is logged in and has data
-    if (userToken && userData) {
-      // Check user's role
-      if (userData.role === 'Admin') {
-        navigate('/dashboard/home');
-      } else {
-        navigate('/dashboard/home');
-      }
-    }
-  }, [userToken, userData, navigate]);
-
-  return null;
-}
-
-
-// Wrap the router component with the CheckUserRole component
-export const RoutedApp = () => (
-  <>
-    <router />
-    <CheckUserRole />
-  </>
-);

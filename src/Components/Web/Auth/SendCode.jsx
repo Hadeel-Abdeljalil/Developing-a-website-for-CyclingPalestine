@@ -13,22 +13,32 @@ export default function SendCode() {
         email: '',
         
     };
+   const toestConfig ={
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    }
     const navigate = useNavigate();
     const onSubmit = async users => {
+      try{
         const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}auth/sendcode`, users);
+        console.log(data.message)
         if (data.message == 'success') {
-            toast.success(`تم إرسال الكود بنجاح`, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.success(`تم إرسال الكود بنجاح`, toestConfig);
             navigate('/forgotPassword')
-        }
+        }else
+            toast.info('الحساب غير موجود', toestConfig);
+      }catch(error){
+        console.log(error)
+        toast.error('الحساب غير موجود', toestConfig);
+
+      }
+        
     }
     const formik = useFormik({
         initialValues: initialValues,

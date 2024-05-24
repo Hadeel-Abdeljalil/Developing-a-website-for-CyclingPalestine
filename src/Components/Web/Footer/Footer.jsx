@@ -8,8 +8,8 @@ export default function Footer() {
   return (
     <footer className="footer ">
       <div className="container">
-        <div className="footer-img">
-          <img src="/images/footerLogo.jpg" alt="restaurant_logo" />
+        <div className="footer-img ">
+          <img src="/images/footerLogo.jpg" alt="cyclingPlestine_logo" />
         </div>
         <p><span>©</span> 2021 Palestine on Bicycle. All Rights Reserved.</p>
         <div className="social-media mt-3 d-flex justify-content-center w-100">
