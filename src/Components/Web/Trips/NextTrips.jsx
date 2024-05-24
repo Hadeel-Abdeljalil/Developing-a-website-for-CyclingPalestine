@@ -11,7 +11,7 @@ export default function NextTrips() {
   const [searchDate, setSearchDate] = useState('');
   const [searchName, setSearchName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const tripsPerPage = 5; 
+  const tripsPerPage = 5; // Adjust this number as needed
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
