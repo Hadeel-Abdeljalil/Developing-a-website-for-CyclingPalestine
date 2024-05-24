@@ -35,7 +35,6 @@ export default function Login() {
     };
 
     const onSubmit = async users => {
-
         try {
             const { data } = await axios.post(`https://cycling-palestine.onrender.com/auth/login`, users);
             if (data.message == 'success') {
@@ -98,6 +97,7 @@ export default function Login() {
 
         />
     )
+
     return (
         <div className='vh-100 d-flex'>
             <div className="sign-img-shadow flex-grow-1 ">

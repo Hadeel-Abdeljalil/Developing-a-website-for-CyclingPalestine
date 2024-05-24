@@ -42,7 +42,7 @@ export default function Profile() {
                                 </div>
                                 <div className="flex-column mb-sm-auto mb-0 justify-content-end align-items-sm-start list-unstyled w-100" id="menu">
                                     <li className={`rounded-1 mb-1  nav-item  sidebar-text ${activeItem === 'personalData' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('personalData')}>
-                                        <Link to='' className="nav-link align-middle px-0 p-2">
+                                        <Link to='userInfo' className="nav-link align-middle px-0 p-2">
                                             <BsPerson className="ms-1 d-none d-sm-inline " /> {/* Adding the user icon */}
                                             <span className="ms-1 d-none d-sm-inline">البيانات الشخصية</span>
                                         </Link>

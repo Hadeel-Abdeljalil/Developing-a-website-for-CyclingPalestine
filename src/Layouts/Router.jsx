@@ -3,7 +3,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import WebLayout from './WebLayout';
 import Home from '../Components/Web/Home/Home';
 import Categories from '../Components/Web/Categories/Categories.jsx';
-import CategoriesDashboard from '../Components/Dashboard/CategoriesDashboard/CategoriesDashboard';
 import HomeDash from '../Components/Dashboard/Home/Home';
 import Register from '../Components/Web/Register/Register';
 import Login from '../Components/Web/Login/Login';
@@ -23,6 +22,12 @@ import Trips from '../Components/Web/Trips/Trips.jsx';
 import TripDetails from '../Components/Web/Trips/TripDetails.jsx';
 import PrevTrips from './../Components/Web/Trips/PrevTrips';
 import NextTrips from './../Components/Web/Trips/NextTrips';
+import Users from '../Components/Dashboard/Home/Users/Users.jsx';
+import TripsA from './../Components/Dashboard/Home/Trips/Trips';
+import CategoriesA from './../Components/Dashboard/Home/Categories/Categories';
+import Orders from './../Components/Dashboard/Home/Orders/Orders';
+import ProductsA from './../Components/Dashboard/Home/Products/Products';
+import ProfileHome from '../Components/Web/Profile/ProfileHome.jsx';
 
 export const router = createBrowserRouter([
 
@@ -53,7 +58,11 @@ export const router = createBrowserRouter([
       </ProtectedRoute>,
     children: [
       {
-        index: true,
+        index:true,
+        element:<ProfileHome/>
+      },
+      {
+        path: 'userInfo',
         element: <UserInfo />
       },
 
@@ -72,30 +81,31 @@ export const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path:'trips/',
-        element:<Trips/>,
+        path: 'trips/',
+        element: <Trips />,
         children: [
           {
             index: true,
             element: <NextTrips />
           },
-          { path: 'nextTrips',
-          element: <NextTrips />
+          {
+            path: 'nextTrips',
+            element: <NextTrips />
           },
           {
             path: 'prevTrips',
             element: <PrevTrips />
           },
-         
+
         ]
       },
       {
-        path:'/trip/:tripId',
-        element:<TripDetails/>,
+        path: '/trip/:tripId',
+        element: <TripDetails />,
       },
       {
-        path:'tripView',
-        element:<TripDetails/>,
+        path: 'tripView',
+        element: <TripDetails />,
       },
       {
         path: 'categories',
@@ -134,15 +144,35 @@ export const router = createBrowserRouter([
 
   {
     path: '/dashboard',
-    element: <DashboardLayout />,
-    children: [{
-      path: 'home',
-      element: <HomeDash />
-    }
-      , {
-      path: 'categories',
-      element: <CategoriesDashboard />
-    },
+    element: <ProtectedRoute>
+      <DashboardLayout />
+    </ProtectedRoute>,
+    children: [
+      {
+        path: 'home',
+        element: <HomeDash />
+      },
+      {
+        path:'users',
+        element:<Users/>
+      },
+      {
+        path:'trips',
+        element:<TripsA/>
+      },
+      {
+        path:'categories',
+        element:<CategoriesA/>
+      },
+      {
+        path:'orders',
+        element:<Orders/>
+      },
+      {
+        path:'products',
+        element:<ProductsA/>
+      },
+    
     {
       path: '*',
       element: <h2>page not found --- dashboard</h2>
