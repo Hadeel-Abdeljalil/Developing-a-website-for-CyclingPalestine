@@ -38,38 +38,38 @@ export default function SideBar() {
                     </div>
                     <div className="flex-column mb-sm-auto mb-0 justify-content-end align-items-sm-start list-unstyled w-100" id="menu">
                        
-                        <li className={`rounded-1 mb-1  nav-item  sidebar-text ${activeItem === 'orders' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('orders')}>
+                        <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'orders' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('orders')}>
                             <Link to='/dashboard/orders' className="nav-link px-0 align-middle w-100 p-2">
                                 <BsListCheck className="ms-1 d-none d-sm-inline " /> 
                                 <span className="ms-1 d-none d-sm-inline">الطلبات</span>
                             </Link>
                         </li>
-                        <li className={`rounded-1 mb-1  nav-item sidebar-text ${activeItem === 'users' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('users')}>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'users' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('users')}>
                             <Link to='/dashboard/users' className="nav-link align-middle px-0 p-2">
                                 <FaUsers className="ms-1 d-none d-sm-inline " /> 
                                 <span className="ms-1 d-none d-sm-inline">  المستخدمين </span>
                             </Link>
                         </li>
-                        <li className={`rounded-1 mb-1  nav-item sidebar-text ${activeItem === 'tripsAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('tripsAdmin')}>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'tripsAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('tripsAdmin')}>
                             <Link to='/dashboard/trips' className="nav-link align-middle px-0 p-2">
                                 <FaRoute className="ms-1 d-none d-sm-inline " /> 
                                 <span className="ms-1 d-none d-sm-inline">  الرحل </span>
                             </Link>
                         </li>
 
-                        <li className={`rounded-1 mb-1  nav-item sidebar-text ${activeItem === 'categoriesAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('categoriesAdmin')}>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'categoriesAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('categoriesAdmin')}>
                             <Link to='/dashboard/categories' className="nav-link align-middle px-0 p-2">
                                 <BiCategory className="ms-1 d-none d-sm-inline " /> 
                                 <span className="ms-1 d-none d-sm-inline">  الفئات </span>
                             </Link>
                         </li>
-                        <li className={`rounded-1 mb-1  nav-item sidebar-text ${activeItem === 'productsAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('productsAdmin')}>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'productsAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('productsAdmin')}>
                             <Link to='/dashboard/products' className="nav-link align-middle px-0 p-2">
                                 <BsCart className="ms-1 d-none d-sm-inline " /> 
                                 <span className="ms-1 d-none d-sm-inline">  المنتجات </span>
                             </Link>
                         </li>
-                        <li className={`rounded-1 mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>
                             <Link to='/' className="nav-link align-middle px-0 p-2">
                                 <BsHouse className="ms-1 d-none d-sm-inline " /> 
                                 <span className="ms-1 d-none d-sm-inline">  العودة إلى الرئيسية </span>

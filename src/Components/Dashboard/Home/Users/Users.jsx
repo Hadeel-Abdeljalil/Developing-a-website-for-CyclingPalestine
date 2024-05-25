@@ -63,12 +63,12 @@ export default function Users() {
               <td>{user.role}</td>
 
               <td>
-                  {user.status === 'Active' ? <button className='bg-danger' onClick={() => handleBlockToggle(user._id)}>حظر</button>
+                  {user.status === 'Active' ? <button className='text-dark bg-transparent' onClick={() => handleBlockToggle(user._id)}>حظر</button>
                    : <button className='bg-dark' onClick={() => handleBlockToggle(user._id)}>الغاء الحظر</button>}
               </td>
               <td>
                {
-                user.role === "User"?(<button className='bg-dark p-2'>اضافة أدمن</button>)
+                user.role === "User"?(<button className='text-dark bg-transparent p-2'>اضافة أدمن</button>)
                 :(<button className='bg-danger px-3'>ازالة أدمن</button>)
                }
               </td>

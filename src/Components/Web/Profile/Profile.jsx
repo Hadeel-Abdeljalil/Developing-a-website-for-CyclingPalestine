@@ -41,21 +41,21 @@ export default function Profile() {
                                     </div>
                                 </div>
                                 <div className="flex-column mb-sm-auto mb-0 justify-content-end align-items-sm-start list-unstyled w-100" id="menu">
-                                    <li className={`rounded-1 mb-1  nav-item  sidebar-text ${activeItem === 'personalData' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('personalData')}>
+                                    <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'personalData' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('personalData')}>
                                         <Link to='userInfo' className="nav-link align-middle px-0 p-2">
                                             <BsPerson className="ms-1 d-none d-sm-inline " /> {/* Adding the user icon */}
                                             <span className="ms-1 d-none d-sm-inline">البيانات الشخصية</span>
                                         </Link>
                                     </li>
 
-                                    <li className={`rounded-1 mb-1  nav-item  sidebar-text ${activeItem === 'orders' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('orders')}>
+                                    <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'orders' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('orders')}>
                                         <Link to='orders' className="nav-link px-0 align-middle w-100 p-2">
                                             <BsListCheck className="ms-1 d-none d-sm-inline " /> {/* Adding the clipboard list icon */}
                                             <span className="ms-1 d-none d-sm-inline">الطلبات</span>
                                         </Link>
                                     </li>
 
-                                    <li className={`rounded-1 mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>
+                                    <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>
                                         <Link to='/' className="nav-link align-middle px-0 p-2">
                                             <BsHouse className="ms-1 d-none d-sm-inline " /> {/* Adding the home icon */}
                                             <span className="ms-1 d-none d-sm-inline"> العودة الى الرئيسية</span>
