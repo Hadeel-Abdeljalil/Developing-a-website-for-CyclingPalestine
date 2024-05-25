@@ -10,7 +10,7 @@ export default function DashboardLayout() {
       <Navbar />
       <div className="d-flex dir pt-4 ">
         <SideBar />
-        <div className="mt-5 p-5">
+        <div className="mt-5 p-5 w-100">
           <Outlet />
         </div>
       </div>

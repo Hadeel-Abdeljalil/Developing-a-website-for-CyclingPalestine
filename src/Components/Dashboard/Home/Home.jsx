@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       {/* Render userName if it exists, otherwise render a fallback */}
-      مرحبًا بعودتك, {userName || 'User'} 👋
+      مرحبًا بك, {userName || 'User'} 👋
     </>
   );
 }
