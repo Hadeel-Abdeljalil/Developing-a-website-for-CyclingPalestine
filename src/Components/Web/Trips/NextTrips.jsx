@@ -8,6 +8,8 @@ import { FaComment } from 'react-icons/fa';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Popup from 'reactjs-popup';
+import { toast } from 'react-toastify';
+
 
 export default function NextTrips() {
   const { loading, userToken } = useContext(UserContext);
@@ -39,6 +41,18 @@ export default function NextTrips() {
     );
   }
 
+  
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+};
+
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
     setSearchDate(selectedDate);
@@ -64,6 +78,21 @@ export default function NextTrips() {
         { headers: { Authorization: `Rufaidah__${userToken}` } }
       );
       console.log(response.data);
+      if(response.data.message == 'succuess'){//  رفيدة كاتبهتا  بالباك هيك
+        toast.success("تمت المشاركة بنجاح",toastConfig)
+      }
+      else if (response.data.message=='Sorry! The track is full.'){
+        toast.warn("نأسف! المسار ممتلئ.",toastConfig);
+
+      }
+      else if (response.data.message=='this track is finished'){
+        toast.warn("تم الانتهاء من هذا المسار",toastConfig);
+
+      }
+      else if (response.data.message=='You have already participated in this track.'){
+        toast.warn("انت مشارك بالفعل في هذا المسار",toastConfig);
+
+      }
     } catch (error) {
       // Handle error if needed
       console.error(error);
