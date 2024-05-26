@@ -26,50 +26,51 @@ export default function Profile() {
             <Navbar />
             <div className="container-fluid">
                 <div className="row dir pt-5 ">
-                    <div className='mt-4  mb-5  vh-100 col-md-3 col-xl-2 px-sm-2 px-0'>
-                        <div className="position-fixed h-75 mb-5  ">
-                            <div className="d-flex flex-column align-items-start px-3 pt-2 text-white justify-content-center mb-5">
-                                <div className="  w-100   mb-3 text-decoration-none">
-                                    <div className=' w-100 d-flex align-items-center'>
-                                        <div className=" ">
-                                            <img className='rounded-circle image-sidebar' src={userData.image? userData.image: '/images/profile.jpeg'} />
-                                        </div>
-                                        <div className='me-2'>
-                                            <p className=" text-dark mb-0 mt-3 ">{userData.userName} </p>
-                                            <p className=" text-black-50  ">{userData.email} </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex-column mb-sm-auto mb-0 justify-content-end align-items-sm-start list-unstyled w-100" id="menu">
-                                    <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'personalData' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('personalData')}>
-                                        <Link to='userInfo' className="nav-link align-middle px-0 p-2">
+                <div className='mt-4  mb-5  vh-100 col-md-3 col-xl-2 px-sm-2  '>
+            <div className=' w-100 d-flex align-items-center'>
+                <div>
+                    <img className='rounded-circle image-sidebar' src={userData.image ? userData.image : '/images/profile.jpeg'} />
+                </div>
+                <div>
+                    <p className=" text-dark mb-0 mt-3 ">{userData.userName} </p>
+                    <p className=" text-black-50  ">{userData.email} </p>
+                </div>
+            </div>
+            <div className="position-fixed  mb-5  ">
+                <div className="d-flex flex-column align-items-start px-3 pt-2 text-white justify-content-center mb-5">
+
+                    <div className="flex-column mb-sm-auto mb-0 justify-content-end align-items-sm-start list-unstyled w-100" id="menu">
+
+                      
+                    <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'personalData' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('personalData')}>
+                                        <Link to='userInfo' className="nav-link align-middle ps-5 p-2">
                                             <BsPerson className="ms-1 d-none d-sm-inline " /> {/* Adding the user icon */}
                                             <span className="ms-1 d-none d-sm-inline">البيانات الشخصية</span>
                                         </Link>
                                     </li>
 
                                     <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'orders' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('orders')}>
-                                        <Link to='orders' className="nav-link px-0 align-middle w-100 p-2">
+                                        <Link to='orders' className="nav-link ps-5 align-middle w-100 p-2">
                                             <BsListCheck className="ms-1 d-none d-sm-inline " /> {/* Adding the clipboard list icon */}
                                             <span className="ms-1 d-none d-sm-inline">الطلبات</span>
                                         </Link>
                                     </li>
 
                                     <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>
-                                        <Link to='/' className="nav-link align-middle px-0 p-2">
+                                        <Link to='/' className="nav-link align-middle ps-5 p-2">
                                             <BsHouse className="ms-1 d-none d-sm-inline " /> {/* Adding the home icon */}
                                             <span className="ms-1 d-none d-sm-inline"> العودة الى الرئيسية</span>
                                         </Link>
                                     </li>
-                                </div>
-                                <hr />
-
-                            </div>
-                        </div>
                     </div>
+                    <hr />
+
+                </div>
+            </div>
+        </div>
 
 
-                    <div className="col-md-9">
+                    <div className="col-md-9 mt-5">
                         <Outlet />
                     </div>
                 </div>
