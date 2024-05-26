@@ -53,7 +53,13 @@ export default function SideBar() {
                         <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'tripsAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('tripsAdmin')}>
                             <Link to='/dashboard/trips' className="nav-link align-middle ps-5 p-2">
                                 <FaRoute className="ms-1 d-none d-sm-inline " />
-                                <span className="ms-1 d-none d-sm-inline">  الرحل </span>
+                                <span className="ms-1 d-none d-sm-inline">  رحلة جديدة </span>
+                            </Link>
+                        </li>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'postAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('postAdmin')}>
+                            <Link to='/dashboard/post' className="nav-link align-middle ps-5 p-2">
+                                <FaRoute className="ms-1 d-none d-sm-inline " />
+                                <span className="ms-1 d-none d-sm-inline">  رحلة قديمة </span>
                             </Link>
                         </li>
 

@@ -12,7 +12,12 @@
     font-weight: 100;
     width: 100%;
 }
-
+.fixed-image {
+    width: 220px; /* Set your desired fixed width */
+    height: 150px; /* Set your desired fixed height */
+    object-fit: cover; /* Ensures the image covers the area while maintaining its aspect ratio */
+  }
+  
 
 .input::placeholder {
     color: #797979 !important; 
@@ -32,4 +37,7 @@
 }
 .border-color{
     border-color: #5F8559 !important;
+}
+.color{
+    color:  #5F8559 !important;
 }

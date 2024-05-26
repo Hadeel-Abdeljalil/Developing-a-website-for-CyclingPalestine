@@ -29,6 +29,7 @@ import Orders from './../Components/Dashboard/Home/Orders/Orders';
 import ProductsA from './../Components/Dashboard/Home/Products/Products';
 import ProfileHome from '../Components/Web/Profile/ProfileHome.jsx';
 import AdminProtectedRouter from '../Components/Web/ProtectedRoute/AdminProtectedRouter.jsx';
+import Post from '../Components/Dashboard/Home/Post/Post.jsx';
 
 export const router = createBrowserRouter([
 
@@ -162,6 +163,10 @@ export const router = createBrowserRouter([
       {
         path:'trips',
         element:<TripsA/>
+      },
+      {
+        path:'post',
+        element:<Post/>
       },
       {
         path:'categories',
