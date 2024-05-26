@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
-import './Users.css';
 import { toast } from 'react-toastify';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import './Users.css';
+
 
 export default function Users() {
   const { userToken, userId: currentAdminId } = useContext(UserContext);
   const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRole, setSelectedRole] = useState('All');
 
-  const getUsers = async (page = 1) => {  // Default page to 1 if not provided
+  const getUsers = async (page = 1) => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}user/getAll?page=${page}`, {
         headers: { Authorization: `Rufaidah__${userToken}` }
@@ -59,11 +64,45 @@ export default function Users() {
       console.error('Error changing admin status:', error);
     }
   };
-  
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleRoleSelect = (e) => {
+    setSelectedRole(e.target.value);
+  };
+
+  const filteredUsers = users.filter(user =>
+    user.userName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+    (selectedRole === 'All' || user.role === selectedRole)
+  );
 
   return (
     <div>
-      <h1 className='mb-4'>المستخدمين</h1>
+    <div className='d-flex justify-content-between mb-4'>
+  <h1 className=''>المستخدمين</h1>
+  {/* Search and Role Select */}
+  <div className='d-flex align-items-center w-50'>
+    <input
+      type="text"
+      placeholder="ابحث عن مستخدم بالاسم..."
+      value={searchQuery}
+      onChange={handleSearch}
+      className='mx-1 border border-secondary rounded shadow-bottom input '
+    />
+    <select
+      value={selectedRole}
+      onChange={handleRoleSelect}
+      className='bg-white text-dark border border-secondary rounded shadow-bottom input'
+    >
+      <option value="All">الكل</option>
+      <option value="Admin">أدمن</option>
+      <option value="User">مستخدم</option>
+    </select>
+  </div>
+</div>
+
 
       <table className="users-table">
         <thead>
@@ -77,7 +116,7 @@ export default function Users() {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(users) && users.map((user, index) => (
+          {filteredUsers.map((user, index) => (
             <tr key={user._id}>
               <td>{index + 1}</td>
               <td>{user.userName}</td>
@@ -101,6 +140,7 @@ export default function Users() {
           ))}
         </tbody>
       </table>
+      
     </div>
   );
 }
