@@ -8,9 +8,12 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function UserInfo() {
-  const navigate =useNavigate();
-  let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteLoading,setDeleteLoading] = useState(false);
+  const [isUpdateLoading,setUpdateLoading] = useState(false);
+
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
 
@@ -25,6 +28,33 @@ export default function UserInfo() {
     theme: "light",
   };
 
+  const handleDeleteImage = async () => {
+    try {
+      // Set isLoading to true only during the image deletion process
+      setDeleteLoading(true);
+  
+      const response = await axios.delete(
+        'https://cycling-palestine.onrender.com/user/deleteImage',
+        { headers: { Authorization: `Rufaidah__${userToken}` } }
+      );
+  
+      if (response.data && response.data.message === 'success') {
+        toast.success('تم حذف الصورة بنجاح', toastConfig);
+        // You may want to update user data or refresh the UI after deleting the image
+      } else {
+        toast.warn('فشل في حذف الصورة');
+        console.error('Server response message:', response.data && response.data.message);
+      }
+    } catch (error) {
+      toast.error('خطأ في حذف الصورة');
+      console.error('Error deleting image:', error);
+    } finally {
+      // Ensure isLoading is set to false after the deletion process
+      setDeleteLoading(false);
+    }
+  };
+  
+
   const formik = useFormik({
     initialValues: {
       image: null,
@@ -35,7 +65,7 @@ export default function UserInfo() {
       Address: userData.Address || '',
     },
     onSubmit: async (values) => {
-      setIsLoading(true);
+      setUpdateLoading(true);
       const formData = new FormData();
       formData.append('image', values.image);
 
@@ -50,18 +80,18 @@ export default function UserInfo() {
 
         console.log('Server response:', data);
 
-        if (data.message === 'success') {
+        if (data && data.message === 'success') {
           formik.resetForm();
           toast.success('تم تغيير الصورة بنجاح', toastConfig);
         } else {
           toast.warn('لم يتم تغيير الصورة');
-          console.log('Server response message:', data.message);
+          console.log('Server response message:', data && data.message);
         }
       } catch (error) {
         toast.error('خطأ في تحميل الصورة');
         console.error('Error uploading image:', error);
       } finally {
-        setIsLoading(false);
+        setUpdateLoading(false);
       }
     },
   });
@@ -74,7 +104,7 @@ export default function UserInfo() {
     setIsLoading(true);
     try {
       const response = await axios.patch(
-        `https://cycling-palestine.onrender.com/user/updateProfile/${userData._id}`,
+        `${import.meta.env.VITE_API_URL}user/updateProfile/${userData._id}`,
         {
           userName: values.userName,
           birthdate: values.birthdate,
@@ -89,12 +119,12 @@ export default function UserInfo() {
 
       console.log('Server response:', data);
 
-      if (data.message === 'success') {
+      if (data && data.message === 'success') {
         setUserData({ ...userData, ...values });
         toast.success('تم تحديث المعلومات بنجاح', toastConfig);
       } else {
         toast.warn('لم يتم تحديث المعلومات');
-        console.log('Server response message:', data.message);
+        console.log('Server response message:', data && data.message);
       }
     } catch (error) {
       toast.error('خطأ في تحديث المعلومات');
@@ -105,8 +135,6 @@ export default function UserInfo() {
     }
   };
 
-  
-
   const handleDeleteAccount = async () => {
     const confirmDeletion = window.confirm('هل أنت متأكد أنك تريد حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي.');
 
@@ -116,13 +144,13 @@ export default function UserInfo() {
           `${import.meta.env.VITE_API_URL}user/deleteAccount/${userData._id}`,
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
-    
+
         if (response.status === 200) {
           alert('تم حذف الحساب بنجاح');
           localStorage.removeItem('userToken');
           setUserToken(null);
           setUserData(null);
-          navigate("/login")
+          navigate("/login");
         } else {
           alert('فشل في حذف الحساب');
         }
@@ -132,7 +160,6 @@ export default function UserInfo() {
       }
     }
   };
-  
 
   return (
     <div className='h-100 py-5'>
@@ -152,9 +179,12 @@ export default function UserInfo() {
             <div className='w-25 me-3'>
               <p className='mt-3'>إضفاء الطابع الشخصي على حسابك مع صورة. ستظهر صورة ملفك الشخصي</p>
               <input type='file' name='image' onChange={handleFileChange} />
-              <button type="submit" disabled={isLoading || !formik.isValid} className='btn border-black mt-1'>{isLoading ? 'جاري التحميل...' : 'غيَر الصورة'}</button>
+              <button  className='btn border-black mt-1'>{isUpdateLoading ? 'جاري التحميل...' : 'غيَر الصورة'}</button>
+
             </div>
           </form>
+          <button  className='  mt-1 border-0 bg-white text-danger me-4' onClick={handleDeleteImage}>{deleteLoading ? 'جاري التحميل...' : 'حذف الصورة '}</button>
+
         </div>
         <hr />
         <div className='mx-3 d-flex justify-content-between'>
