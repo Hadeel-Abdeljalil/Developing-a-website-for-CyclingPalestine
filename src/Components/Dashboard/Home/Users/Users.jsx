@@ -109,6 +109,7 @@ export default function Users() {
           <tr>
             <th>#</th>
             <th>الاسم</th>
+            <th>البريد</th>
             <th>الحالة</th>
             <th>الدور</th>
             <th>حظر</th>
@@ -120,6 +121,7 @@ export default function Users() {
             <tr key={user._id}>
               <td>{index + 1}</td>
               <td>{user.userName}</td>
+              <td>{user.email}</td>
               <td>{user.status}</td>
               <td>{user.role}</td>
               <td>
