@@ -10,18 +10,18 @@ import Stack from '@mui/material/Stack';
 import Popup from 'reactjs-popup';
 
 export default function NextTrips() {
-  const { loading } = useContext(UserContext);
+  const { loading, userToken } = useContext(UserContext);
   const [tracks, setTracks] = useState([]);
   const [searchDate, setSearchDate] = useState('');
   const [searchName, setSearchName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const tripsPerPage = 5;
+  const [isPatecipate,setIsPartecipate] =useState(false);
 
   useEffect(() => {
     const getTracks = async () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}track/allTracks`);
-        console.log(data);
         setTracks(data.tracks);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -55,11 +55,21 @@ export default function NextTrips() {
     return dateStr.split('T')[0];
   };
 
-
   const totalPages = Math.ceil(filteredTrips.length / tripsPerPage);
   const currentTrips = filteredTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
-
+  const handelparticipating = async (trackId) => {
+    try {
+      const response = await axios.post( `${import.meta.env.VITE_API_URL}track/${trackId}/participating`, {}, 
+        { headers: { Authorization: `Rufaidah__${userToken}` } }
+      );
+      console.log(response.data);
+    } catch (error) {
+      // Handle error if needed
+      console.error(error);
+    }
+  };
+  
   return (
     <div className='container '>
       <div className='d-flex justify-content-end pe-5 me-5'>
@@ -118,7 +128,7 @@ export default function NextTrips() {
                           trigger={<Link className='small me-3 color'>عرض المزيد</Link>}
                           position="center center"
                         >
-                          <div className='border shadow bg-body-secondary p-3 rounded-3'>
+                          <div className='border shadow bg-white p-3 rounded-3'>
                           <h2>{item.trackName}</h2>
                           <div
                             className=' dir'
@@ -140,9 +150,6 @@ export default function NextTrips() {
                         </Popup>
                       </div>
                     </div>
-
-
-
                   </div>
                   <div className='d-flex'>
                     <div className='text-danger p-2 mx-1'>
@@ -156,7 +163,7 @@ export default function NextTrips() {
                 </div>
                 <div className='col-lg-4 dir2 d-flex flex-column justify-content-between'>
                   <p>{formatDate(item.date)}</p>
-                  <Link to='/tripView' className='btn bg-color text-white w-50 rounded-2 p-2'>شارك</Link>
+                  <button to='/tripView' className='btn bg-color text-white w-50 rounded-2 p-2' onClick={()=>handelparticipating(item._id)}>شارك</button>
                 </div>
               </div>
             ))
