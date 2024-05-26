@@ -8,7 +8,7 @@ import './Users.css';
 
 
 export default function Users() {
-  const { userToken, userId: currentAdminId } = useContext(UserContext);
+  const { userToken, userData } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRole, setSelectedRole] = useState('All');
@@ -42,7 +42,7 @@ export default function Users() {
   const handelAdminChange = async (user) => {
     try {
       // Prevent the current admin from changing their own role
-      if (user._id === currentAdminId) {
+      if (user._id === userData._id) {
         toast.warn("لا يمكن للمسؤولين تغيير دورهم.");
         return;
       }
