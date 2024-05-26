@@ -22,8 +22,9 @@ export default function SideBar() {
     }
 
     return (
-        <div className='mt-4  mb-5  vh-100 col-md-3 col-xl-2 px-sm-2  '>
-            <div className=' w-100 d-flex align-items-center'>
+        <div className=' mt-4  mb-5  vh-100 col-md-3 col-xl-2 px-sm-2  '>
+           <div className='position-fixed'>
+           <div className=' w-100 d-flex align-items-center'>
                 <div>
                     <img className='rounded-circle image-sidebar' src={userData.image ? userData.image : '/images/profile.jpeg'} />
                 </div>
@@ -32,7 +33,7 @@ export default function SideBar() {
                     <p className=" text-black-50  ">{userData.email} </p>
                 </div>
             </div>
-            <div className="position-fixed  mb-5  ">
+            <div className="  mb-5  ">
                 <div className="d-flex flex-column align-items-start px-3 pt-2 text-white justify-content-center mb-5">
 
                     <div className="flex-column mb-sm-auto mb-0 justify-content-end align-items-sm-start list-unstyled w-100" id="menu">
@@ -79,6 +80,7 @@ export default function SideBar() {
 
                 </div>
             </div>
+           </div>
         </div>
     )
 }
