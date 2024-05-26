@@ -147,7 +147,7 @@ export default function UserInfo() {
         <div className='m-5'>
           <form className='d-flex align-items-center' onSubmit={formik.handleSubmit} encType='multipart/form-data'>
             <div className="pt-3">
-              <img className='profileImage' src={userData.image ? userData.image : 'images/profile.jpeg'} alt="Profile" />
+              <img className='profileImage' src={userData.image ? userData.image : '/images/profile.jpeg'} alt="Profile" />
             </div>
             <div className='w-25 me-3'>
               <p className='mt-3'>إضفاء الطابع الشخصي على حسابك مع صورة. ستظهر صورة ملفك الشخصي</p>
