@@ -30,7 +30,7 @@ export default function Profile() {
                       <div className='position-fixed'>
                       <div className=' w-100 d-flex align-items-center'>
                             <div>
-                                <img className='rounded-circle image-sidebar' src={userData.image ? userData.image : '/images/profile.jpeg'} />
+                                <img className='rounded-circle image-sidebar' src={userData.image?.secure_url ? userData.image?.secure_url: '/images/profile.jpeg'} />
                             </div>
                             <div>
                                 <p className=" text-dark mb-0 mt-3 ">{userData.userName} </p>

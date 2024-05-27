@@ -8,14 +8,12 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function UserInfo() {
-  const navigate = useNavigate();
-  const { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
+  const navigate =useNavigate();
+  let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [deleteLoading,setDeleteLoading] = useState(false);
-  const [isUpdateLoading,setUpdateLoading] = useState(false);
-
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
+  const [deleteLoading,setDeleteLoading] = useState(false);
 
   const toastConfig = {
     position: "top-right",
@@ -26,6 +24,114 @@ export default function UserInfo() {
     draggable: true,
     progress: undefined,
     theme: "light",
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      image: null,
+      userName: userData.userName || '',
+      birthdate: userData.birthdate || '',
+      gender: userData.gender || '',
+      phone: userData.phone || '',
+      Address: userData.Address || '',
+    },
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append('image', values.image);
+
+      try {
+        const response = await axios.patch(
+          `${import.meta.env.VITE_API_URL}user/uploadPic`,
+          formData,
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
+        );
+
+        const { data } = response;
+
+        console.log('Server response:', data);
+
+        if (data.message === 'success') {
+          formik.resetForm();
+          toast.success('تم تغيير الصورة بنجاح', toastConfig);
+        } else {
+          toast.warn('لم يتم تغيير الصورة');
+          console.log('Server response message:', data.message);
+        }
+      } catch (error) {
+        toast.error('خطأ في تحميل الصورة');
+        console.error('Error uploading image:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+  });
+
+  const handleFileChange = (event) => {
+    formik.setFieldValue('image', event.target.files[0]);
+  };
+
+  const handleInfoChange = async (values) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.patch(
+        `https://cycling-palestine.onrender.com/user/updateProfile/${userData._id}`,
+        {
+          userName: values.userName,
+          birthdate: values.birthdate,
+          gender: values.gender,
+          phone: values.phone,
+          Address: values.Address,
+        },
+        { headers: { Authorization: `Rufaidah__${userToken}` } }
+      );
+
+      const { data } = response;
+
+      console.log('Server response:', data);
+
+      if (data.message === 'success') {
+        setUserData({ ...userData, ...values });
+        toast.success('تم تحديث المعلومات بنجاح', toastConfig);
+      } else {
+        toast.warn('لم يتم تحديث المعلومات');
+        console.log('Server response message:', data.message);
+      }
+    } catch (error) {
+      toast.error('خطأ في تحديث المعلومات');
+      console.error('Error updating info:', error);
+    } finally {
+      setIsLoading(false);
+      setIsEditingInfo(false);
+    }
+  };
+
+  
+
+  const handleDeleteAccount = async () => {
+    const confirmDeletion = window.confirm('هل أنت متأكد أنك تريد حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي.');
+
+    if (confirmDeletion) {
+      try {
+        const response = await axios.delete(
+          `${import.meta.env.VITE_API_URL}user/deleteAccount/${userData._id}`,
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
+        );
+    
+        if (response.status === 200) {
+          alert('تم حذف الحساب بنجاح');
+          localStorage.removeItem('userToken');
+          setUserToken(null);
+          setUserData(null);
+          navigate("/login")
+        } else {
+          alert('فشل في حذف الحساب');
+        }
+      } catch (error) {
+        console.error('There was an error deleting the account!', error);
+        alert('حدث خطأ أثناء حذف الحساب!');
+      }
+    }
   };
 
   const handleDeleteImage = async () => {
@@ -54,112 +160,7 @@ export default function UserInfo() {
     }
   };
   
-
-  const formik = useFormik({
-    initialValues: {
-      image: null,
-      userName: userData.userName || '',
-      birthdate: userData.birthdate || '',
-      gender: userData.gender || '',
-      phone: userData.phone || '',
-      Address: userData.Address || '',
-    },
-    onSubmit: async (values) => {
-      setUpdateLoading(true);
-      const formData = new FormData();
-      formData.append('image', values.image);
-
-      try {
-        const response = await axios.patch(
-          `${import.meta.env.VITE_API_URL}user/uploadPic`,
-          formData,
-          { headers: { Authorization: `Rufaidah__${userToken}` } }
-        );
-
-        const { data } = response;
-
-        console.log('Server response:', data);
-
-        if (data && data.message === 'success') {
-          formik.resetForm();
-          toast.success('تم تغيير الصورة بنجاح', toastConfig);
-        } else {
-          toast.warn('لم يتم تغيير الصورة');
-          console.log('Server response message:', data && data.message);
-        }
-      } catch (error) {
-        toast.error('خطأ في تحميل الصورة');
-        console.error('Error uploading image:', error);
-      } finally {
-        setUpdateLoading(false);
-      }
-    },
-  });
-
-  const handleFileChange = (event) => {
-    formik.setFieldValue('image', event.target.files[0]);
-  };
-
-  const handleInfoChange = async (values) => {
-    setIsLoading(true);
-    try {
-      const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}user/updateProfile/${userData._id}`,
-        {
-          userName: values.userName,
-          birthdate: values.birthdate,
-          gender: values.gender,
-          phone: values.phone,
-          Address: values.Address,
-        },
-        { headers: { Authorization: `Rufaidah__${userToken}` } }
-      );
-
-      const { data } = response;
-
-      console.log('Server response:', data);
-
-      if (data && data.message === 'success') {
-        setUserData({ ...userData, ...values });
-        toast.success('تم تحديث المعلومات بنجاح', toastConfig);
-      } else {
-        toast.warn('لم يتم تحديث المعلومات');
-        console.log('Server response message:', data && data.message);
-      }
-    } catch (error) {
-      toast.error('خطأ في تحديث المعلومات');
-      console.error('Error updating info:', error);
-    } finally {
-      setIsLoading(false);
-      setIsEditingInfo(false);
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    const confirmDeletion = window.confirm('هل أنت متأكد أنك تريد حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي.');
-
-    if (confirmDeletion) {
-      try {
-        const response = await axios.delete(
-          `${import.meta.env.VITE_API_URL}user/deleteAccount/${userData._id}`,
-          { headers: { Authorization: `Rufaidah__${userToken}` } }
-        );
-
-        if (response.status === 200) {
-          alert('تم حذف الحساب بنجاح');
-          localStorage.removeItem('userToken');
-          setUserToken(null);
-          setUserData(null);
-          navigate("/login");
-        } else {
-          alert('فشل في حذف الحساب');
-        }
-      } catch (error) {
-        console.error('There was an error deleting the account!', error);
-        alert('حدث خطأ أثناء حذف الحساب!');
-      }
-    }
-  };
+  
 
   return (
     <div className='h-100 py-5'>
@@ -174,17 +175,15 @@ export default function UserInfo() {
         <div className='m-5'>
           <form className='d-flex align-items-center' onSubmit={formik.handleSubmit} encType='multipart/form-data'>
             <div className="pt-3">
-              <img className='profileImage' src={userData.image ? userData.image : '/images/profile.jpeg'} alt="Profile" />
+              <img className='profileImage' src={userData.image?.secure_url ? userData.image?.secure_url : '/images/profile.jpeg'} alt="Profile" />
             </div>
             <div className='w-25 me-3'>
               <p className='mt-3'>إضفاء الطابع الشخصي على حسابك مع صورة. ستظهر صورة ملفك الشخصي</p>
               <input type='file' name='image' onChange={handleFileChange} />
-              <button  className='btn border-black mt-1'>{isUpdateLoading ? 'جاري التحميل...' : 'غيَر الصورة'}</button>
-
+              <button type="submit" disabled={isLoading || !formik.isValid} className='btn border-black mt-1'>{isLoading ? 'جاري التحميل...' : 'غيَر الصورة'}</button>
             </div>
           </form>
           <button  className='  mt-1 border-0 bg-white text-danger me-4' onClick={handleDeleteImage}>{deleteLoading ? 'جاري التحميل...' : 'حذف الصورة '}</button>
-
         </div>
         <hr />
         <div className='mx-3 d-flex justify-content-between'>
