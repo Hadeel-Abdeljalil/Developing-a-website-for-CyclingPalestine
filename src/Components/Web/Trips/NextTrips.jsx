@@ -18,7 +18,7 @@ export default function NextTrips() {
   const [searchName, setSearchName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const tripsPerPage = 5;
-  const [isPatecipate,setIsPartecipate] =useState(false);
+  const [isPatecipate, setIsPartecipate] = useState(false);
 
   useEffect(() => {
     const getTracks = async () => {
@@ -41,7 +41,7 @@ export default function NextTrips() {
     );
   }
 
-  
+
   const toastConfig = {
     position: "top-right",
     autoClose: 2000,
@@ -51,7 +51,7 @@ export default function NextTrips() {
     draggable: true,
     progress: undefined,
     theme: "light",
-};
+  };
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
@@ -70,27 +70,29 @@ export default function NextTrips() {
   };
 
   const totalPages = Math.ceil(filteredTrips.length / tripsPerPage);
-  const currentTrips = filteredTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
+  const sortedTrips = filteredTrips.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const currentTrips = sortedTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
   const handelparticipating = async (trackId) => {
     try {
-      const response = await axios.post( `${import.meta.env.VITE_API_URL}track/${trackId}/participating`, {}, 
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}track/${trackId}/participating`, {},
         { headers: { Authorization: `Rufaidah__${userToken}` } }
       );
       console.log(response.data);
-      if(response.data.message == 'succuess'){//  رفيدة كاتبهتا  بالباك هيك
-        toast.success("تمت المشاركة بنجاح",toastConfig)
+      if (response.data.message == 'success') {
+        toast.success("تمت المشاركة بنجاح", toastConfig)
       }
-      else if (response.data.message=='Sorry! The track is full.'){
-        toast.warn("نأسف! المسار ممتلئ.",toastConfig);
+      else if (response.data.message == 'Sorry! The track is full.') {
+        toast.warn("نأسف! المسار ممتلئ.", toastConfig);
 
       }
-      else if (response.data.message=='this track is finished'){
-        toast.warn("تم الانتهاء من هذا المسار",toastConfig);
+      else if (response.data.message == 'this track is finished') {
+        toast.warn("تم الانتهاء من هذا المسار", toastConfig);
 
       }
-      else if (response.data.message=='You have already participated in this track.'){
-        toast.warn("انت مشارك بالفعل في هذا المسار",toastConfig);
+      else if (response.data.message == 'You have already participated in this track.') {
+        toast.warn("انت مشارك بالفعل في هذا المسار", toastConfig);
 
       }
     } catch (error) {
@@ -98,7 +100,7 @@ export default function NextTrips() {
       console.error(error);
     }
   };
-  
+
   return (
     <div className='container '>
       <div className='d-flex justify-content-end pe-5 me-5'>
@@ -158,24 +160,26 @@ export default function NextTrips() {
                           position="center center"
                         >
                           <div className='border shadow bg-white p-3 rounded-3'>
-                          <h2>{item.trackName}</h2>
-                          <div
-                            className=' dir'
-                            style={{ width: '50vw', padding: '20px' }}
-                          >
-                            <p><strong>مستوى الصعوبة:</strong> {item.difficulty_level}</p>
-                            <p><strong>المسافة:</strong> {item.distance} km</p>
-                            <p><strong>نقطة البداية:</strong> {item.start_point}</p>
-                            <p><strong>نقطة النهاية:</strong> {item.end_point}</p>
-                            <p><strong>تاريخ الإنشاء:</strong> {new Date(item.createdAt).toLocaleString()}</p>
-                            <p><strong>تاريخ التحديث:</strong> {new Date(item.updatedAt).toLocaleString()}</p>
-                            <p><strong>تاريخ:</strong> {new Date(item.date).toLocaleString()}</p>
-                            <p><strong>عدد المشاركين:</strong> {item.number_of_participants}</p>
-                            <p><strong>الحد الأقصى للمشاركين:</strong> {item.maxParticipants}</p>
-                            <p><strong>وصف:</strong> {item.description}</p>
+                            <h2>{item.trackName}</h2>
+                            <div
+                              className=' dir'
+                              style={{ width: '50vw', padding: '20px' }}
+                            >
+                              <p><strong>مستوى الصعوبة:</strong> {item.difficulty_level}</p>
+                              <p><strong>المسافة:</strong> {item.distance} km</p>
+                              <p><strong>نقطة البداية:</strong> {item.start_point}</p>
+                              <p><strong>نقطة النهاية:</strong> {item.end_point}</p>
+                              <p><strong>تاريخ الإنشاء:</strong> {new Date(item.createdAt).toLocaleString()}</p>
+                              <p><strong>تاريخ التحديث:</strong> {new Date(item.updatedAt).toLocaleString()}</p>
+                              <p><strong>تاريخ:</strong> {new Date(item.date).toLocaleString()}</p>
+                              <p><strong>عدد المشاركين:</strong> {item.number_of_participants}</p>
+                              <p><strong>الحد الأقصى للمشاركين:</strong> {item.maxParticipants}</p>
+                              <p className='w-100' style={{ wordWrap: 'break-word', maxWidth: '100%' }}>
+                                <strong>وصف:</strong> {item.description}
+                              </p>
+                            </div>
                           </div>
-                          </div>
-                          
+
                         </Popup>
                       </div>
                     </div>
@@ -192,7 +196,7 @@ export default function NextTrips() {
                 </div>
                 <div className='col-lg-4 dir2 d-flex flex-column justify-content-between'>
                   <p>{formatDate(item.date)}</p>
-                  <button to='/tripView' className='btn bg-color text-white w-50 rounded-2 p-2' onClick={()=>handelparticipating(item._id)}>شارك</button>
+                  <button to='/tripView' className='btn bg-color text-white w-50 rounded-2 p-2' onClick={() => handelparticipating(item._id)}>شارك</button>
                 </div>
               </div>
             ))

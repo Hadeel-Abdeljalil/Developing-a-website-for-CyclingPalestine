@@ -8,12 +8,12 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function UserInfo() {
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
-  const [deleteLoading,setDeleteLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const toastConfig = {
     position: "top-right",
@@ -75,7 +75,7 @@ export default function UserInfo() {
     setIsLoading(true);
     try {
       const response = await axios.patch(
-        `https://cycling-palestine.onrender.com/user/updateProfile/${userData._id}`,
+        `${import.meta.env.VITE_API_URL}user/updateProfile/${userData._id}`,
         {
           userName: values.userName,
           birthdate: values.birthdate,
@@ -106,8 +106,6 @@ export default function UserInfo() {
     }
   };
 
-  
-
   const handleDeleteAccount = async () => {
     const confirmDeletion = window.confirm('هل أنت متأكد أنك تريد حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي.');
 
@@ -117,7 +115,7 @@ export default function UserInfo() {
           `${import.meta.env.VITE_API_URL}user/deleteAccount/${userData._id}`,
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
-    
+
         if (response.status === 200) {
           alert('تم حذف الحساب بنجاح');
           localStorage.removeItem('userToken');
@@ -138,12 +136,12 @@ export default function UserInfo() {
     try {
       // Set isLoading to true only during the image deletion process
       setDeleteLoading(true);
-  
+
       const response = await axios.delete(
         'https://cycling-palestine.onrender.com/user/deleteImage',
         { headers: { Authorization: `Rufaidah__${userToken}` } }
       );
-  
+
       if (response.data && response.data.message === 'success') {
         toast.success('تم حذف الصورة بنجاح', toastConfig);
         // You may want to update user data or refresh the UI after deleting the image
@@ -159,8 +157,6 @@ export default function UserInfo() {
       setDeleteLoading(false);
     }
   };
-  
-  
 
   return (
     <div className='h-100 py-5'>
@@ -183,28 +179,10 @@ export default function UserInfo() {
               <button type="submit" disabled={isLoading || !formik.isValid} className='btn border-black mt-1'>{isLoading ? 'جاري التحميل...' : 'غيَر الصورة'}</button>
             </div>
           </form>
-          <button  className='  mt-1 border-0 bg-white text-danger me-4' onClick={handleDeleteImage}>{deleteLoading ? 'جاري التحميل...' : 'حذف الصورة '}</button>
+          <button className='  mt-1 border-0 bg-white text-danger me-4' onClick={handleDeleteImage}>{deleteLoading ? 'جاري التحميل...' : 'حذف الصورة '}</button>
         </div>
         <hr />
-        <div className='mx-3 d-flex justify-content-between'>
-          <p>الإسم الكامل</p>
-          {isEditingName ? (
-            <div>
-              <input
-                type="text"
-                defaultValue={userData.userName}
-                onBlur={(e) => handleInfoChange({ userName: e.target.value })}
-                autoFocus
-              />
-              <button onClick={() => setIsEditingName(false)}>إلغاء</button>
-            </div>
-          ) : (
-            <>
-              <p>{userData.userName}</p>
-              <button className='text-info border-0 bg-transparent mb-3' onClick={() => setIsEditingName(true)}>تغيير الاسم</button>
-            </>
-          )}
-        </div>
+
       </div>
       <div className='border rounded-2 bg-white shadowx mt-3'>
         <div>
@@ -227,8 +205,23 @@ export default function UserInfo() {
               </div>
             </div>
           </div>
+        
           {isEditingInfo ? (
             <form onSubmit={formik.handleSubmit}>
+               <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <label className='opacity-50 w-25'> الاسم</label>
+                    <input
+                      type='text'
+                      name='userName'
+                      value={formik.values.userName}
+                      onChange={formik.handleChange}
+                      className='form-control m-2'
+                    />
+                  </div>
+                </div>
+              </div>      
               <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
                   <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
@@ -254,8 +247,8 @@ export default function UserInfo() {
                       className='form-control bg-transparent text-dark m-2'
                     >
                       <option value=''>اختيار</option>
-                      <option value='male'>ذكر</option>
-                      <option value='female'>أنثى</option>
+                      <option value='ذكر'>ذكر</option>
+                      <option value='أنثى'>أنثى</option>
                     </select>
                   </div>
                 </div>
@@ -308,6 +301,17 @@ export default function UserInfo() {
             </form>
           ) : (
             <>
+             <div className='d-flex align-items-center'>
+                <div className='border-bottom w-100'>
+                  <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
+                    <p className='opacity-50'> اسم المستخدم</p>
+                    <p>{userData.userName ? userData.userName  : 'لا يوجد'}</p>
+                    <Link className='pb-3 opacity-50'>
+                      <BsArrowLeft />
+                    </Link>
+                  </div>
+                </div>
+              </div>
               <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
                   <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
@@ -358,11 +362,11 @@ export default function UserInfo() {
         </div>
       </div>
       <div className='mx-5 mt-2 d-flex'>
-          <Link to='#' className='text-danger' onClick={handleDeleteAccount}>
-            حذف الحساب الشخصي 
-          </Link>
-          <p className='small'>سيتم حذف جميع بياناتك بشكل نهائي </p>
-        </div>
+        <Link to='#' className='text-danger' onClick={handleDeleteAccount}>
+          حذف الحساب الشخصي
+        </Link>
+        <p className='small'>سيتم حذف جميع بياناتك بشكل نهائي </p>
+      </div>
     </div>
   );
 }
