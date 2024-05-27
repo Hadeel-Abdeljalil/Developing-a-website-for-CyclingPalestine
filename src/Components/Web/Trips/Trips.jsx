@@ -12,7 +12,7 @@ export default function Trips() {
       <div className='d-flex justify-content-end pe-5 me-5 mt-5'>
         <div className=' pb-2'>
           <NavLink to="/trips/nextTrips" className='p-2 trip-link' activeclassname="active"> الجولات القادمة</NavLink>
-          <NavLink to="/trips/prevTrips" className='p-2 trip-link' activeclassname="active"> الجولات السابقة</NavLink>
+          <NavLink to="/trips/prevTrips" className='p-2 trip-link' activeclassname="active">  شاهد جولاتنا</NavLink>
         </div>
       </div>
       <Outlet/>

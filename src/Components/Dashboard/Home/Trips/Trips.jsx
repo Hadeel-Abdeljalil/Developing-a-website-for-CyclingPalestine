@@ -37,14 +37,15 @@ export default function Trips() {
       draggable: true,
       progress: undefined,
       theme: "light",
-  };
+    };
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}track`, trackData, {
-        headers: { Authorization: `Rufaidah__${userToken}` 
+        headers: {
+          Authorization: `Rufaidah__${userToken}`
         },
       });
-      toast.success('تمت إضافة الرحلة بنجاح',toastConfig)
+      toast.success('تمت إضافة الرحلة بنجاح', toastConfig)
       console.log('Success:', response.data);
       setTrackName('');
       setDate('');
@@ -59,6 +60,7 @@ export default function Trips() {
       console.error('Error:', error);
     }
   };
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <div className="container mt-3">
@@ -78,9 +80,10 @@ export default function Trips() {
           <label className='label-width'>التاريخ:</label>
           <input
             type="date"
-            className="form-control "
+            className="form-control"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            min={today} // Set the min attribute to today's date
             required
           />
         </div>
@@ -143,11 +146,11 @@ export default function Trips() {
             required
           />
         </div>
-       <div className=' d-flex justify-content-end mt-3'>
-       <button type="submit" className="btn btn-outline-dark  ">
-          إضافة مسار
-        </button>
-       </div>
+        <div className=' d-flex justify-content-end mt-3'>
+          <button type="submit" className="btn btn-outline-dark  ">
+            إضافة مسار
+          </button>
+        </div>
       </form>
     </div>
   );
