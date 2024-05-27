@@ -148,7 +148,7 @@ export default function NextTrips() {
                 </div>
                 <div className='col-lg-5 d-flex flex-column justify-content-between'>
                   <div className='d-flex'>
-                    <h2>{item.trackName}</h2>
+                    <h2 >{item.trackName}</h2>
                     <p className='text-dark pt-2 pe-3'> {item.difficulty_level}</p>
                   </div>
                   <div>
@@ -160,7 +160,9 @@ export default function NextTrips() {
                           position="center center"
                         >
                           <div className='border shadow bg-white p-3 rounded-3'>
-                            <h2>{item.trackName}</h2>
+                            <div className='w-100 d-flex justify-content-center'>
+                            <h2 className='dir '>{item.trackName}</h2>
+                            </div>
                             <div
                               className=' dir'
                               style={{ width: '50vw', padding: '20px' }}
