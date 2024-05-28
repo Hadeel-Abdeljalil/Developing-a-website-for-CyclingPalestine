@@ -9,10 +9,11 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Popup from 'reactjs-popup';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 
 export default function NextTrips() {
-  const { loading, userToken } = useContext(UserContext);
+  const { loading, userToken, userData } = useContext(UserContext);
   const [tracks, setTracks] = useState([]);
   const [searchDate, setSearchDate] = useState('');
   const [searchName, setSearchName] = useState('');
@@ -24,6 +25,7 @@ export default function NextTrips() {
     const getTracks = async () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}track/allTracks`);
+        console.log(data)
         setTracks(data.tracks);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -35,12 +37,11 @@ export default function NextTrips() {
 
   if (loading) {
     return (
-      <div className="loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3">
+      <div className="loading bg-white w-100 vh-100 d-flex justify-content-center align-items-center z-3">
         <span className="loader"></span>
       </div>
     );
   }
-
 
   const toastConfig = {
     position: "top-right",
@@ -74,32 +75,84 @@ export default function NextTrips() {
 
   const currentTrips = sortedTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
+  const cancelparticipating = async (trackId) => {
+    try {
+        const confirmation = await Swal.fire({
+            title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+            confirmButtonText: "<span class=''>نعم</span>",
+            cancelButtonText: "<span class='mb-3'>لا</span>",
+            showCancelButton: true,
+            showCloseButton: true,
+            customClass: {
+                confirmButton: 'btn bg-white border border-success text-dark',
+                cancelButton: 'btn bg-white border text-dark'
+            },
+        });
+
+        if (confirmation.isConfirmed) {
+            const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`, {
+                headers: { Authorization: `Rufaidah__${userToken}` }
+            });
+            console.log(data);
+            if (data.message == 'You have successfully canceled your subscription to this track') {
+              toast.success("تم الغاء المشاركة في هذا المسار", toastConfig);
+              location.reload();
+            }
+
+        }
+    } catch (error) {
+        // Handle errors here
+        console.error(error);
+    }
+};
+
   const handelparticipating = async (trackId) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}track/${trackId}/participating`, {},
-        { headers: { Authorization: `Rufaidah__${userToken}` } }
-      );
-      console.log(response.data);
-      if (response.data.message == 'success') {
-        toast.success("تمت المشاركة بنجاح", toastConfig)
-      }
-      else if (response.data.message == 'Sorry! The track is full.') {
-        toast.warn("نأسف! المسار ممتلئ.", toastConfig);
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
 
-      }
-      else if (response.data.message == 'this track is finished') {
-        toast.warn("تم الانتهاء من هذا المسار", toastConfig);
 
-      }
-      else if (response.data.message == 'You have already participated in this track.') {
-        toast.warn("انت مشارك بالفعل في هذا المسار", toastConfig);
-
+      if (confirmation.isConfirmed) {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}track/${trackId}/participating`, {},
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
+        );
+        console.log(response.data);
+        if (response.data.message == 'success') {
+          toast.success("تمت المشاركة بنجاح", toastConfig);
+          setIsPartecipate(true)
+          location.reload();
+        } else if (response.data.message == 'Sorry! The track is full.') {
+          toast.warn("نأسف! المسار ممتلئ.", toastConfig);
+        } else if (response.data.message == 'this track is finished') {
+          toast.warn("تم الانتهاء من هذا المسار", toastConfig);
+        } else if (response.data.message == 'You have already participated in this track.') {
+          toast.warn("انت مشارك بالفعل في هذا المسار", toastConfig);
+        }
       }
     } catch (error) {
-      // Handle error if needed
       console.error(error);
     }
   };
+
+
+  const check = (item) => {
+    let isUserParticipating = false;
+    item.participants.forEach((participant) => {
+      if (participant.user_id === userData._id) {
+        isUserParticipating = true;
+      }
+    });
+    return isUserParticipating;
+  }
 
   return (
     <div className='container '>
@@ -136,73 +189,85 @@ export default function NextTrips() {
 
       <div className='dir mb-3 mt-2'>
         <div className='container-fluid flex-column justify-content-center w-75'>
-          {
-            currentTrips.map((item) => (
-              <div
-                key={item.id}
-                to={`/trip/${item.id}`}
-                className='row border rounded-2 border-2 color p-3 mt-3'
-              >
-                <div className='col-lg-3'>
-                  <img className='fixed-image rounded-2' src={item.image ? item.image : '/images/back.jpg'} alt={item.trackName} />
-                </div>
-                <div className='col-lg-5 d-flex flex-column justify-content-between'>
-                  <div className='d-flex'>
-                    <h2 >{item.trackName}</h2>
-                    <p className='text-dark pt-2 pe-3'> {item.difficulty_level}</p>
-                  </div>
-                  <div>
-                    <div className='d-flex'>
-                      <p className='text-dark'>عدد المشاركين({item.number_of_participants})</p>
-                      <div className=''>
-                        <Popup
-                          trigger={<Link className='small me-3 color'>عرض المزيد</Link>}
-                          position="center center"
-                        >
-                          <div className='border shadow bg-white p-3 rounded-3'>
-                            <div className='w-100 d-flex justify-content-center'>
-                            <h2 className='dir '>{item.trackName}</h2>
-                            </div>
-                            <div
-                              className=' dir'
-                              style={{ width: '50vw', padding: '20px' }}
-                            >
-                              <p><strong>مستوى الصعوبة:</strong> {item.difficulty_level}</p>
-                              <p><strong>المسافة:</strong> {item.distance} km</p>
-                              <p><strong>نقطة البداية:</strong> {item.start_point}</p>
-                              <p><strong>نقطة النهاية:</strong> {item.end_point}</p>
-                              <p><strong>تاريخ الإنشاء:</strong> {new Date(item.createdAt).toLocaleString()}</p>
-                              <p><strong>تاريخ التحديث:</strong> {new Date(item.updatedAt).toLocaleString()}</p>
-                              <p><strong>تاريخ:</strong> {new Date(item.date).toLocaleString()}</p>
-                              <p><strong>عدد المشاركين:</strong> {item.number_of_participants}</p>
-                              <p><strong>الحد الأقصى للمشاركين:</strong> {item.maxParticipants}</p>
-                              <p className='w-100' style={{ wordWrap: 'break-word', maxWidth: '100%' }}>
-                                <strong>وصف:</strong> {item.description}
-                              </p>
-                            </div>
-                          </div>
+          {currentTrips.map((item) => (
 
-                        </Popup>
-                      </div>
-                    </div>
-                  </div>
+            <div
+              key={item.id}
+              className='row border rounded-2 border-2 color p-3 mt-3'
+            >
+              <div className='col-lg-3'>
+                <img
+                  className='fixed-image rounded-2'
+                  src={item.image ? item.image : '/images/back.jpg'}
+                  alt={item.trackName}
+                />
+              </div>
+              <div className='col-lg-5 d-flex flex-column justify-content-between'>
+                <div className='d-flex'>
+                  <h2>{item.trackName}</h2>
+                  <p className='text-dark pt-2 pe-3'>{item.difficulty_level}</p>
+                </div>
+                <div>
                   <div className='d-flex'>
-                    <div className='text-danger p-2 mx-1'>
-                      <BsHeart />
-                    </div>
-                    <div className='p-2 color'>|</div>
-                    <div className='color p-2 mx-1'>
-                      <FaComment />
+                    <p className='text-dark'>عدد المشاركين({item.number_of_participants})</p>
+                    <div>
+                      <Popup
+                        trigger={<Link className='small me-3 color'>عرض المزيد</Link>}
+                        position='center center'
+                      >
+                        <div className='border shadow bg-white p-3 rounded-3'>
+                          <div className='w-100 d-flex justify-content-center'>
+                            <h2 className='dir'>{item.trackName}</h2>
+                          </div>
+                          <div className='dir' style={{ width: '50vw', padding: '20px' }}>
+                            <p><strong>مستوى الصعوبة:</strong> {item.difficulty_level}</p>
+                            <p><strong>المسافة:</strong> {item.distance} km</p>
+                            <p><strong>نقطة البداية:</strong> {item.start_point}</p>
+                            <p><strong>نقطة النهاية:</strong> {item.end_point}</p>
+                            <p><strong>تاريخ الإنشاء:</strong> {new Date(item.createdAt).toLocaleString()}</p>
+                            <p><strong>تاريخ التحديث:</strong> {new Date(item.updatedAt).toLocaleString()}</p>
+                            <p><strong>تاريخ:</strong> {new Date(item.date).toLocaleString()}</p>
+                            <p><strong>عدد المشاركين:</strong> {item.number_of_participants}</p>
+                            <p><strong>الحد الأقصى للمشاركين:</strong> {item.maxParticipants}</p>
+                            <p className='w-100' style={{ wordWrap: 'break-word', maxWidth: '100%' }}>
+                              <strong>وصف:</strong> {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      </Popup>
                     </div>
                   </div>
                 </div>
-                <div className='col-lg-4 dir2 d-flex flex-column justify-content-between'>
-                  <p>{formatDate(item.date)}</p>
-                  <button to='/tripView' className='btn bg-color text-white w-50 rounded-2 p-2' onClick={() => handelparticipating(item._id)}>شارك</button>
+                <div className='d-flex'>
+                  <div className='text-danger p-2 mx-1'>
+                    <BsHeart />
+                  </div>
+                  <div className='p-2 color'>|</div>
+                  <div className='color p-2 mx-1'>
+                    <FaComment />
+                  </div>
                 </div>
               </div>
-            ))
-          }
+              <div className='col-lg-4 dir2 d-flex flex-column justify-content-between'>
+                <p>{formatDate(item.date)}</p>
+                <div>
+                  {check(item) ? (
+                    <button
+                      className='btn bg-color text-white w-50 rounded-2 p-2'
+                      onClick={() => cancelparticipating(item._id)}>
+                      الغاء الاشتراك
+                    </button>
+                  )
+                    :
+                    (<button
+                      className='btn bg-color text-white w-50 rounded-2 p-2'
+                      onClick={() => handelparticipating(item._id)}>
+                      شارك
+                    </button>)}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       <div className="d-flex justify-content-center mb-5">
