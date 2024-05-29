@@ -7,12 +7,17 @@ import { FaComment } from 'react-icons/fa';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
+import Popup from 'reactjs-popup';
+import UpdateTrip from './UpdateTrip.jsx';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 export default function PrevTrips() {
-  const { loading, userData } = useContext(UserContext);
+  const { loading, userData,userToken } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const tripsPerPage = 6;
+  const role=userData?.role;
 
   useEffect(() => {
     const getPosts = async () => {
@@ -33,6 +38,46 @@ export default function PrevTrips() {
         <span className="loader"></span>
       </div>
     );
+  }
+
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      if (confirmation.isConfirmed) {
+        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}post/delete/${postId}`,
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
+        );
+        console.log(data)
+        if (data.message == 'success') {
+          toast.success("تم حذف الرحلة بنجاح", toastConfig);
+          location.reload()
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const totalPages = Math.ceil(posts.length / tripsPerPage);
@@ -80,13 +125,44 @@ export default function PrevTrips() {
                   </div>
                 </div>
               </div>
-              <div className='col-lg-5 dir2 d-flex flex-column justify-content-between'>
+              <div className='col-lg-5  dir2 d-flex flex-column justify-content-between'>
                 <p></p>
-              <Link to={`/trip/${item._id}`}>  <button
+
+                <div>
+                  {
+                    role == "Admin" ? (
+                      <div className='d-flex mb-2  w-50'>
+                        <Popup
+                          trigger={<button
+                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'     
+                          >
+                            تعديل
+                          </button>}
+                          position='center center'
+                        >
+                          <UpdateTrip
+                          item={item}
+                          postId={item._id}/>
+                        </Popup>
+                        <button
+                          className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
+                          onClick={() => deletePost(item._id)}>
+                          حذف
+                        </button></div>
+                    ) : ""
+                  }
+
+                  <div>
+                 
+                      <button
                         className='btn bg-color text-white w-50 rounded-2 p-2'
                         >
-                    شاهد      
-                </button></Link>
+                         شاهد
+                      </button>
+                    
+                     
+                  </div>
+                </div>
               </div>
             </div>
           ))}
