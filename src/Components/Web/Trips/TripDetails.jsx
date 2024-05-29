@@ -43,7 +43,7 @@ const TripDetails = () => {
   }
 
   return (
-    <div className='container mt-5 pt-5 vh-100'>
+    <div className='container mt-5 pt-5 '>
       <div className='d-flex justify-content-center'>
         <div className='container-fluid w-75 h-100'>
           <Swiper
@@ -74,7 +74,7 @@ const TripDetails = () => {
           <div className='mt-4 d-flex justify-content-end align-items-center'>
             <h1>{trip.title}</h1>
           </div>
-          <p className='dir'>{trip.description}</p>
+          <p className='dir text-wrap text-break'>{trip.description}</p>
         </div>
       </div>
     </div>
