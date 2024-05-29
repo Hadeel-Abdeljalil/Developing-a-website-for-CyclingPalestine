@@ -11,6 +11,7 @@ import Popup from 'reactjs-popup';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import Trips from '../../Dashboard/Home/Trips/Trips.jsx';
+import UpdateTrip from './UpdateTrip.jsx';
 
 
 export default function NextTrips() {
@@ -21,6 +22,7 @@ export default function NextTrips() {
   const [currentPage, setCurrentPage] = useState(1);
   const tripsPerPage = 6;
   const role = userData?.role;
+  
   useEffect(() => {
     const getTracks = async () => {
       try {
@@ -68,11 +70,6 @@ export default function NextTrips() {
     // Extract the date part from the ISO string (YYYY-MM-DD)
     return dateStr.split('T')[0];
   };
-
-  const totalPages = Math.ceil(filteredTrips.length / tripsPerPage);
-  const sortedTrips = filteredTrips.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  const currentTrips = sortedTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
   const cancelparticipating = async (trackId) => {
     try {
@@ -143,7 +140,6 @@ export default function NextTrips() {
     }
   };
 
-
   const check = (item) => {
     let isUserParticipating = false;
     item.participants.forEach((participant) => {
@@ -153,6 +149,7 @@ export default function NextTrips() {
     });
     return isUserParticipating;
   }
+
   const deleteTrack = async (trackId) => {
     try {
       const confirmation = await Swal.fire({
@@ -167,11 +164,11 @@ export default function NextTrips() {
         },
       });
       if (confirmation.isConfirmed) {
-        const {data} = await axios.delete(`${import.meta.env.VITE_API_URL}track/delete/${trackId}`,
-          { headers: { Authorization: `Rufaidah__${userToken}`} }
+        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/delete/${trackId}`,
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
         console.log(data)
-        if (data.message== 'success') {
+        if (data.message == 'success') {
           toast.success("تمت حذف الرحلة بنجاح", toastConfig);
           location.reload()
         }
@@ -181,25 +178,12 @@ export default function NextTrips() {
       console.log(error)
     }
   }
-  const updateTrack = async (trackId) => {
-    try {
-      const confirmation = await Swal.fire({
-        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
-        confirmButtonText: "<span class=''>نعم</span>",
-        cancelButtonText: "<span class='mb-3'>لا</span>",
-        showCancelButton: true,
-        showCloseButton: true,
-        customClass: {
-          confirmButton: 'btn bg-white border border-success text-dark',
-          cancelButton: 'btn bg-white border text-dark'
-        },
-      });
-      const data = await axios.patch(`${import.meta.env.VITE_API_URL}updateTrack/${trackId}`)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  const today = new Date().toISOString().split('T')[0];
+
+
+ 
+  const totalPages = Math.ceil(filteredTrips.length / tripsPerPage);
+  const sortedTrips = filteredTrips.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const currentTrips = sortedTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
   return (
     <div className='container '>
@@ -305,12 +289,15 @@ export default function NextTrips() {
                         <Popup
                           trigger={<button
                             className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'
+                            
                           >
                             تعديل
                           </button>}
                           position='center center'
                         >
-                          <Trips/>
+                          <UpdateTrip
+                          item={item}
+                          trackId={item._id}/>
                         </Popup>
                         <button
                           className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
