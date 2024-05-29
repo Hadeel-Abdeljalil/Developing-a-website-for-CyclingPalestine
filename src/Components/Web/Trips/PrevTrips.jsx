@@ -23,6 +23,7 @@ export default function PrevTrips() {
     const getPosts = async () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}post/`);
+        console.log(data)
         setPosts(data.posts);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -80,8 +81,8 @@ export default function PrevTrips() {
     }
   }
 
-  const totalPages = Math.ceil(posts.length / tripsPerPage);
-  const sortedTrips = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedTrips = posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const totalPages = Math.ceil(sortedTrips.length / tripsPerPage);
   const currentTrips = sortedTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
   return (
@@ -109,7 +110,7 @@ export default function PrevTrips() {
               <div className='col-lg-3'>
                 <img
                   className='fixed-image rounded-2'
-                  src={item.image ? item.image : '/images/back.jpg'}
+                  src={item.mainImage ? item.mainImage.secure_url : '/images/main.jpg'}
                   alt={item.title}
                 />
               </div>
@@ -140,9 +141,7 @@ export default function PrevTrips() {
                           </button>}
                           position='center center'
                         >
-                          <UpdateTrip
-                          item={item}
-                          postId={item._id}/>
+                          hh
                         </Popup>
                         <button
                           className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
@@ -152,7 +151,7 @@ export default function PrevTrips() {
                     ) : ""
                   }
 
-                  <div>
+                  <Link to={`/trip/${item._id}`}>
                  
                       <button
                         className='btn bg-color text-white w-50 rounded-2 p-2'
@@ -161,7 +160,7 @@ export default function PrevTrips() {
                       </button>
                     
                      
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>

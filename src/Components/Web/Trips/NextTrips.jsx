@@ -228,7 +228,7 @@ export default function NextTrips() {
               <div className='col-lg-3'>
                 <img
                   className='fixed-image rounded-2'
-                  src={item.image ? item.image : '/images/back.jpg'}
+                  src={item.image ? item.image : '/images/main.jpg'}
                   alt={item.trackName}
                 />
               </div>

@@ -7,11 +7,15 @@ export default function Post() {
   const { userToken } = useContext(UserContext);
   const [formData, setFormData] = useState({
     title: '',
-    body: '',
+    description: '',
+    mainImage: null,
     images: []
   });
+  const [mainImagePreview, setmainImagePreview] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const mainImageInputRef = useRef(null);
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -24,6 +28,13 @@ export default function Post() {
 
       const imageUrls = imageFiles.map(file => URL.createObjectURL(file));
       setImagePreviews(prevPreviews => [...prevPreviews, ...imageUrls]);
+    } else if (name === 'mainImage') {
+      const mainImageFile = files[0];
+      setFormData(prevState => ({
+        ...prevState,
+        mainImage: mainImageFile
+      }));
+      setmainImagePreview(URL.createObjectURL(mainImageFile));
     } else {
       setFormData(prevState => ({
         ...prevState,
@@ -33,6 +44,7 @@ export default function Post() {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     const toastConfig = {
       position: "top-right",
@@ -45,35 +57,41 @@ export default function Post() {
       theme: "light"
     };
 
-    if (formData.images.length < 5) {
-      toast.error('يرجى تحميل ما لا يقل عن 5 صور', toastConfig);
+    if (formData.images.length < 1) {
+      toast.error('يرجى تحميل ما لا يقل عن  صورة', toastConfig);
       return;
     }
 
     try {
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
-      formDataToSend.append('body', formData.body);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('mainImage', formData.mainImage);
 
       formData.images.forEach(image => {
-        formDataToSend.append('images', image);  // Use 'images' instead of 'images[]'
+        formDataToSend.append('images', image);
       });
 
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}post/`, formDataToSend, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}post/`, formDataToSend, {
         headers: {
           Authorization: `Rufaidah__${userToken}`,
           'Content-Type': 'multipart/form-data'
         }
       });
 
+      const { data } = response;
+
       console.log(data);
-      if (data.message === "success") {
+
+      if (data && data.message === "success") {
         toast.success('تمت إضافة الرحلة بنجاح', toastConfig);
         setFormData({
           title: '',
-          body: '',
+          description: '',
+          mainImage: null,
           images: []
         });
+        setmainImagePreview(null);
         setImagePreviews([]);
       } else {
         toast.error('حدث خطأ أثناء إضافة الرحلة', toastConfig);
@@ -83,23 +101,32 @@ export default function Post() {
       toast.error('حدث خطأ أثناء إضافة الرحلة', toastConfig);
       console.error('Error during submission:', error);
 
-      // Log detailed error information
       if (error.response) {
-        // Server responded with a status other than 2xx
         console.error('Server error data:', error.response.data);
       } else if (error.request) {
-        // Request was made but no data was received
         console.error('No data received:', error.request);
       } else {
-        // Something else caused the error
         console.error('Error message:', error.message);
       }
     }
+    setLoading(false)
+
   };
 
-  const handleUploadClick = () => {
+  const handlemainImageClick = () => {
+    mainImageInputRef.current.click();
+  };
+
+  const handleImagesUploadClick = () => {
     fileInputRef.current.click();
   };
+  if (loading) {
+    return (
+      <div className="loading bg-white w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <span className="loader"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-3">
@@ -110,7 +137,7 @@ export default function Post() {
           <input
             type="text"
             className="form-control"
-            name="title" // Changed to 'title'
+            name="title"
             value={formData.title}
             onChange={handleChange}
             required
@@ -120,11 +147,35 @@ export default function Post() {
           <label className='label-width'>الوصف:</label>
           <textarea
             className="form-control"
-            name="body" // Changed to 'body'
-            value={formData.body}
+            name="description"
+            value={formData.description}
             onChange={handleChange}
             required
           />
+        </div>
+        <div className="form-group justify-content-around mb-2">
+          <label className='label-width'>صورة الغلاف:</label>
+          <input
+            type="file"
+            className="form-control "
+            name="mainImage"
+            ref={mainImageInputRef}
+            onChange={handleChange}
+          />
+          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handlemainImageClick}>
+            اختر الصورة
+          </button>
+          <div className="form-group justify-content-around mb-2">
+          {mainImagePreview && (
+            <img
+              src={mainImagePreview}
+              alt="Main preview"
+              className="img-thumbnail m-2"
+              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+            />
+          )}
+          </div>
+         
         </div>
         <div className="form-group justify-content-around mb-2">
           <label className='label-width'>تحميل الصور:</label>
@@ -136,7 +187,7 @@ export default function Post() {
             multiple
             onChange={handleChange}
           />
-          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleUploadClick}>
+          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleImagesUploadClick}>
             اختر الصور
           </button>
         </div>
