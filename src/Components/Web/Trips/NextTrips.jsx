@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import Trips from '../../Dashboard/Home/Trips/Trips.jsx';
 import UpdateTrip from './UpdateTrip.jsx';
+import Comment from './Comment.jsx';
 
 
 export default function NextTrips() {
@@ -178,8 +179,6 @@ export default function NextTrips() {
       console.log(error)
     }
   }
-
-
  
   const totalPages = Math.ceil(filteredTrips.length / tripsPerPage);
   const sortedTrips = filteredTrips.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -274,9 +273,15 @@ export default function NextTrips() {
                     <BsHeart />
                   </div>
                   <div className='p-2 color'>|</div>
-                  <div className='color p-2 mx-1'>
-                    <FaComment />
-                  </div>
+                  <Popup
+                          trigger={<div className='color p-2 mx-1'>
+                          <FaComment />
+                        </div>}
+                          position='center center'
+                        >
+                          <Comment
+                          item={item}/>
+                   </Popup>
                 </div>
               </div>
               <div className='col-lg-5  dir2 d-flex flex-column justify-content-between'>
@@ -288,8 +293,7 @@ export default function NextTrips() {
                       <div className='d-flex mb-2  w-50'>
                         <Popup
                           trigger={<button
-                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'
-                            
+                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'     
                           >
                             تعديل
                           </button>}

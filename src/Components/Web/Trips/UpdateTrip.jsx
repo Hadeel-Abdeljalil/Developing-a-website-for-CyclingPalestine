@@ -5,7 +5,7 @@ import axios from 'axios';
 import { UserContext } from '../Context/FeatureUser.jsx';
 import { toast } from 'react-toastify';
 
-export default function UpdateTrip({ item, trackId }) {
+export default function UpdateTrip({ item }) {
     const { userToken } = useContext(UserContext);
 
   const toastConfig = {
@@ -34,7 +34,7 @@ export default function UpdateTrip({ item, trackId }) {
                 },
             });
             if (confirmation.isConfirmed) {
-                const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}track/updateTrack/${trackId}`, values, {
+                const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}track/updateTrack/${item._id}`, values, {
                     headers: { Authorization: `Rufaidah__${userToken}` }
                 });
                 console.log(data);
@@ -60,7 +60,6 @@ export default function UpdateTrip({ item, trackId }) {
             // If parsing fails, return an empty string 
             return '';
         }
-    
         // Format the date in "yyyy-MM-dd" format
         const year = dateObject.getFullYear();
         const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
@@ -68,9 +67,6 @@ export default function UpdateTrip({ item, trackId }) {
     
         return `${year}-${month}-${day}`;
     };
-    
-    
-    
     const initialValues = {
         trackName: item.trackName || '',
         date: formatDate(item.date), // Convert date format
@@ -86,9 +82,7 @@ export default function UpdateTrip({ item, trackId }) {
         initialValues,
         onSubmit,
     });
-
     const today = new Date().toISOString().split('T')[0];
-
     return (
         <form className='border shadowx p-3 py-5 dir' onSubmit={formik.handleSubmit}>
             <div className="form-group justify-content-around mb-2 ">

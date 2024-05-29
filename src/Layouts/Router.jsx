@@ -106,10 +106,6 @@ export const router = createBrowserRouter([
         element: <TripDetails />,
       },
       {
-        path: 'tripView',
-        element: <TripDetails />,
-      },
-      {
         path: 'categories',
         element: <Categories />
       },
