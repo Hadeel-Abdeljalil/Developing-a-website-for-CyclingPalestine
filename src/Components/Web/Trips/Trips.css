@@ -41,3 +41,12 @@
 .color{
     color:  #5F8559 !important;
 }
+
+.custom-popup {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  
+  

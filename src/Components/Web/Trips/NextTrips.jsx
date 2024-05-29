@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import Popup from 'reactjs-popup';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import Trips from '../../Dashboard/Home/Trips/Trips.jsx';
 
 
 export default function NextTrips() {
@@ -18,14 +19,12 @@ export default function NextTrips() {
   const [searchDate, setSearchDate] = useState('');
   const [searchName, setSearchName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const tripsPerPage = 5;
-  const [isPatecipate, setIsPartecipate] = useState(false);
-
+  const tripsPerPage = 6;
+  const role = userData?.role;
   useEffect(() => {
     const getTracks = async () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}track/allTracks`);
-        console.log(data)
         setTracks(data.tracks);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -77,34 +76,35 @@ export default function NextTrips() {
 
   const cancelparticipating = async (trackId) => {
     try {
-        const confirmation = await Swal.fire({
-            title: "<div class='pt-3'>هل أنت متأكد؟</div>",
-            confirmButtonText: "<span class=''>نعم</span>",
-            cancelButtonText: "<span class='mb-3'>لا</span>",
-            showCancelButton: true,
-            showCloseButton: true,
-            customClass: {
-                confirmButton: 'btn bg-white border border-success text-dark',
-                cancelButton: 'btn bg-white border text-dark'
-            },
-        });
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
 
-        if (confirmation.isConfirmed) {
-            const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`, {
-                headers: { Authorization: `Rufaidah__${userToken}` }
-            });
-            console.log(data);
-            if (data.message == 'You have successfully canceled your subscription to this track') {
-              toast.success("تم الغاء المشاركة في هذا المسار", toastConfig);
-              location.reload();
-            }
+      if (confirmation.isConfirmed) {
+        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`, {
+          headers: { Authorization: `Rufaidah__${userToken}` }
+        });
+        console.log(data);
+        if (data.message == 'You have successfully canceled your subscription to this track') {
+          location.reload();
+          toast.success("تم الغاء المشاركة في هذا المسار", toastConfig);
 
         }
+
+      }
     } catch (error) {
-        // Handle errors here
-        console.error(error);
+      // Handle errors here
+      console.error(error);
     }
-};
+  };
 
   const handelparticipating = async (trackId) => {
     try {
@@ -128,7 +128,7 @@ export default function NextTrips() {
         console.log(response.data);
         if (response.data.message == 'success') {
           toast.success("تمت المشاركة بنجاح", toastConfig);
-          setIsPartecipate(true)
+
           location.reload();
         } else if (response.data.message == 'Sorry! The track is full.') {
           toast.warn("نأسف! المسار ممتلئ.", toastConfig);
@@ -153,6 +153,53 @@ export default function NextTrips() {
     });
     return isUserParticipating;
   }
+  const deleteTrack = async (trackId) => {
+    try {
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      if (confirmation.isConfirmed) {
+        const {data} = await axios.delete(`${import.meta.env.VITE_API_URL}track/delete/${trackId}`,
+          { headers: { Authorization: `Rufaidah__${userToken}`} }
+        );
+        console.log(data)
+        if (data.message== 'success') {
+          toast.success("تمت حذف الرحلة بنجاح", toastConfig);
+          location.reload()
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const updateTrack = async (trackId) => {
+    try {
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      const data = await axios.patch(`${import.meta.env.VITE_API_URL}updateTrack/${trackId}`)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <div className='container '>
@@ -202,7 +249,7 @@ export default function NextTrips() {
                   alt={item.trackName}
                 />
               </div>
-              <div className='col-lg-5 d-flex flex-column justify-content-between'>
+              <div className='col-lg-4 d-flex flex-column justify-content-between'>
                 <div className='d-flex'>
                   <h2>{item.trackName}</h2>
                   <p className='text-dark pt-2 pe-3'>{item.difficulty_level}</p>
@@ -215,7 +262,7 @@ export default function NextTrips() {
                         trigger={<Link className='small me-3 color'>عرض المزيد</Link>}
                         position='center center'
                       >
-                        <div className='border shadow bg-white p-3 rounded-3'>
+                        <div className='border shadow bg-white p-3 rounded-3 '>
                           <div className='w-100 d-flex justify-content-center'>
                             <h2 className='dir'>{item.trackName}</h2>
                           </div>
@@ -248,22 +295,47 @@ export default function NextTrips() {
                   </div>
                 </div>
               </div>
-              <div className='col-lg-4 dir2 d-flex flex-column justify-content-between'>
+              <div className='col-lg-5  dir2 d-flex flex-column justify-content-between'>
                 <p>{formatDate(item.date)}</p>
+
                 <div>
-                  {check(item) ? (
-                    <button
-                      className='btn bg-color text-white w-50 rounded-2 p-2'
-                      onClick={() => cancelparticipating(item._id)}>
-                      الغاء الاشتراك
-                    </button>
-                  )
-                    :
-                    (<button
-                      className='btn bg-color text-white w-50 rounded-2 p-2'
-                      onClick={() => handelparticipating(item._id)}>
-                      شارك
-                    </button>)}
+                  {
+                    role == "Admin" ? (
+                      <div className='d-flex mb-2  w-50'>
+                        <Popup
+                          trigger={<button
+                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'
+                          >
+                            تعديل
+                          </button>}
+                          position='center center'
+                        >
+                          <Trips/>
+                        </Popup>
+                        <button
+                          className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
+                          onClick={() => deleteTrack(item._id)}>
+                          حذف
+                        </button></div>
+                    ) : ""
+                  }
+
+                  <div>
+                    {check(item) ? (
+                      <button
+                        className='btn bg-color text-white w-50 rounded-2 p-2'
+                        onClick={() => cancelparticipating(item._id)}>
+                        الغاء الاشتراك
+                      </button>
+                    )
+                      :
+                      (<button
+                        className='btn bg-color text-white w-50 rounded-2 p-2'
+                        onClick={() => handelparticipating(item._id)}>
+                        شارك
+                      </button>
+                      )}
+                  </div>
                 </div>
               </div>
             </div>
