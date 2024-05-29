@@ -44,7 +44,6 @@ export default function Post() {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true)
     e.preventDefault();
     const toastConfig = {
       position: "top-right",
@@ -57,12 +56,13 @@ export default function Post() {
       theme: "light"
     };
 
-    if (formData.images.length < 1) {
-      toast.error('يرجى تحميل ما لا يقل عن  صورة', toastConfig);
+    if (formData.images.length < 4) {
+      toast.error('يرجى تحميل ما لا يقل عن  4 صور', toastConfig);
       return;
     }
 
     try {
+      setLoading(true)
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('description', formData.description);
@@ -94,20 +94,25 @@ export default function Post() {
         setmainImagePreview(null);
         setImagePreviews([]);
       } else {
+        setLoading(false)
         toast.error('حدث خطأ أثناء إضافة الرحلة', toastConfig);
         console.error('Server data error:', data);
       }
     } catch (error) {
+      setLoading(false)
       toast.error('حدث خطأ أثناء إضافة الرحلة', toastConfig);
       console.error('Error during submission:', error);
 
       if (error.response) {
+        setLoading(false)
+
         console.error('Server error data:', error.response.data);
       } else if (error.request) {
         console.error('No data received:', error.request);
       } else {
         console.error('Error message:', error.message);
       }
+
     }
     setLoading(false)
 

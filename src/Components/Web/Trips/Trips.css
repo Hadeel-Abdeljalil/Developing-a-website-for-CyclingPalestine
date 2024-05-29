@@ -49,4 +49,11 @@
     transform: translate(-50%, -50%) !important;
   }
   
-  
+  .trip-description {
+    height: 100%;
+    width: 100%;
+    overflow: auto; /* Add scrollbars if the text overflows */
+    /* Ensure text wrapping */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }

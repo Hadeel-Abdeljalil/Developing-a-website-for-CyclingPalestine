@@ -102,7 +102,7 @@ export const router = createBrowserRouter([
         ]
       },
       {
-        path: '/trip/:tripId',
+        path: '/trip/:postId',
         element: <TripDetails />,
       },
       {
