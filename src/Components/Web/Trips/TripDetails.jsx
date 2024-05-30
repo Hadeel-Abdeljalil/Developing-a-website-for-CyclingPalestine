@@ -7,6 +7,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import './TripDetails.css';
+import SwiperReviews from '../Products/SwiperReviews.jsx';
+import ReviewOrders from '../Products/ReviewOrders.jsx';
 
 const TripDetails = () => {
   const { postId } = useParams();
@@ -43,9 +45,13 @@ const TripDetails = () => {
   }
 
   return (
-    <div className='container mt-5 pt-5 '>
+    <div className='container mt-5 pt-5 mb-5'>
       <div className='d-flex justify-content-center'>
         <div className='container-fluid w-75 h-100'>
+        <div className='mt-4 d-flex justify-content-end align-items-center'>
+            <h1>{trip.title}</h1>
+          </div>
+          <p className='dir text-wrap text-break'>{trip.description}</p>
           <Swiper
             modules={[Pagination, Scrollbar, Autoplay]}
             spaceBetween={55} // Remove padding between slides
@@ -71,10 +77,13 @@ const TripDetails = () => {
             ))}
           </Swiper>
 
-          <div className='mt-4 d-flex justify-content-end align-items-center'>
-            <h1>{trip.title}</h1>
-          </div>
-          <p className='dir text-wrap text-break'>{trip.description}</p>
+       <div className='mt-5'>
+        <h1 className='dir'>التعليقات</h1>
+        <ReviewOrders postId={trip._id} />
+
+       <SwiperReviews data={trip}/>
+       </div>
+
         </div>
       </div>
     </div>

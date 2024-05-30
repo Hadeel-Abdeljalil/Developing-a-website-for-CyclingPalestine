@@ -159,7 +159,7 @@ export default function Post() {
           />
         </div>
         <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>صورة الغلاف:</label>
+          <label className='label-width'> الصورة الرئيسية:</label>
           <input
             type="file"
             className="form-control "
@@ -180,10 +180,10 @@ export default function Post() {
             />
           )}
           </div>
-         
         </div>
+        
         <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>تحميل الصور:</label>
+          <label className='label-width'> صور إضافية:</label>
           <input
             type="file"
             className="form-control d-none"

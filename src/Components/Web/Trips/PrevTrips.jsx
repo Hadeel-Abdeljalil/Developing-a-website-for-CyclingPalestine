@@ -110,7 +110,7 @@ export default function PrevTrips() {
               <div className='col-lg-3'>
                 <img
                   className='fixed-image rounded-2'
-                  src={item.mainImage ? item.mainImage.secure_url : '/images/main.jpg'}
+                  src={item.mainImage ? item.mainImage?.secure_url : '/images/main.jpg'}
                   alt={item.title}
                 />
               </div>

@@ -1,19 +1,24 @@
-import React from 'react'
-import { useContext } from 'react'
-import { UserContext } from '../Context/FeatureUser'
-import Input from '../../Shared/Input'
-import { useFormik } from 'formik'
+import React, { useContext, useState } from 'react';
+import { useFormik } from 'formik';
 import axios from 'axios';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 import { useQuery } from 'react-query';
+import { UserContext } from '../Context/FeatureUser';
+import Input from '../../Shared/Input';
+import * as Yup from 'yup';
 
-
-export default function ReviewOrders({ productId }) {
+export default function ReviewOrders({ postId }) {
+    const { getUserOrdersContext, userToken } = useContext(UserContext);
+    const [comments, setComments] = useState([]);
 
     const initialValues = {
-        comment: '',
-        rating: '',
+        text: '',
     };
+
+    const validationSchema = Yup.object({
+        text: Yup.string().required('Text is required'),
+    });
+
     const toastConfig = {
         position: "top-right",
         autoClose: 2000,
@@ -24,45 +29,42 @@ export default function ReviewOrders({ productId }) {
         progress: undefined,
         theme: "light",
     };
-    const onSubmit = async () => {
+
+    const onSubmit = async (values, { resetForm }) => {
         const token = localStorage.getItem('userToken');
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}products/${productId}/review`,
-                { comment: formik.values.comment, rating: formik.values.rating },
-                { headers: { Authorization: `Tariq__${token}` } }
+            const { data } = await axios.post(`https://cycling-palestine.onrender.com/post/comment/${postId}`, 
+                { text: values.text },
+                { headers: { Authorization: `Rufaidah__${token}` } }
             );
-            console.log(data);
-            if (data.message == 'success') {
-                toast.success(`تمت إضافة تعليقك بنجاح  `, toastConfig);
+            if (data.message === 'success') {
+                resetForm();
+                setComments(prevComments => [...prevComments, { text: values.text, _id: data.commentId }]);
             }
-            return data;
         } catch (error) {
             console.error(error);
+            toast.error('حدث خطأ أثناء إضافة تعليقك', toastConfig);
         }
     };
+
     const formik = useFormik({
-        initialValues: initialValues,
+        initialValues,
+        validationSchema,
         onSubmit,
-    })
+    });
+
     const inputs = [
         {
             type: 'text',
-            id: 'comment',
-            name: 'comment',
-            title: 'Comment',
+            id: 'text',
+            name: 'text',
+            title: 'text',
             placeholder: 'أكتب تعليق',
-            value: formik.values.comment,
+            value: formik.values.text,
         },
-        {
-            type: 'number',
-            id: 'rating',
-            name: 'rating',
-            title: 'Rating',
-            placeholder: ' تقييمك من 0-5',
-            value: formik.values.rating,
-        },
-    ]
-    const renderInputs = inputs.map((input, index) =>
+    ];
+
+    const renderInputs = inputs.map((input, index) => (
         <Input
             key={index}
             type={input.type}
@@ -77,45 +79,70 @@ export default function ReviewOrders({ productId }) {
             touched={formik.touched}
             autocomplete={input.name}
         />
-    )
+    ));
 
-    const { getUserOrdersContext, userToken } = useContext(UserContext);
     const getUserOrders = async () => {
         try {
             const res = await getUserOrdersContext();
-            //console.log(res.orders);
-            return res.orders;
+            return res.orders || [];
         } catch (error) {
             console.error('Error fetching user orders:', error);
             return [];
         }
     };
-    const { data, isLoading } = useQuery('get-user-orders', getUserOrders);
-    if (isLoading) {
-        return <div className="loading bg-transfer w-100 d-flex justify-content-center align-items-center z-3">
-            <span className="loader"></span>
-        </div>
-    }
-    //   let orders=getUserOrders();
-    //   console.log(orders);
-    return (
-        <div className='d-flex justify-content-end'>
-            <div className='w-50'>
-                <form onSubmit={formik.handleSubmit}>
 
-                    {userToken && (
-                        <div className=''>
+    const { data: orders, isLoading: isOrdersLoading } = useQuery('get-user-orders', getUserOrders);
+
+    const fetchComments = async () => {
+        try {
+            const { data } = await axios.get(`https://cycling-palestine.onrender.com/post/comments/${postId}`);
+            return data.comments || [];
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+            return [];
+        }
+    };
+
+    const { data: initialComments, isLoading: isCommentsLoading } = useQuery('fetch-comments', fetchComments, {
+        onSuccess: (data) => setComments(data),
+    });
+
+    if (isOrdersLoading || isCommentsLoading) {
+        return (
+            <div className="loading bg-transfer w-100 d-flex justify-content-center align-items-center z-3">
+                <span className="loader"></span>
+            </div>
+        );
+    }
+
+    return (
+        <div className='d-flex justify-content-end '>
+            <div className='w-100'>
+                <form onSubmit={formik.handleSubmit}>
+                    {userToken ? (
+                        <div>
                             {renderInputs}
-                            <div className="">
-                                <button className="btn  " type="submit">
+                            <div>
+                                <button className="btn" type="submit">
                                     انشر تعليقك
                                 </button>
                             </div>
+                            {formik.errors.text && formik.touched.text ? (
+                                <div className="error">{formik.errors.text}</div>
+                            ) : null}
                         </div>
+                    ) : (
+                        <div>يرجى تسجيل الدخول لإضافة تعليق</div>
                     )}
-
                 </form>
+                <div className="comments-section">
+                    {comments.map(comment => (
+                        <div key={comment._id} className="comment">
+                            {comment.text}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
-    )
+    );
 }
