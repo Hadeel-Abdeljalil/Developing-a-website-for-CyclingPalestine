@@ -5,7 +5,8 @@ import { toast } from 'react-toastify';
 import './Trips.css'
 
 export default function Trips() {
-  const { userToken } = useContext(UserContext);
+  const { userToken, userData } = useContext(UserContext);
+  console.log(userToken)
   const [formData, setFormData] = useState({
     trackName: '',
     date: '',
