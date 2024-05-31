@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
 import { toast } from 'react-toastify';
@@ -11,6 +11,7 @@ export default function Categories() {
   });
   const [imagePreview, setimagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const imageInputRef = useRef(null);
 
   const handleChange = e => {
@@ -49,13 +50,12 @@ export default function Categories() {
       formDataToSend.append('name', formData.name);
       formDataToSend.append('image', formData.image);
 
-      const {data} = await axios.post(`${import.meta.env.VITE_API_URL}category/create`, formDataToSend, {
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}category/create`, formDataToSend, {
         headers: {
           Authorization: `Rufaidah__${userToken}`,
           'Content-Type': 'multipart/form-data'
         }
       });
-
 
       console.log(data);
 
@@ -66,6 +66,7 @@ export default function Categories() {
           image: null
         });
         setimagePreview(null);
+        getCategories();  // Fetch categories again to update the table
       } else {
         setLoading(false);
         toast.error('حدث خطأ أثناء إضافة الفئة', toastConfig);
@@ -82,6 +83,56 @@ export default function Categories() {
   const handleimageClick = () => {
     imageInputRef.current.click();
   };
+
+  const getCategories = async () => {
+    try {
+      const { data } = await axios.get(`https://cycling-palestine.onrender.com/category/getActive`);
+      if (data && data.message === "success") {
+        setCategories(data.categories);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const toastConfig = {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light"
+    };
+
+    try {
+      setLoading(true);
+      const { data } = await axios.delete(`https://cycling-palestine.onrender.com/category/delete/${id}`, {
+        headers: { Authorization: `Rufaidah__${userToken}`
+        }
+      });
+
+      if (data && data.message === "category successfully deleted") {
+        toast.success('تم حذف الفئة بنجاح', toastConfig);
+        getCategories();  // Fetch categories again to update the table
+      } else {
+        setLoading(false);
+        toast.error('حدث خطأ أثناء حذف الفئة', toastConfig);
+        console.error('Server data error:', data);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error('حدث خطأ أثناء حذف الفئة', toastConfig);
+      console.error('Error during deletion:', error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   if (loading) {
     return (
@@ -135,9 +186,34 @@ export default function Categories() {
           </button>
         </div>
       </form>
-      <div>
-        
-      </div>
+
+      <h2 className='mt-5'>الفئات الحالية</h2>
+      <table className="table table-bordered mt-3">
+        <thead>
+          <tr>
+            <th>الاسم</th>
+            <th>الصورة</th>
+            <th>التاريخ</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {categories.map(category => (
+            <tr key={category._id}>
+              <td>{category.name}</td>
+              <td>
+                <img src={category.image.secure_url} alt={category.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+              </td>
+              <td>{new Date(category.createdAt).toLocaleDateString()}</td>
+              <td>
+                <button className="btn btn-danger" onClick={() => handleDelete(category._id)}>
+                  حذف
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
