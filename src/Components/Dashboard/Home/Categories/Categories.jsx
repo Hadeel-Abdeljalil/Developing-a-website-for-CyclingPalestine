@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
 import { toast } from 'react-toastify';
+import Popup from 'reactjs-popup';
+import UpdateCategory from './UpdateCategory.jsx';
 
 export default function Categories() {
   const { userToken } = useContext(UserContext);
@@ -110,11 +112,12 @@ export default function Categories() {
     try {
       setLoading(true);
       const { data } = await axios.delete(`https://cycling-palestine.onrender.com/category/delete/${id}`, {
-        headers: { Authorization: `Rufaidah__${userToken}`
+        headers: {
+          Authorization: `Rufaidah__${userToken}`
         }
       });
 
-      if (data && data.message === "category successfully deleted") {
+      if (data && data.message === "success") {
         toast.success('تم حذف الفئة بنجاح', toastConfig);
         getCategories();  // Fetch categories again to update the table
       } else {
@@ -128,6 +131,11 @@ export default function Categories() {
       console.error('Error during deletion:', error);
     }
     setLoading(false);
+  };
+
+  const handleUpdate = async (id) => {
+    // Implement update functionality here
+    console.log('Update category with ID:', id);
   };
 
   useEffect(() => {
@@ -205,10 +213,22 @@ export default function Categories() {
                 <img src={category.image.secure_url} alt={category.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
               </td>
               <td>{new Date(category.createdAt).toLocaleDateString()}</td>
-              <td>
+              <td >
                 <button className="btn btn-danger" onClick={() => handleDelete(category._id)}>
                   حذف
                 </button>
+                <Popup
+                  trigger={<button className="btn btn-info me-2" onClick={() => handleUpdate(category._id)}>
+                    تعديل
+                  </button>}
+                  position='center center'
+                >
+                  <UpdateCategory
+                    category={category}
+                    userToken={userToken}
+                  />
+                </Popup>
+
               </td>
             </tr>
           ))}
