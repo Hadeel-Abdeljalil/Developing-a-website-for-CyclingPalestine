@@ -13,7 +13,7 @@ export default function UserOrders() {
     const { data, isLoading } = useQuery('order-content', getUserOrders);
 
     if (isLoading) {
-        return <div className="loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3">
+        return <div className="loading vh-100 w-100 d-flex justify-content-center align-items-center bg-white">
             <span className="loader"></span>
         </div>
     }
@@ -37,7 +37,7 @@ export default function UserOrders() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.length ? data.map((order) =>
+                        {data?.length ? data.map((order) =>
                             <React.Fragment key={order._id}>
                                 <tr>
                                     <td>{counter++}</td>

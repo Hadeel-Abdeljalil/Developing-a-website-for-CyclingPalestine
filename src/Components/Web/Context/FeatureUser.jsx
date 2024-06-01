@@ -24,7 +24,7 @@ export default function UserContextProvider({ children }) {
     const getUserOrdersContext = async () => {
 
         if (userToken) {
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}order/`,
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}order/myOrders`,
                 { headers: { Authorization: `Rufaidah__${userToken}` } }
             )
 

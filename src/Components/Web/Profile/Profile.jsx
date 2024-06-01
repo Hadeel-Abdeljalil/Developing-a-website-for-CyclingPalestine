@@ -45,21 +45,21 @@ export default function Profile() {
 
                                     <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'personalData' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('personalData')}>
                                         <Link to='userInfo' className="nav-link align-middle ps-5 p-2">
-                                            <BsPerson className="ms-1 d-none d-sm-inline " /> {/* Adding the user icon */}
+                                            <BsPerson className="ms-1 d-none d-sm-inline " /> 
                                             <span className="ms-1 d-none d-sm-inline">البيانات الشخصية</span>
                                         </Link>
                                     </li>
 
                                     <li className={`rounded-end-1  mb-1  nav-item  sidebar-text ${activeItem === 'orders' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('orders')}>
                                         <Link to='orders' className="nav-link ps-5 align-middle w-100 p-2">
-                                            <BsListCheck className="ms-1 d-none d-sm-inline " /> {/* Adding the clipboard list icon */}
+                                            <BsListCheck className="ms-1 d-none d-sm-inline " /> 
                                             <span className="ms-1 d-none d-sm-inline">الطلبات</span>
                                         </Link>
                                     </li>
 
                                     <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>
                                         <Link to='/' className="nav-link align-middle ps-5 p-2">
-                                            <BsHouse className="ms-1 d-none d-sm-inline " /> {/* Adding the home icon */}
+                                            <BsHouse className="ms-1 d-none d-sm-inline " /> 
                                             <span className="ms-1 d-none d-sm-inline"> العودة الى الرئيسية</span>
                                         </Link>
                                     </li>
