@@ -11,7 +11,7 @@ export default function Post() {
     mainImage: null,
     images: []
   });
-  const [mainImagePreview, setmainImagePreview] = useState(null);
+  const [mainImagePreview, setMainImagePreview] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -34,7 +34,7 @@ export default function Post() {
         ...prevState,
         mainImage: mainImageFile
       }));
-      setmainImagePreview(URL.createObjectURL(mainImageFile));
+      setMainImagePreview(URL.createObjectURL(mainImageFile));
     } else {
       setFormData(prevState => ({
         ...prevState,
@@ -91,7 +91,7 @@ export default function Post() {
           mainImage: null,
           images: []
         });
-        setmainImagePreview(null);
+        setMainImagePreview(null);
         setImagePreviews([]);
       } else {
         setLoading(false)
@@ -118,13 +118,14 @@ export default function Post() {
 
   };
 
-  const handlemainImageClick = () => {
+  const handleMainImageClick = () => {
     mainImageInputRef.current.click();
   };
 
   const handleImagesUploadClick = () => {
     fileInputRef.current.click();
   };
+
   if (loading) {
     return (
       <div className="loading bg-white w-100 vh-100 d-flex justify-content-center align-items-center z-3">
@@ -137,79 +138,80 @@ export default function Post() {
     <div className="container mt-3">
       <h1 className='mb-3'>اضافة رحلة سابقة</h1>
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>اسم المسار:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>الوصف:</label>
-          <textarea
-            className="form-control"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'> الصورة الرئيسية:</label>
-          <input
-            type="file"
-            className="form-control "
-            name="mainImage"
-            ref={mainImageInputRef}
-            onChange={handleChange}
-          />
-          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handlemainImageClick}>
-            اختر الصورة
-          </button>
-          <div className="form-group justify-content-around mb-2">
-          {mainImagePreview && (
-            <img
-              src={mainImagePreview}
-              alt="Main preview"
-              className="img-thumbnail m-2"
-              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+        <div className="row mb-3">
+          <div className="col-lg-6 d-flex">
+            <label className='label-width'>اسم المسار:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              required
             />
-          )}
           </div>
         </div>
-        
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'> صور إضافية:</label>
-          <input
-            type="file"
-            className="form-control d-none"
-            name="images"
-            ref={fileInputRef}
-            multiple
-            onChange={handleChange}
-          />
-          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleImagesUploadClick}>
-            اختر الصور
-          </button>
-        </div>
-        <div className="form-group justify-content-around mb-2">
-          {imagePreviews.length > 0 && (
-            <div className="image-previews">
-              {imagePreviews.map((preview, index) => (
+        <div className="col-lg-6 d-flex">
+            <label className='label-width'>الوصف:</label>
+            <textarea
+              className="form-control"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        <div className="row mb-3">
+          <div className="col-lg-6">
+            <label className='label-width'>الصورة الرئيسية:</label>
+            <input
+              type="file"
+              className="form-control"
+              name="mainImage"
+              ref={mainImageInputRef}
+              onChange={handleChange}
+            />
+            <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleMainImageClick}>
+              اختر الصورة
+            </button>
+            {mainImagePreview && (
+              <div className="mt-2">
                 <img
-                  key={index}
-                  src={preview}
-                  alt={`Preview ${index + 1}`}
-                  className="img-thumbnail m-2"
+                  src={mainImagePreview}
+                  alt="Main preview"
+                  className="img-thumbnail"
                   style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                 />
-              ))}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+          <div className="col-lg-6">
+            <label className='label-width'>صور إضافية:</label>
+            <input
+              type="file"
+              className="form-control d-none"
+              name="images"
+              ref={fileInputRef}
+              multiple
+              onChange={handleChange}
+            />
+            <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleImagesUploadClick}>
+              اختر الصور
+            </button>
+            {imagePreviews.length > 0 && (
+              <div className="image-previews mt-2">
+                {imagePreviews.map((preview, index) => (
+                  <img
+                    key={index}
+                    src={preview}
+                    alt={`Preview ${index + 1}`}
+                    className="img-thumbnail m-2"
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className='d-flex justify-content-end mt-3'>
           <button type="submit" className="btn btn-outline-dark">

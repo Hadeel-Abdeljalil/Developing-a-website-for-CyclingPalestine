@@ -2,11 +2,10 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
 import { toast } from 'react-toastify';
-import './Trips.css'
+import './Trips.css';
 
 export default function Trips() {
-  const { userToken, userData } = useContext(UserContext);
-  console.log(userToken)
+  const { userToken } = useContext(UserContext);
   const [formData, setFormData] = useState({
     trackName: '',
     date: '',
@@ -14,8 +13,8 @@ export default function Trips() {
     startPoint: '',
     endPoint: '',
     difficultyLevel: '',
+    maxParticipants: '',
     description: '',
-    maxParticipants: ''
   });
 
   const handleChange = e => {
@@ -40,11 +39,11 @@ export default function Trips() {
         startPoint: '',
         endPoint: '',
         difficultyLevel: '',
+        maxParticipants: '',
         description: '',
-        maxParticipants: ''
       });
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
       console.error('Error:', error);
     }
   };
@@ -54,31 +53,105 @@ export default function Trips() {
   return (
     <div className="container mt-3">
       <h1 className='mb-3'>اضافة رحلة جديدة</h1>
-      <form onSubmit={handleSubmit} className='border shadowx p-3 py-5'>
-        {Object.entries(formData).map(([key, value]) => (
-          <div key={key} className="form-group justify-content-around mb-2">
-            <label className='label-width'>{key === 'maxParticipants' ? 'الحد الأقصى للمشاركين' : key === 'difficultyLevel' ? 'مستوى الصعوبة' : key === 'description' ? 'الوصف' : key === 'distance' ? 'المسافة' : key === 'endPoint' ? 'نقطة النهاية' : key === 'startPoint' ? 'نقطة البداية' : key === 'date' ? 'التاريخ' : 'اسم المسار'}:</label>
-            {key === 'description' ? (
-              <textarea
-                className="form-control"
-                name={key}
-                value={value}
-                onChange={handleChange}
-                required
-              />
-            ) : (
-              <input
-                type={key === 'date' ? 'date' : 'text'}
-                className="form-control"
-                name={key}
-                value={value}
-                onChange={handleChange}
-                min={key === 'date' ? today : undefined}
-                required
-              />
-            )}
+      <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
+        <div className="row">
+          <div className="col-lg-6 mb-3 d-flex">
+            <label className='label-width'>اسم المسار:</label>
+            <input
+              type="text"
+              className="form-control input-width"
+              name="trackName"
+              value={formData.trackName}
+              onChange={handleChange}
+              required
+            />
           </div>
-        ))}
+          <div className="col-lg-6 mb-3 d-flex">
+            <label className='label-width'>التاريخ:</label>
+            <input
+              type="date"
+              className="form-control input-width"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              min={today}
+              required
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-6 mb-3 d-flex">
+            <label className='label-width'>المسافة:</label>
+            <input
+              type="text"
+              className="form-control input-width"
+              name="distance"
+              value={formData.distance}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col-lg-6 mb-3 d-flex">
+            <label className='label-width'>نقطة البداية:</label>
+            <input
+              type="text"
+              className="form-control input-width"
+              name="startPoint"
+              value={formData.startPoint}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-6 mb-3 d-flex">
+            <label className='label-width'>نقطة النهاية:</label>
+            <input
+              type="text"
+              className="form-control input-width"
+              name="endPoint"
+              value={formData.endPoint}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col-lg-6 mb-3 d-flex">
+            <label className='label-width'>مستوى الصعوبة:</label>
+            <input
+              type="text"
+              className="form-control input-width"
+              name="difficultyLevel"
+              value={formData.difficultyLevel}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-6 mb-3 d-flex">
+            <label className='label-width'>الحد الأقصى للمشاركين:</label>
+            <input
+              type="text"
+              className="form-control input-width"
+              name="maxParticipants"
+              value={formData.maxParticipants}
+              onChange={handleChange}
+              required
+            />
+          </div>
+         
+        </div>
+      
+          <div className="col-lg-12 mb-3 ">
+            <label className='label-width'> الوصف :</label>
+            <textarea
+              className="form-control input-width"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
         <div className='d-flex justify-content-end mt-3'>
           <button type="submit" className="btn btn-outline-dark">
             إضافة مسار

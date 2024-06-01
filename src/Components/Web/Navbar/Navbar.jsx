@@ -1,17 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRoute } from '@fortawesome/free-solid-svg-icons';
+import { faRoute, faBell } from '@fortawesome/free-solid-svg-icons';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { UserContext } from '../Context/FeatureUser';
 import { CartContext } from '../Context/FeatureCart';
 import './Navbar.css';
+import Popup from 'reactjs-popup';
 
 export default function Navbar() {
   const navigate = useNavigate();
   let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
   let { count } = useContext(CartContext);
-  const role=userData?.role;
+  const role = userData?.role;
 
   const logOut = () => {
     localStorage.removeItem('userToken');
@@ -87,8 +88,16 @@ export default function Navbar() {
               </li>
             ) : null}
           </ul>
-         
+
           <ul className="navbar-nav">
+            <li className='nav-item dropdown d-flex  align-items-center'>
+              {userData?<Popup
+                  trigger={<FontAwesomeIcon icon={faBell} />}
+                  position='center center'
+                >
+                </Popup>:''}
+            
+            </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {userData ? userData.userName : 'شارك معنا'}
@@ -135,18 +144,19 @@ export default function Navbar() {
                 )}
               </ul>
             </li>
+
           </ul>
-          
+
 
         </div>
-        
+
       </div>
       {
-            role ==='Admin'?(<Link to={'/dashboard/home'}>
-            <button className='btn btn-outline-dark me-2'>dashboard </button>
-          </Link>): ''
-          }
-      
+        role === 'Admin' ? (<Link to={'/dashboard/home'}>
+          <button className='btn btn-outline-dark me-2'>dashboard </button>
+        </Link>) : ''
+      }
+
     </nav>
   );
 }

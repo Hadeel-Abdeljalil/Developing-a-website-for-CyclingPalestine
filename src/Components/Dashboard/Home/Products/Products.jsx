@@ -143,119 +143,129 @@ export default function Products() {
     <div className="container mt-3">
       <h1 className='mb-3'>اضافة منتج جديد</h1>
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>اسم المنتج:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+        <div className="row mb-3">
+          <div className="col-lg-6 d-flex">
+            <label className='label-width '>اسم المنتج:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col-lg-6 d-flex">
+            <label className='label-width'>الفئة:</label>
+            <div className='w-100'>
+              <select
+                className="form-control bg-white text-dark w-100"
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                required
+              >
+                <option value="">اختر الفئة</option>
+                {categories?.map(category => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>الوصف:</label>
-          <textarea
-            className="form-control"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
+        <div className="row mb-3">
+          <div className="col-lg-6 d-flex">
+            <label className='label-width'>السعر:</label>
+            <input
+              type="number"
+              className="form-control"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col-lg-6 d-flex">
+            <label className='label-width'>الخصم:</label>
+            <input
+              type="number"
+              className="form-control"
+              name="discount"
+              value={formData.discount}
+              onChange={handleChange}
+            />
+          </div>
         </div>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>السعر:</label>
-          <input
-            type="number"
-            className="form-control"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>الخصم:</label>
-          <input
-            type="number"
-            className="form-control"
-            name="discount"
-            value={formData.discount}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>الفئة:</label>
-          <select
-            className="form-control bg-white text-dark"
-            name="categoryId"
-            value={formData.categoryId}
-            onChange={handleChange}
-            required
-          >
-            <option value="">اختر الفئة</option>
-            {categories?.map(category => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>الصورة الرئيسية:</label>
-          <input
-            type="file"
-            className="form-control"
-            name="mainImage"
-            ref={mainImageInputRef}
-            onChange={handleChange}
-          />
-          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleMainImageClick}>
-            اختر الصورة
-          </button>
-          <div className="form-group justify-content-around mb-2">
-            {mainImagePreview && (
-              <img
-                src={mainImagePreview}
-                alt="Main preview"
-                className="img-thumbnail m-2"
-                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-              />
-            )}
+        <div className="row mb-3 ">
+
+          <div className="col-lg-12 ">
+            <label className='label-width'>الوصف:</label>
+            <textarea
+              className="form-control"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
           </div>
         </div>
 
-        <div className="form-group justify-content-around mb-2">
-          <label className='label-width'>صور إضافية:</label>
-          <input
-            type="file"
-            className="form-control d-none"
-            name="subImages"
-            ref={fileInputRef}
-            multiple
-            onChange={handleChange}
-          />
-          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleSubImagesUploadClick}>
-            اختر الصور
-          </button>
-        </div>
-        <div className="form-group justify-content-around mb-2">
-          {imagePreviews.length > 0 && (
-            <div className="image-previews">
-              {imagePreviews.map((preview, index) => (
-                <img
-                  key={index}
-                  src={preview}
-                  alt={`Preview ${index + 1}`}
-                  className="img-thumbnail m-2"
-                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                />
-              ))}
+        <div className="row mb-3 ">
+        <div className="col-lg-6">
+          <div className='d-flex'>
+            <label className='label-width'>الصورة الرئيسية:</label>
+            <input
+              type="file"
+              className="form-control"
+              name="mainImage"
+              ref={mainImageInputRef}
+              onChange={handleChange}
+            />
+            <button type="button" className="btn btn-outline-secondary me-2" onClick={handleMainImageClick}>
+              حدد
+            </button>
+          </div>
+          {mainImagePreview && (
+            <div className="mt-2">
+              <img
+                src={mainImagePreview}
+                alt="Main preview"
+                className="img-thumbnail"
+                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+              />
             </div>
           )}
         </div>
-
+          <div className="col-lg-6">
+            <label className='label-width'>صور إضافية:</label>
+            <input
+              type="file"
+              className="form-control d-none"
+              name="subImages"
+              ref={fileInputRef}
+              multiple
+              onChange={handleChange}
+            />
+            <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleSubImagesUploadClick}>
+              اختر الصور
+            </button>
+            {imagePreviews.length > 0 && (
+              <div className="image-previews mt-2">
+                {imagePreviews.map((preview, index) => (
+                  <img
+                    key={index}
+                    src={preview}
+                    alt={`Preview ${index + 1}`}
+                    className="img-thumbnail m-2"
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
         <div className='d-flex justify-content-end mt-3'>
           <button type="submit" className="btn btn-outline-dark">
             إضافة منتج

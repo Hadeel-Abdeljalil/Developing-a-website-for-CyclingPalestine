@@ -154,7 +154,8 @@ export default function Categories() {
     <div className="container mt-3">
       <h1 className='mb-3'>اضافة  فئة جديدة</h1>
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
-        <div className="form-group justify-content-around mb-2">
+       <div className='row'>
+       <div className="col-lg-6 mb-3 d-flex">
           <label className='label-width'>اسم الفئة:</label>
           <input
             type="text"
@@ -165,7 +166,9 @@ export default function Categories() {
             required
           />
         </div>
-        <div className="form-group justify-content-around mb-2">
+    
+       </div>
+       <div className="col-lg-9 mb-3 d-flex">
           <label className='label-width'>الصورة الرئيسية:</label>
           <input
             type="file"
@@ -174,9 +177,10 @@ export default function Categories() {
             ref={imageInputRef}
             onChange={handleChange}
           />
-          <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleimageClick}>
+          <button type="button" className="btn btn-outline-secondary w-25 me-2 " onClick={handleimageClick}>
             اختر الصورة
           </button>
+          </div>
           {imagePreview && (
             <div className="form-group justify-content-around mb-2">
               <img
@@ -187,7 +191,6 @@ export default function Categories() {
               />
             </div>
           )}
-        </div>
         <div className='d-flex justify-content-end mt-3'>
           <button type="submit" className="btn btn-outline-dark">
             إضافة مسار
