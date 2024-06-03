@@ -10,9 +10,9 @@ export default function Trips() {
     trackName: '',
     date: '',
     distance: '',
-    startPoint: '',
-    endPoint: '',
-    difficultyLevel: '',
+    start_point: '',
+    end_point: '',
+    difficulty_level: '',
     maxParticipants: '',
     description: '',
   });
@@ -30,15 +30,20 @@ export default function Trips() {
     const toastConfig = { position: "top-right", autoClose: 2000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, theme: "light" };
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}track`, formData, { headers: { Authorization: `Rufaidah__${userToken}` } });
-      toast.success('تمت إضافة الرحلة بنجاح', toastConfig);
+      const {data} = await axios.post(`${import.meta.env.VITE_API_URL}track`, formData,
+       { headers: { Authorization: `Rufaidah__${userToken}` } });
+       if(data.message =="success"){
+        toast.success("تمت اضافة الرحلة بنجاح", toastConfig);
+       }else{
+        toast.warning(data.message,toastConfig);
+       }
       setFormData({
         trackName: '',
         date: '',
         distance: '',
-        startPoint: '',
-        endPoint: '',
-        difficultyLevel: '',
+        start_point: '',
+        end_point: '',
+        difficulty_level: '',
         maxParticipants: '',
         description: '',
       });
@@ -96,8 +101,8 @@ export default function Trips() {
             <input
               type="text"
               className="form-control input-width"
-              name="startPoint"
-              value={formData.startPoint}
+              name="start_point"
+              value={formData.start_point}
               onChange={handleChange}
               required
             />
@@ -109,8 +114,8 @@ export default function Trips() {
             <input
               type="text"
               className="form-control input-width"
-              name="endPoint"
-              value={formData.endPoint}
+              name="end_point"
+              value={formData.end_point}
               onChange={handleChange}
               required
             />
@@ -120,8 +125,8 @@ export default function Trips() {
             <input
               type="text"
               className="form-control input-width"
-              name="difficultyLevel"
-              value={formData.difficultyLevel}
+              name="difficulty_level"
+              value={formData.difficulty_level}
               onChange={handleChange}
               required
             />

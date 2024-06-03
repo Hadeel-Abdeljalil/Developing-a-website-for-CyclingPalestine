@@ -51,7 +51,7 @@ export default function UserOrders() {
 
                                 </tr>
                             </React.Fragment>
-                        ) : <h2>No orders</h2>}
+                        ) : <h2>لا يوجد طلبات</h2>}
 
                     </tbody>
                 </table>

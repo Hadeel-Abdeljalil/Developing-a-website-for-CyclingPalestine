@@ -6,12 +6,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 export default function UserInfo() {
   const navigate = useNavigate();
   let { userToken, setUserToken, userData, setUserData } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -30,7 +30,7 @@ export default function UserInfo() {
     initialValues: {
       image: null,
       userName: userData.userName || '',
-      birthdate: userData.birthdate || '',
+      birthdate: userData.birthdate ? new Date(userData.birthdate).toISOString().split('T')[0] : '',
       gender: userData.gender || '',
       phone: userData.phone || '',
       Address: userData.Address || '',
@@ -107,34 +107,45 @@ export default function UserInfo() {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmDeletion = window.confirm('هل أنت متأكد أنك تريد حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي.');
-
-    if (confirmDeletion) {
       try {
-        const response = await axios.delete(
-          `${import.meta.env.VITE_API_URL}user/deleteAccount/${userData._id}`,
-          { headers: { Authorization: `Rufaidah__${userToken}` } }
-        );
-
-        if (response.status === 200) {
-          alert('تم حذف الحساب بنجاح');
-          localStorage.removeItem('userToken');
-          setUserToken(null);
-          setUserData(null);
-          navigate("/login")
-        } else {
-          alert('فشل في حذف الحساب');
+        const confirmation = await Swal.fire({
+          title: "<div class='p-3 pt-5'>هل أنت متأكد أنك تريد حذف حسابك؟</div>",
+          confirmButtonText: "<span class=''>نعم</span>",
+          cancelButtonText: "<span class='mb-3'>لا</span>",
+          showCancelButton: true,
+          showCloseButton: true,
+          customClass: {
+            confirmButton: 'btn bg-white border border-success text-dark',
+            cancelButton: 'btn bg-white border text-dark'
+          },
+        });
+        if (confirmation.isConfirmed) {
+          const response = await axios.delete(
+            `${import.meta.env.VITE_API_URL}user/deleteAccount/${userData._id}`,
+            { headers: { Authorization: `Rufaidah__${userToken}` } }
+          );
+  
+          if (response.status === 200) {
+            alert('تم حذف الحساب بنجاح');
+            localStorage.removeItem('userToken');
+            setUserToken(null);
+            setUserData(null);
+            navigate("/login")
+          } else {
+            alert('فشل في حذف الحساب');
+          }
         }
-      } catch (error) {
+          
+        }
+       catch (error) {
         console.error('There was an error deleting the account!', error);
         alert('حدث خطأ أثناء حذف الحساب!');
       }
-    }
+    
   };
 
   const handleDeleteImage = async () => {
     try {
-      // Set isLoading to true only during the image deletion process
       setDeleteLoading(true);
 
       const response = await axios.delete(
@@ -144,7 +155,6 @@ export default function UserInfo() {
 
       if (response.data && response.data.message === 'success') {
         toast.success('تم حذف الصورة بنجاح', toastConfig);
-        // You may want to update user data or refresh the UI after deleting the image
       } else {
         toast.warn('فشل في حذف الصورة');
         console.error('Server response message:', response.data && response.data.message);
@@ -153,7 +163,6 @@ export default function UserInfo() {
       toast.error('خطأ في حذف الصورة');
       console.error('Error deleting image:', error);
     } finally {
-      // Ensure isLoading is set to false after the deletion process
       setDeleteLoading(false);
     }
   };
@@ -162,7 +171,7 @@ export default function UserInfo() {
     <div className='h-100 py-5'>
       <div className='d-flex justify-content-between mx-4 mb-3'>
         <h3>بياناتك</h3>
-        <Link className='text-info' to='../sendCode'>
+        <Link className='text-info ' to='../sendCode'>
           تغيير كلمة السر
           <span><IoMdKey /></span>
         </Link>
@@ -182,7 +191,6 @@ export default function UserInfo() {
           <button className='  mt-1 border-0 bg-white text-danger me-4' onClick={handleDeleteImage}>{deleteLoading ? 'جاري التحميل...' : 'حذف الصورة '}</button>
         </div>
         <hr />
-
       </div>
       <div className='border rounded-2 bg-white shadowx mt-3'>
         <div>
@@ -205,10 +213,9 @@ export default function UserInfo() {
               </div>
             </div>
           </div>
-        
           {isEditingInfo ? (
             <form onSubmit={formik.handleSubmit}>
-               <div className='d-flex align-items-center'>
+              <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
                   <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
                     <label className='opacity-50 w-25'> الاسم</label>
@@ -316,14 +323,13 @@ export default function UserInfo() {
                 <div className='border-bottom w-100'>
                   <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>
                     <p className='opacity-50'>تاريخ الميلاد</p>
-                    <p>{userData.birthdate ? (new Date(userData.birthdate)).toISOString().split('T')[0] : 'لا يوجد'}</p>
+                    <p>{userData.birthdate ? new Date(userData.birthdate).toISOString().split('T')[0] : 'لا يوجد'}</p>
                     <Link className='pb-3 opacity-50'>
                       <BsArrowLeft />
                     </Link>
                   </div>
                 </div>
               </div>
-
               <div className='d-flex align-items-center'>
                 <div className='border-bottom w-100'>
                   <div className='mx-3 pt-3 d-flex justify-content-between align-items-center'>

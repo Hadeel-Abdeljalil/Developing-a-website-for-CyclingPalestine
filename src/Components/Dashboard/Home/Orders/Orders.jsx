@@ -1,9 +1,114 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
+import { BsBicycle, BsCheck } from 'react-icons/bs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
+
 
 export default function Orders() {
+  const { userToken } = useContext(UserContext);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}order/getAll`, {
+        headers: { Authorization: `Rufaidah__${userToken}` }
+      });
+      setOrders(response.data.orders);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [userToken]);
+
+  const handleChangeStatus = async (orderId, status) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}order/changeStatus/${orderId}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Rufaidah__${userToken}`,
+          },
+        }
+      );
+
+    } catch (error) {
+      setError(error);
+    }
+  };
+
+  if (loading) {
+    return <p>جارٍ التحميل...</p>;
+  }
+
+  if (error) {
+    return <p>خطأ: {error.message}</p>;
+  }
+
   return (
     <div>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Et ratione possimus odit magnam facilis, error optio repellat delectus a at assumenda fugit dolorem consequatur cupiditate, nemo nostrum debitis iste natus accusamus, voluptatibus distinctio velit. Repudiandae impedit, hic explicabo rem est pariatur ipsa ipsum aliquam ipsam necessitatibus? Impedit, nobis dolorum odio minus magni totam est perspiciatis eius dolorem provident porro quasi odit repellat fuga esse praesentium sunt labore et deserunt architecto laboriosam temporibus corporis? Quidem inventore numquam vel non aspernatur. Repudiandae possimus asperiores quod corrupti hic? Itaque sequi vitae cum non accusantium facilis harum eos, porro enim nemo totam delectus maxime aspernatur, nihil praesentium nesciunt debitis fuga aliquid quasi est deserunt molestias natus. Repellendus, ab ea! Excepturi aliquid odio voluptatum tempora fugit illo repellat aliquam nobis adipisci deserunt ea non culpa labore magnam provident maxime animi similique praesentium placeat qui facilis eos minus, nostrum corporis? Incidunt explicabo commodi beatae nemo aliquam perspiciatis nobis nihil fugiat illum sapiente necessitatibus recusandae sit obcaecati velit nulla aut tempora, fugit ab, neque eveniet. Nulla ad dolorum pariatur velit unde sunt quia itaque laudantium expedita excepturi, nam quidem ab iste iure libero quaerat accusamus provident commodi placeat voluptas aliquam! Dolorum deleniti nesciunt laboriosam veniam dicta ratione eum cupiditate quidem aliquid, aspernatur esse quod? In explicabo consequuntur nostrum sed esse, deleniti natus harum nobis itaque cum incidunt dolore repellat delectus deserunt ipsam numquam voluptates pariatur maxime ut eius officia accusantium eveniet molestias. Accusantium sequi, incidunt recusandae atque repellendus magni necessitatibus id aut? Consectetur, incidunt amet alias optio rem nobis quod repellendus nam dolor exercitationem reiciendis aspernatur eaque dolorum at veniam magni ea provident, distinctio doloribus impedit dignissimos. Nihil minus, earum ab, repudiandae ullam quam deserunt voluptatem sint quis a harum possimus sit numquam voluptatibus, quibusdam consequuntur nemo esse nobis. Optio laborum in modi quo cum voluptate consequuntur cupiditate obcaecati. Dolorem, ipsam. Quibusdam, obcaecati libero nisi incidunt est amet accusamus placeat! Natus beatae nisi ducimus aut nam delectus ut incidunt velit voluptatum id repellendus laudantium non nostrum tempore reiciendis reprehenderit, quam, sit tenetur? Reiciendis velit cupiditate voluptates deleniti, dolorem sequi. Consequatur autem illum totam saepe dignissimos recusandae neque quaerat corporis obcaecati at voluptatibus pariatur, impedit dolorem odio vel laboriosam, voluptate doloremque perferendis nam illo qui. Expedita iste corporis magnam pariatur. Optio, facilis? Assumenda possimus labore delectus perspiciatis, ipsum atque temporibus, necessitatibus iste consequatur maiores expedita ut, magnam corrupti natus veniam hic dolores accusamus distinctio cupiditate voluptates. Cum quidem earum eos quasi unde quisquam sunt error velit consequuntur. Laboriosam hic cupiditate voluptatum ratione vero, dolorum saepe laudantium alias? Consectetur ad corrupti atque accusamus earum cumque autem nostrum tempore ipsa minus quam ipsam voluptatum beatae porro, fugit sequi at vero? Placeat in animi ipsam nisi quod doloribus libero excepturi expedita mollitia obcaecati amet aut eius, quis tempora, maxime perspiciatis ratione voluptates! Inventore corrupti aliquid placeat odio tenetur repellendus unde ab eius modi deserunt reiciendis, quasi mollitia, optio consequuntur! Hic ipsum, saepe expedita eos cupiditate minus. Possimus corporis, impedit facere rem nemo consectetur assumenda distinctio illum sint repellat nostrum, repudiandae alias officiis eius fugiat debitis pariatur, maxime quaerat ex necessitatibus itaque? Consectetur rem, cum, tenetur doloremque ut dolorem voluptatem odio nesciunt velit ullam asperiores consequatur. Repudiandae iusto quod quas, modi neque iure nihil aspernatur quidem sapiente quasi repellendus voluptate, doloribus veniam at pariatur. Consequuntur corrupti at odit, numquam vero incidunt voluptas reiciendis quia dolorem ea ab iste. Eos placeat minus quia atque veritatis accusantium quos dolor veniam, eius tenetur doloremque cupiditate fuga itaque dolorem impedit quidem autem culpa. Dolor repudiandae quidem cupiditate iste, voluptatibus reiciendis, vero, ratione ex numquam quae libero nostrum voluptate veritatis doloremque nam earum nesciunt expedita. Corrupti inventore voluptatum reiciendis autem esse dolore suscipit id laboriosam ipsum deleniti natus doloribus distinctio quidem, tempore, mollitia consectetur nihil provident ea. Consectetur omnis impedit tempora maiores, placeat iure tempore fuga rerum suscipit similique sit voluptatibus, perspiciatis quisquam aperiam, quae blanditiis adipisci iusto esse ipsam doloremque vero consequatur porro? Eos obcaecati ratione id distinctio delectus ea. Natus inventore consectetur eveniet neque ex error, enim mollitia provident perspiciatis veniam eaque labore et consequatur facere asperiores quam, quo sit obcaecati, illo omnis accusantium! Illo omnis, corporis sequi optio animi maxime vitae fugit nam, dolore, possimus eius ipsam! Fuga quidem ipsam perspiciatis ipsa culpa unde molestiae optio explicabo voluptate id dolorum quo pariatur nam, tempore doloribus! Hic totam esse debitis quas, dolore pariatur maiores quo tenetur inventore similique obcaecati velit ut voluptas veritatis. Quibusdam iure, ab officiis exercitationem ipsum nihil culpa accusantium velit consequatur temporibus nemo eum quisquam laboriosam earum maxime voluptatum blanditiis? Repellendus nam facilis iste velit. Aspernatur accusantium commodi quisquam eum ipsam sequi sunt! Culpa incidunt nisi eos accusantium repellat cupiditate dolorem rem, alias iste hic voluptate praesentium assumenda minima, commodi architecto dolores! Impedit voluptates in exercitationem tempora, numquam repellendus laudantium quisquam ab possimus molestias necessitatibus temporibus beatae vitae, quos, excepturi rerum error similique alias officia! Labore culpa, delectus veniam fugit dolore id, ullam at dicta tempore vitae praesentium laudantium eaque quis. Odio minus voluptatem aut pariatur qui quae quod. Libero provident nam animi tempore vitae totam, repellendus, veniam itaque officia id incidunt cum corrupti tempora dolorum maiores aperiam voluptatibus voluptatum, ad harum laborum quis ex porro ullam? Tempora molestiae reiciendis nihil ad ducimus explicabo tempore, doloribus magni harum officiis rem dolorum in unde vero atque sequi, fugit qui maiores repudiandae. Minus deleniti explicabo dolorum illum distinctio vitae voluptate provident, quae, ipsum, numquam magnam tempore culpa non nihil nulla velit quisquam eveniet iure eligendi consectetur vero facere tenetur! Odio dicta distinctio voluptas error eos molestias veritatis beatae minima fuga corporis. Vel omnis blanditiis repellat deleniti fugiat ea dolorem quisquam. Porro totam, nesciunt sed, autem voluptatibus ea numquam animi at ducimus, reprehenderit consequuntur iure obcaecati aliquam distinctio aliquid! Odio dicta sapiente fuga. Eum deserunt aliquam quas, eveniet quibusdam fuga quae ipsum, minima dolor est delectus quidem eos doloribus unde reprehenderit? Voluptatem ab rem enim quae hic qui fuga iure doloremque necessitatibus sequi in vero placeat architecto, rerum doloribus ut? Consequuntur eveniet eius earum cum aliquam, facere temporibus dolorum dignissimos magnam. Fugiat earum id ut!
+      <h1>الطلبات</h1>
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+            <th>الزبون</th>
+            <th>العنوان</th>
+            <th>رقم الهاتف</th>
+            <th>المبلغ</th>
+            <th>نوع الدفع</th>
+            <th>الحالة</th>
+            <th>تغيير الحالة</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order._id}>
+              <td>{order.address}</td>
+              <td>{order.address}</td>
+              <td>{order.phoneNumber}</td>
+              <td>{order.amount}</td>
+              <td>{order.paymentType}</td>
+              <td>{order.status}</td>
+              <td>
+                <div className="btn-group">
+
+                  {order.status !== 'confirmed' && (
+                    <button
+                      className="btn btn-secondary mx-2 border rounded-2 bg-success"
+                      onClick={() => handleChangeStatus(order._id, 'confirmed')}
+                    >
+                      <BsCheck />
+                    </button>
+                  )}
+                  {order.status !== 'pending' && (
+                    <button
+                      className="btn btn-secondary mx-2 border rounded-2 bg-info"
+                      onClick={() => handleChangeStatus(order._id, 'onway')}
+                    >
+                      <BsBicycle />
+                    </button>
+                  )}
+                  <button
+                    className="btn btn-secondary bg-danger border rounded-2"
+                    onClick={() => handleChangeStatus(order._id, 'cancelled')}
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  )
+  );
 }

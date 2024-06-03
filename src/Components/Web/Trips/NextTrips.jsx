@@ -92,7 +92,6 @@ export default function NextTrips() {
         });
         console.log(data);
         if (data.message == 'You have successfully canceled your subscription to this track') {
-          location.reload();
           toast.success("تم الغاء المشاركة في هذا المسار", toastConfig);
 
         }
@@ -123,12 +122,17 @@ export default function NextTrips() {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}track/${trackId}/participating`, {},
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
-        console.log(response.data);
+        console.log(response.data.message);
         if (response.data.message == 'success') {
           toast.success("تمت المشاركة بنجاح", toastConfig);
-
           location.reload();
-        } else if (response.data.message == 'Sorry! The track is full.') {
+        }else if(response.data== 'Enter your date of birth in your profile plz'){
+          toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig)
+
+        }else if(response.data.message == "Your age is less than the permissible limit "){
+          toast.warn("عمرك أقل من الحد المسموح به ", toastConfig)
+        }
+         else if (response.data.message == 'Sorry! The track is full.') {
           toast.warn("نأسف! المسار ممتلئ.", toastConfig);
         } else if (response.data.message == 'this track is finished') {
           toast.warn("تم الانتهاء من هذا المسار", toastConfig);
@@ -171,7 +175,6 @@ export default function NextTrips() {
         console.log(data)
         if (data.message == 'success') {
           toast.success("تمت حذف الرحلة بنجاح", toastConfig);
-          location.reload()
         }
       }
 
