@@ -23,7 +23,7 @@ export default function NextTrips() {
   const [currentPage, setCurrentPage] = useState(1);
   const tripsPerPage = 6;
   const role = userData?.role;
-  
+
   useEffect(() => {
     const getTracks = async () => {
       try {
@@ -126,13 +126,13 @@ export default function NextTrips() {
         if (response.data.message == 'success') {
           toast.success("تمت المشاركة بنجاح", toastConfig);
           location.reload();
-        }else if(response.data== 'Enter your date of birth in your profile plz'){
+        } else if (response.data == 'Enter your date of birth in your profile plz') {
           toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig)
 
-        }else if(response.data.message == "Your age is less than the permissible limit "){
+        } else if (response.data.message == "Your age is less than the permissible limit ") {
           toast.warn("عمرك أقل من الحد المسموح به ", toastConfig)
         }
-         else if (response.data.message == 'Sorry! The track is full.') {
+        else if (response.data.message == 'Sorry! The track is full.') {
           toast.warn("نأسف! المسار ممتلئ.", toastConfig);
         } else if (response.data.message == 'this track is finished') {
           toast.warn("تم الانتهاء من هذا المسار", toastConfig);
@@ -156,6 +156,7 @@ export default function NextTrips() {
   }
 
   const deleteTrack = async (trackId) => {
+    console.log(trackId)
     try {
       const confirmation = await Swal.fire({
         title: "<div class='pt-3'>هل أنت متأكد؟</div>",
@@ -182,7 +183,7 @@ export default function NextTrips() {
       console.log(error)
     }
   }
- 
+
   const totalPages = Math.ceil(filteredTrips.length / tripsPerPage);
   const sortedTrips = filteredTrips.sort((a, b) => new Date(b.date) - new Date(a.date));
   const currentTrips = sortedTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
@@ -242,7 +243,30 @@ export default function NextTrips() {
                 </div>
                 <div>
                   <div className='d-flex'>
-                    <p className='text-dark'>عدد المشاركين({item.number_of_participants})</p>
+                    <Popup
+                      trigger={<button className='text-dark border-0 bg-white'> المشاركين({item.number_of_participants})</button>}
+                      position='center center'
+                    >
+                      <div className='table-responsive'>
+                        <table className='table dir'>
+                          <thead>
+                            <tr>
+                              <th scope='col'>#</th>
+                              <th scope='col'>الاسم</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {item.participants.map((participant, index) => (
+                              <tr key={participant._id}>
+                                <th scope='row'>{index + 1}</th>
+                                <td>{participant.name}</td>
+                           
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </Popup>
                     <div>
                       <Popup
                         trigger={<Link className='small me-3 color'>عرض المزيد</Link>}
@@ -277,14 +301,14 @@ export default function NextTrips() {
                   </div>
                   <div className='p-2 color'>|</div>
                   <Popup
-                          trigger={<div className='color p-2 mx-1'>
-                          <FaComment />
-                        </div>}
-                          position='center center'
-                        >
-                          <Comment
-                          item={item}/>
-                   </Popup>
+                    trigger={<div className='color p-2 mx-1'>
+                      <FaComment />
+                    </div>}
+                    position='center center'
+                  >
+                    <Comment
+                      item={item} />
+                  </Popup>
                 </div>
               </div>
               <div className='col-lg-5  dir2 d-flex flex-column justify-content-between'>
@@ -296,15 +320,15 @@ export default function NextTrips() {
                       <div className='d-flex mb-2  w-50'>
                         <Popup
                           trigger={<button
-                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'     
+                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'
                           >
                             تعديل
                           </button>}
                           position='center center'
                         >
                           <UpdateTrip
-                          item={item}
-                          trackId={item._id}/>
+                            item={item}
+                            trackId={item._id} />
                         </Popup>
                         <button
                           className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '

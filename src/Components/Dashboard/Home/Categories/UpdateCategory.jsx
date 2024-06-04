@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function UpdateCategory({ category, userToken }) {
   const [categoryName, setCategoryName] = useState(category.name);
@@ -21,6 +22,18 @@ export default function UpdateCategory({ category, userToken }) {
     }
 
     try {
+      const confirmation = await Swal.fire({
+        title: "<div class='p-3 pt-5'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      if (confirmation.isConfirmed) {
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}category/update/${category._id}`,
         formData,
@@ -31,9 +44,8 @@ export default function UpdateCategory({ category, userToken }) {
           },
         }
       );
-      console.log(response.data);
 
-    } catch (error) {
+    }} catch (error) {
       console.error('Error updating category:', error);
      
     }

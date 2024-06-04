@@ -26,8 +26,8 @@ export default function AllProducts() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}product/getAll/663514ea28f9fed3e3e52999?page=${currentPage}&&limit=${limit}&&sort=${sort}
+       const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}product/getActive?categoryId=664c8ae88c57dbaf72c3974f&&page=${currentPage}&&limit=${limit}&&sort=${sort}
             &&price[gte]=${gtePrice}&&price[lte]=${ltePrice}${categoryFilter ? `&categoryId=${categoryFilter}` : ''}`);
       //console.log(data);
       setProduct(data);

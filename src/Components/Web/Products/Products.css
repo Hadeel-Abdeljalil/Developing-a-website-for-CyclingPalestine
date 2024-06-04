@@ -11,10 +11,10 @@
 }
 .swiper-pagination-bullet.swiper-pagination-bullet-active{
 
-background-color: #5a3d11;
+background-color: #ffffff;
 }
 .swiper-button-prev {
-    background-color: #5a3d11;
+    background-color: #ffffff;
     color: #d39b6d;
     width: 40px;
     height: 40px;
@@ -22,7 +22,7 @@ background-color: #5a3d11;
     top: 90px;
 }
     .swiper-button-next {
-        background-color: #5a3d11;
+        background-color: #ffffff;
     color: #d39b6d;
     width: 40px;
     height: 40px;
@@ -45,8 +45,8 @@ svg{
     width: 150px;
 }
 select{
-    background-color: #5a3d11 !important;
-    color:whitesmoke !important;
+    background-color: #ffffff !important;
+    color:rgb(0, 0, 0) !important;
 }  
 
 .textarea{
