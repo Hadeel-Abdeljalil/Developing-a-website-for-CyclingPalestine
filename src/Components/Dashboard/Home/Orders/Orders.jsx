@@ -73,7 +73,7 @@ export default function Orders() {
   return (
     <Root>
       <h1>الطلبات</h1>
-      <table className="table table-bordered">
+      <table className="table table-bordered users-table">
         <thead>
           <tr>
             <th>الزبون</th>

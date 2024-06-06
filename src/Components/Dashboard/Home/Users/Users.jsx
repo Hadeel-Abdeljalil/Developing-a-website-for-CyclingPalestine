@@ -145,7 +145,7 @@ export default function Users() {
               </td>
               <td>
                 {user.role === 'User' ? (
-                  <button className='text-dark bg-transparent p-2' onClick={() => handelAdminChange(user)}>اضافة أدمن</button>
+                  <button className='text-dark bg-transparent p-2 ' onClick={() => handelAdminChange(user)}>اضافة أدمن</button>
                 ) : (
                   <button className='bg-danger px-3' onClick={() => handelAdminChange(user)}>ازالة أدمن</button>
                 )}

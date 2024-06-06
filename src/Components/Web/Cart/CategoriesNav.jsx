@@ -24,7 +24,7 @@ export default function Categories() {
 
     return (
         <ul className='d-flex justify-content-end '>
-            {data?.categories.length ? data?.categories.map(category => (
+            {data?.categories?.length ? data?.categories.map(category => (
                 <li key={category._id} ><NavLink activeclassname="active" className="category" to={`/products/category/${category._id}`}>{category.name}</NavLink></li>
 
             )) : "there is no category found"

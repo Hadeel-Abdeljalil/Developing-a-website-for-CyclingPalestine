@@ -55,8 +55,8 @@ export function CartContextProvider({children}){
     const getCartContext =async ()=>{
         try{
             const token = localStorage.getItem('userToken');
-            const {data} = await axios.get(`https://ecommerce-node4-five.vercel.app/cart`,
-            {headers:{Authorization: `Tariq__${token}`}});
+            const {data} = await axios.get(`${import.meta.env.VITE_API_URL}cart`,
+            {headers:{Authorization: `Rufaidah__${token}`}});
             setCount(data.count);
             setCart(data.cart);
             return data;
@@ -68,10 +68,10 @@ export function CartContextProvider({children}){
     const removeFromCartContext = async(productId) =>{
         try{
             const token = localStorage.getItem('userToken');
-            const {data} = await axios.patch(`https://ecommerce-node4-five.vercel.app/cart/removeItem`,
+            const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}cart/removeItem`,
             
             {productId},
-            {headers:{Authorization: `Tariq__${token}`}});
+            {headers:{Authorization: `Rufaidah__${token}`}});
            if(data.message == 'success'){
             toast.warn('تم حذف المنتج ',toastConfig);
            }
@@ -88,11 +88,11 @@ export function CartContextProvider({children}){
         try{
             const token = localStorage.getItem('userToken');
             const {data} = await axios.patch(
-                `https://ecommerce-node4-five.vercel.app/cart/clear`,
+                `${import.meta.env.VITE_API_URL}cart/clear`,
                 {},
                 {
                   headers: {
-                    Authorization: `Tariq__${token}`,
+                    Authorization: `Rufaidah__${token}`,
                   },
                 }
               );
@@ -115,9 +115,9 @@ export function CartContextProvider({children}){
     const increaseQuantityContext = async(productId)=>{
         try{
             const token = localStorage.getItem('userToken');
-            const {data} = await axios.patch(`https://ecommerce-node4-five.vercel.app/cart/incraseQuantity`,
+            const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}cart/incraseQuantity`,
             {productId},
-            {headers:{Authorization:`Tariq__${token}`}}
+            {headers:{Authorization:`Rufaidah__${token}`}}
             );
             // {data.cart.products.map((product)=>{
             //     //console.log(product);
@@ -136,9 +136,9 @@ export function CartContextProvider({children}){
         try{
             const token = localStorage.getItem('userToken');
             //const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}/cart/decraseQuantity`,
-            const {data} = await axios.patch(`https://ecommerce-node4-five.vercel.app/cart/decraseQuantity`,
+            const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}cart/decraseQuantity`,
             {productId},
-            {headers:{Authorization:`Tariq__${token}`}}
+            {headers:{Authorization:`Rufaidah__${token}`}}
             );
             console.log(data);
             setQuantity(--quantity);
@@ -154,7 +154,7 @@ export function CartContextProvider({children}){
     // const createOrderContext = async(phone,address,couponName)=>{
     //     const token = localStorage.getItem('userToken');
     //        const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/order`,
-    //        {phone,address,couponName},{headers:{Authorization: `Tariq__${token}`}});
+    //        {phone,address,couponName},{headers:{Authorization: `Rufaidah__${token}`}});
     //        return data;
     // }
 
