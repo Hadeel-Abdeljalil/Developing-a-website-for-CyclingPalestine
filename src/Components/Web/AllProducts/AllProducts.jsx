@@ -14,19 +14,28 @@ export default function AllProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [limit, setLimit] = useState(8);
-  const [sort, setSort] = useState('');
-  const [ltePrice, setLtePrice] = useState(100000);
+  const [limit, setLimit] = useState(5);
+  const [sort, setSort] = useState('price');
+  const [ltePrice, setLtePrice] = useState(5000);
   const [gtePrice, setGtePrice] = useState(0);
-  const [categoryFilter, setCategoryFilter] = useState(null);
+  const [categoryFilter, setCategoryFilter] = useState('664c8ae88c57dbaf72c3974f');
+  const [search, setSearch] = useState('');
   const { addToCartContext } = useContext(CartContext);
   const { userToken } = useContext(UserContext);
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getAll/664c8ae88c57dbaf72c3974f`, {
-        params: { page: currentPage, limit, sort, ltePrice, gtePrice, category: categoryFilter },
-        headers: { Authorization: `Rufaidah__${userToken}` },
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getActive`, {
+        params: {
+          status: 'Active',
+          page: currentPage,
+          limit,
+          sort,
+          search,
+          'price[lte]': ltePrice,
+          'price[gte]': gtePrice,
+          categoryId: categoryFilter,
+        },
       });
       setProducts(data);
     } catch (error) {
@@ -36,7 +45,7 @@ export default function AllProducts() {
 
   const getCategories = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getAll`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getActive`);
       setCategories(data.categories);
     } catch (error) {
       console.error(error);
@@ -46,7 +55,7 @@ export default function AllProducts() {
   useEffect(() => {
     fetchProducts();
     getCategories();
-  }, [currentPage, limit, sort, categoryFilter, ltePrice, gtePrice]);
+  }, [currentPage, limit, sort, categoryFilter, ltePrice, gtePrice, search]);
 
   const totalPages = Math.ceil((products.total || 0) / limit);
 
@@ -83,12 +92,20 @@ export default function AllProducts() {
           </div>
 
           <div className="d-flex gap-2 justify-content-center">
+            <input
+              type="text"
+              className="form-control w-25"
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+
             <div className="dropdown">
               <button className="btn btn-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
                 حدد
               </button>
               <ul className="dropdown-menu">
-                {Array.from({ length: products.total || 0 }, (_, index) => (
+                {Array.from({ length: Math.max(1, totalPages) }, (_, index) => (
                   <li key={index}>
                     <button className="dropdown-item" onClick={() => setLimit(index + 1)}>
                       {index + 1}
@@ -134,6 +151,11 @@ export default function AllProducts() {
             {products.products ? products.products.map(product => (
               <Link className="col-lg-3 ps-0 mb-3" to={`/products/${product._id}`} style={{ width: '17rem', position: 'relative' }} key={product._id}>
                 <div className="image-container position-relative">
+                <img
+                      className="w-100 h-100 product-image"
+                      src={product.mainImage.secure_url}
+                      alt="Card image cap"
+                    />
                   <div className="icon-container position-absolute bottom-0 start-50 mb-3 d-flex justify-content-center d-icon">
                     <Link onClick={() => addToCartContext(product._id)} className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3">
                       <BsCartPlus className="icon-animation" />

@@ -15,7 +15,8 @@ export default function CategoriesDetails() {
 
   const getCategoryDetails = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}products/category/${categoryId}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getActive?status=Active&categoryId=${categoryId}`);
+      console.log(data)
       return data.products;
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -50,17 +51,12 @@ export default function CategoriesDetails() {
   return (
     <div className='mt-5'>
       <div className='imageStore text-white d-flex align-items-center justify-content-center  '>
-        متجرنا
       </div>
       <div className='shadow'>
         <StoreNav />
-
       </div>
-
       <div className='container pt-5 mt-5 pb-5 '>
-
         <div className='row d-flex justify-content-around '>
-
           {category.length ? (
             category.map((product) => (
               <Link

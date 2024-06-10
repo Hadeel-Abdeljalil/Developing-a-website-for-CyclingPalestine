@@ -25,7 +25,7 @@ export default function StoreNav() {
     return (
         <section className='store '>
             <div className='container '>
-                <div className='row d-flex container-fluid  shadow-bottom '>
+                <div className='row d-flex container-fluid   '>
                     <div className='col-lg-10 department-store pe-5 pt-3 '>
                         <CategoriesNav />
                     </div>

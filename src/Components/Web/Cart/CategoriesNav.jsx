@@ -6,7 +6,7 @@ import './Store.css'
 
 export default function Categories() {
     const getCategory = async () => {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}categories/active?limit=9`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getActive?limit=9`);
         return data;
     };
 
