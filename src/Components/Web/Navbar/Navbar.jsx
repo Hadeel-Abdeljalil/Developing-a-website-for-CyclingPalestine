@@ -35,7 +35,7 @@ export default function Navbar() {
 
   const getNotification = async () => {
     try {
-      const { data } = await axios.get(`https://cycling-palestine.onrender.com/notification/`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}notification/`, {
         headers: { Authorization: `Rufaidah__${userToken}` }
       });
       setNotifications(data.notifications.reverse());
@@ -111,7 +111,7 @@ export default function Navbar() {
 
           <ul className="navbar-nav">
             <li className='nav-item dropdown d-flex align-items-center '>
-              {userData ? (
+              {userData? (
                 <Popup
                   trigger={<button className="btn"><FontAwesomeIcon icon={faBell} /></button>}
                   

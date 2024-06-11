@@ -149,7 +149,7 @@ export default function UserInfo() {
       setDeleteLoading(true);
 
       const response = await axios.delete(
-        'https://cycling-palestine.onrender.com/user/deleteImage',
+        `${import.meta.env.VITE_API_URL}user/deleteImage`,
         { headers: { Authorization: `Rufaidah__${userToken}` } }
       );
 

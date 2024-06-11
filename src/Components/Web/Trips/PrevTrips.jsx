@@ -66,9 +66,7 @@ export default function PrevTrips() {
         },
       });
       if (confirmation.isConfirmed) {
-        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}post/delete/${postId}`,
-          { headers: { Authorization: `Rufaidah__${userToken}` } }
-        );
+        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}post/delete/${postId}`);
         console.log(data)
         if (data.message == 'success') {
           toast.success("تم حذف الرحلة بنجاح", toastConfig);

@@ -34,7 +34,7 @@ export default function TripComments({ postId }) {
     const onSubmit = async (values, { resetForm }) => {
         const token = localStorage.getItem('userToken');
         try {
-            const { data } = await axios.post(`https://cycling-palestine.onrender.com/post/comment/${postId}`,
+            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}post/comment/${postId}`,
                 { text: values.text },
                 { headers: { Authorization: `Rufaidah__${token}` } }
             );

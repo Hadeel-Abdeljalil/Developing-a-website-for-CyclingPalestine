@@ -24,7 +24,7 @@ export default function Products() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await axios.get('https://cycling-palestine.onrender.com/category/getActive');
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getActive`);
         setCategories(data.categories);
       } catch (error) {
         console.error('Error fetching categories:', error);

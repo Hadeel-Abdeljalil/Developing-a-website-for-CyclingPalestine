@@ -4,6 +4,7 @@ import { BsCart, BsHouse, BsListCheck, BsPerson } from 'react-icons/bs';
 import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
 import { FaRoute, FaUsers } from 'react-icons/fa';
 import { BiCategory } from 'react-icons/bi';
+import { Newspaper } from '@mui/icons-material';
 
 export default function SideBar() {
     const { userData, loading } = useContext(UserContext);
@@ -50,6 +51,7 @@ export default function SideBar() {
                                 <span className="ms-1 d-none d-sm-inline">  المستخدمين </span>
                             </Link>
                         </li>
+                     
                         <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'tripsAdmin' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('tripsAdmin')}>
                             <Link to='/dashboard/trips' className="nav-link align-middle ps-5 p-2">
                                 <FaRoute className="ms-1 d-none d-sm-inline " />
@@ -73,6 +75,12 @@ export default function SideBar() {
                             <Link to='/dashboard/products' className="nav-link align-middle ps-5 p-2">
                                 <BsCart className="ms-1 d-none d-sm-inline " />
                                 <span className="ms-1 d-none d-sm-inline">  المنتجات </span>
+                            </Link>
+                        </li>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'news' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('news')}>
+                            <Link to='/dashboard/news' className="nav-link align-middle ps-5 p-2">
+                                <Newspaper className="ms-1 d-none d-sm-inline " />
+                                <span className="ms-1 d-none d-sm-inline">  أخبار </span>
                             </Link>
                         </li>
                         <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>

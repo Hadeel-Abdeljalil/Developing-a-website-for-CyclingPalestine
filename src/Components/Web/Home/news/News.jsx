@@ -16,7 +16,7 @@ export default function News() {
     // Function to fetch data from the API
     const fetchData = async () => {
       try {
-        const { data } = await axios.get('https://cycling-palestine.onrender.com/news/',{
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}news/`,{
           headers :{Authorization :`Rufaidah__${userToken}`}
         });
         setNews(data.news);

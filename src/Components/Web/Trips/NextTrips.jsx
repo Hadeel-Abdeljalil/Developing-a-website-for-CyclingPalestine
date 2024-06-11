@@ -87,9 +87,7 @@ export default function NextTrips() {
       });
 
       if (confirmation.isConfirmed) {
-        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`, {
-          headers: { Authorization: `Rufaidah__${userToken}` }
-        });
+        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`);
         console.log(data);
         if (data.message == 'You have successfully canceled your subscription to this track') {
           toast.success("تم الغاء المشاركة في هذا المسار", toastConfig);

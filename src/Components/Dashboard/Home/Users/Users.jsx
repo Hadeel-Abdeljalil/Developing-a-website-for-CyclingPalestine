@@ -33,11 +33,31 @@ export default function Users() {
     }
   };
 
-  const handleBlockToggle = (userId) => {
-    setUsers(users.map(user =>
-      user._id === userId ? { ...user, status: user.status === 'Active' ? 'Blocked' : 'Active' } : user
-    ));
+  const handleToggle = async (userId, action) => {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}user/${action}User/${userId}`;
+      const {data} = await axios.patch(url, {}, {
+        headers: {
+          'Authorization': `Rufaidah__${userToken}`
+        }
+      });
+      console.log(data)
+      if (data.message === "success") { 
+        setUsers(users.map(user =>
+          user._id === userId ? { ...user, status: user.status === 'Active' ? 'Blocked' : 'Active' } : user
+        ));
+      } else {
+        console.error('Failed to update user status');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
+  const handleBlockToggle = (userId) => handleToggle(userId, 'block');
+  const handleUnBlockToggle = (userId) => handleToggle(userId, 'unBlock');
+  
+
 
   const handelAdminChange = async (user) => {
     try {
@@ -82,7 +102,8 @@ export default function Users() {
   };
 
   const filteredUsers = users.filter(user =>
-    user.userName.toLowerCase().includes(searchQuery.toLowerCase()) 
+    user.userName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+    (selectedRole === 'All' || user.role === selectedRole)
   );
 
   const displayedUsers = rowsPerPage > 0
@@ -140,7 +161,7 @@ export default function Users() {
                 {user.status === 'Active' ? (
                   <button className='text-dark bg-transparent' onClick={() => handleBlockToggle(user._id)}>حظر</button>
                 ) : (
-                  <button className='bg-dark' onClick={() => handleBlockToggle(user._id)}>الغاء الحظر</button>
+                  <button className='bg-dark' onClick={() => handleUnBlockToggle(user._id)}>الغاء الحظر</button>
                 )}
               </td>
               <td>

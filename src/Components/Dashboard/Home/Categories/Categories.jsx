@@ -88,7 +88,7 @@ export default function Categories() {
 
   const getCategories = async () => {
     try {
-      const { data } = await axios.get(`https://cycling-palestine.onrender.com/category/getActive`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getActive`);
       if (data && data.message === "success") {
         setCategories(data.categories);
       }
@@ -111,7 +111,7 @@ export default function Categories() {
 
     try {
       setLoading(true);
-      const { data } = await axios.delete(`https://cycling-palestine.onrender.com/category/delete/${id}`, {
+      const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}category/delete/${id}`, {
         headers: {
           Authorization: `Rufaidah__${userToken}`
         }
