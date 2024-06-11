@@ -16,7 +16,7 @@ import Comment from './Comment.jsx';
 
 
 export default function NextTrips() {
-  const { loading, userToken, userData } = useContext(UserContext);
+  const {  userToken, userData } = useContext(UserContext);
   const [tracks, setTracks] = useState([]);
   const [searchDate, setSearchDate] = useState('');
   const [searchName, setSearchName] = useState('');
@@ -37,13 +37,7 @@ export default function NextTrips() {
     getTracks();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="loading bg-white w-100 vh-100 d-flex justify-content-center align-items-center z-3">
-        <span className="loader"></span>
-      </div>
-    );
-  }
+
 
   const toastConfig = {
     position: "top-right",

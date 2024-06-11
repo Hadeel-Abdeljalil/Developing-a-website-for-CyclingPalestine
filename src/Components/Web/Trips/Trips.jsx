@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
-import { Data } from './Data.jsx';
+import React from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
 import './Trips.css';
-import { BsHeart } from 'react-icons/bs';
-import { FaComment } from 'react-icons/fa';
 
 export default function Trips() {
 
@@ -15,7 +12,7 @@ export default function Trips() {
           <NavLink to="/trips/prevTrips" className='p-2 trip-link' activeclassname="active">  شاهد جولاتنا</NavLink>
         </div>
       </div>
-      <Outlet/>
+      <Outlet />
     </div>
   );
 }
