@@ -38,7 +38,6 @@ export default function Navbar() {
       const { data } = await axios.get(`https://cycling-palestine.onrender.com/notification/`, {
         headers: { Authorization: `Rufaidah__${userToken}` }
       });
-      console.log(data)
       setNotifications(data.notifications.reverse());
     } catch (error) {
       console.log(error);
