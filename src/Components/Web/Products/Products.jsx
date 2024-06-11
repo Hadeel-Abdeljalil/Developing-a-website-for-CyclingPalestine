@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
 import { CartContext } from '../Context/FeatureCart';
 import { UserContext } from '../Context/FeatureUser';
 import SwiperReviews from './SwiperReviews';
-import ReviewOrders from './ReviewOrders';
+import TripComments from './TripComments';
+import InnerImageZoom from 'react-inner-image-zoom';
 import { BiCart } from 'react-icons/bi';
-import './Products.css'
+import './Products.css';
 import { BsHeart } from 'react-icons/bs';
-
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
 
 export default function Products() {
   const { productId } = useParams();
@@ -18,8 +19,6 @@ export default function Products() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageOpacity, setImageOpacity] = useState({}); // Store opacity for each image
 
-
-
   let ratCount = 0;
   let ratsNum = 0;
   let AvgRating = 0;
@@ -27,7 +26,7 @@ export default function Products() {
 
   const getProduct = async () => {
     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getDetails/${productId}`);
-    //console.log(data.product);
+    console.log(data)
     return data.product;
   };
 
@@ -40,15 +39,12 @@ export default function Products() {
     data.reviews.map((review) => {
       ratCount += review.rating;
       ratsNum++;
-    })
+    });
     AvgRating = ratCount / ratsNum;
-    console.log(AvgRating);
     return Math.round(AvgRating);
-
-  }
+  };
 
   const { data, isLoading, isError, refetch } = useQuery(["productDetails", productId], getProduct);
-
 
   useEffect(() => {
     refetch();
@@ -74,7 +70,7 @@ export default function Products() {
     const updatedOpacity = {};
     Object.keys(imageOpacity).forEach((key) => {
       if (key === index.toString()) {
-        updatedOpacity['main'] = 0.5;//خاصة بالصورة الرئيسية
+        updatedOpacity['main'] = 0.5; // خاصة بالصورة الرئيسية
       }
       if (key === index.toString()) {
         updatedOpacity[key] = key === index.toString() ? 1 : 0.5; // Set opacity to 1 for the clicked image and 0.5 for the main image
@@ -91,36 +87,36 @@ export default function Products() {
     setIsClicked(!isClicked);
   };
 
-
   if (isError) {
     return <div>خطأ في جلب البيانات</div>;
   }
 
   if (isLoading || !product) {
-    return <div className="loading bg-transfer  w-100 d-flex justify-content-center align-items-center z-3">
-      <span className="loader"></span>
-    </div>
+    return (
+      <div className="loading bg-transfer w-100 d-flex justify-content-center align-items-center z-3">
+        <span className="loader"></span>
+      </div>
+    );
   }
+
   return (
     <div className="container pt-5 mt-5 pb-5 mb-5">
       <div className="row justify-content-center align-items-center pt-5">
         <div className="col-lg-10">
-          <div className='pb-5 d-flex '>
+          <div className='pb-5 d-flex'>
             <div className='dir col-lg-6 pe-5'>
               <h2 className="fw-bold">{data.name}</h2>
               <div className='pe-4 pt-3'>
                 <p>السعر: <span className='color'> {product.price} ₪</span></p>
               </div>
-              <div className='pe-4 '>
+              <div className='pe-4'>
                 <p>اللون: <span className='color'> {product.color} </span></p>
               </div>
               <div className='pe-2'>
                 <p className='mb-0'>في حال لديك ملاحظات خاصة للبائع</p>
                 <textarea className='mt-0 w-100 textarea'></textarea>
-
               </div>
-
-              <div className='d-flex pe-2   dir'>
+              <div className='d-flex pe-2 dir'>
                 <p>التقييم:</p>
                 <div className='d-flex gap-1'>
                   {Array.from({ length: avgRat() }, (_, index) => (
@@ -141,7 +137,6 @@ export default function Products() {
                       />
                     </svg>
                   ))}
-
                   {Array.from({ length: Number(5) - avgRat() }, (_, index) => (
                     <svg
                       height="200px"
@@ -165,39 +160,75 @@ export default function Products() {
                   ))}
                 </div>
               </div>
-             <div className='d-flex justify-content-center'>
-           
               <div className='d-flex justify-content-center'>
-                <button
-                  className="btn text-white bg-dark d-flex align-items-center dir add-button "
-                  onClick={() => addToCart(data._id)}
-                  hidden={!userToken}
-                >
-                  <span className="ps-2 pb-1">
-                    <BiCart />
-                  </span>
-                  أضف إلى عربة التسوق
-
-                </button>
+                <div className='d-flex justify-content-center'>
+                  <button
+                    className="btn text-white bg-dark d-flex align-items-center dir add-button"
+                    onClick={() => addToCart(data._id)}
+                    hidden={!userToken}
+                  >
+                    <span className="ps-2 pb-1">
+                      <BiCart />
+                    </span>
+                    أضف إلى عربة التسوق
+                  </button>
+                </div>
+                <div className="heart-icon pe-3 pt-2">
+                  <BsHeart />
+                </div>
               </div>
-              <div className=" heart-icon pe-3 pt-2 ">
-                <BsHeart />
+            </div>
+            <div className='col-lg-6 d-flex'>
+              <div className=' p-image'>
+                <InnerImageZoom
+                  src={selectedImage}
+                  zoomSrc={selectedImage}
+                  zoomType="hover"
+                  zoomScale={1.5}
+                  className='shadow-lg '
+                />
               </div>
-             </div>
-           
+              <div>
+                {product.subImages && product.subImages.length > 0 && (
+                  <>
+                    <div className='mt-2 ms-2'>
+                      <img
+                        src={product.mainImage.secure_url}
+                        alt={`main image`}
+                        className={`sub-image`}
+                        style={{ opacity: imageOpacity["main"] }}
+                        onClick={() => handleImageClick(product.mainImage.secure_url, "main")}
+                      />
+                    </div>
+                    {product.subImages.map((subImage, index) => (
+                      <div key={index} className='mt-2 ms-2'>
+                        <img
+                          src={subImage.secure_url}
+                          alt={`sub image ${index}`}
+                          className={`sub-image`}
+                          style={{ opacity: imageOpacity[index] }}
+                          onClick={() => handleImageClick(subImage.secure_url, index)}
+                        />
+                      </div>
+                    ))}
+                  </>
+                )}
+                {!product.subImages || product.subImages.length === 0 && (
+                  <div>Sub images not found</div>
+                )}
+              </div>
             </div>
-            <div className='col-lg-6 d-flex '>
-            </div>
-
           </div>
-
-
         </div>
       </div>
-      <h2 className="text-end me-4 py-5 fw-bolder ">ماذا يقول عملاؤنا</h2>
+      <hr />
+      <h2 className="text-center py-4 fw-bolder">
+        ما مدى رضاك عن منتجنا؟
+      </h2>
+      <TripComments productId={productId} />
+      <hr />
+      <h2 className="text-center py-5 fw-bolder">ماذا يقول عملاؤنا</h2>
       <SwiperReviews data={data} />
-      <ReviewOrders productId={productId} />
     </div>
-    
   );
 }

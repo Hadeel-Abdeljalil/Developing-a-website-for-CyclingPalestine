@@ -7,8 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import './TripDetails.css';
-import SwiperReviews from '../Products/SwiperReviews.jsx';
-import ReviewOrders from '../Products/ReviewOrders.jsx';
+import TripComments from '../Products/TripComments.jsx';
 
 const TripDetails = () => {
   const { postId } = useParams();
@@ -20,7 +19,6 @@ const TripDetails = () => {
     const fetchTripDetails = async () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}post/getDetails/${postId}`);
-        console.log(data.post);
         setTrip(data.post);
         setLoading(false);
       } catch (error) {
@@ -79,9 +77,8 @@ const TripDetails = () => {
 
        <div className='mt-5'>
         <h1 className='dir'>التعليقات</h1>
-        <ReviewOrders postId={trip._id} />
+        <TripComments postId={trip._id}  />
 
-       <SwiperReviews data={trip}/>
        </div>
 
         </div>

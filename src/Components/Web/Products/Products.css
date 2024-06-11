@@ -66,3 +66,16 @@ select{
     animation: shake 1.5s   infinite;
 
 }
+.p-image {
+    width: 30rem;
+    height: 35rem;
+    transition: transform 1s ease;
+  }
+
+.p-image img:hover {
+    transform: scale(1.5);
+}
+.p-image img{
+    width: 30rem;
+    height: 35rem;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Input({ type, id, name, title, value, errors, placeholder, onChange, onBlur, touched, autoComplete }) {
+export default function Input({ type, id, name, title, value, errors, placeholder, onChange, onBlur, touched, autoComplete='current' }) {
 
   return (
     <React.Fragment>

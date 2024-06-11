@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRoute, faBell } from '@fortawesome/free-solid-svg-icons';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { UserContext } from '../Context/FeatureUser';
 import { CartContext } from '../Context/FeatureCart';
 import './Navbar.css';
 import Popup from 'reactjs-popup';
+import axios from 'axios';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ export default function Navbar() {
   };
 
   const [navbar, setNavbar] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+
   const changeBackground = () => {
     if (window.scrollY >= 30) {
       setNavbar(true);
@@ -29,6 +32,24 @@ export default function Navbar() {
       setNavbar(false);
     }
   };
+
+  const getNotification = async () => {
+    try {
+      const { data } = await axios.get(`https://cycling-palestine.onrender.com/notification/`, {
+        headers: { Authorization: `Rufaidah__${userToken}` }
+      });
+      console.log(data)
+      setNotifications(data.notifications.reverse());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userToken) {
+      getNotification();
+    }
+  }, [userToken]);
 
   window.addEventListener('scroll', changeBackground);
 
@@ -54,12 +75,12 @@ export default function Navbar() {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav m-auto mb-3 mb-lg-0 dir">
-            <li className="nav-item me-4 ">
+            <li className="nav-item me-4">
               <NavLink className="nav-link border-nav" activeclassname="active" to="/">
                 الرئيسية
               </NavLink>
             </li>
-            <li className="nav-item me-4 ">
+            <li className="nav-item me-4">
               <NavLink className="nav-link border-nav" activeclassname="active" to="/trips">
                 جولاتنا
               </NavLink>
@@ -90,13 +111,23 @@ export default function Navbar() {
           </ul>
 
           <ul className="navbar-nav">
-            <li className='nav-item dropdown d-flex  align-items-center'>
-              {userData?<Popup
-                  trigger={<FontAwesomeIcon icon={faBell} />}
-                  position='center center'
+            <li className='nav-item dropdown d-flex align-items-center '>
+              {userData ? (
+                <Popup
+                  trigger={<button className="btn"><FontAwesomeIcon icon={faBell} /></button>}
+                  
                 >
-                </Popup>:''}
-            
+                  <div className='bg-white  position-relative comment-container rounded-3'>
+                    {notifications.length > 0 ? notifications.map((not) => (
+                      <div key={not._id} className=''>
+                        <p className='color'>{not.createdAt.split('T')[0]}</p>
+                        <p className='text-end me-3'>{not.content}</p>
+                        <hr />
+                      </div>
+                    )) : 'No notifications'}
+                  </div>
+                </Popup>
+              ) : ''}
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -144,19 +175,16 @@ export default function Navbar() {
                 )}
               </ul>
             </li>
-
           </ul>
-
-
         </div>
-
       </div>
       {
-        role === 'Admin' ? (<Link to={'/dashboard/home'}>
-          <button className='btn btn-outline-dark me-2'>dashboard </button>
-        </Link>) : ''
+        role === 'Admin' ? (
+          <Link to={'/dashboard/home'}>
+            <button className='btn btn-outline-dark me-2'>dashboard</button>
+          </Link>
+        ) : ''
       }
-
     </nav>
   );
 }

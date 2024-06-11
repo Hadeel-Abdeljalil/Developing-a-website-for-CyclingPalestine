@@ -147,7 +147,7 @@ export default function NextTrips() {
 
   const check = (item) => {
     let isUserParticipating = false;
-    item.participants.forEach((participant) => {
+    item?.participants?.forEach((participant) => {
       if (participant.user_id === userData._id) {
         isUserParticipating = true;
       }
@@ -223,7 +223,7 @@ export default function NextTrips() {
 
       <div className='dir mb-3 mt-2'>
         <div className='container-fluid flex-column justify-content-center w-75'>
-          {currentTrips.map((item) => (
+          {currentTrips?.map((item) => (
 
             <div
               key={item.id}
@@ -256,7 +256,7 @@ export default function NextTrips() {
                             </tr>
                           </thead>
                           <tbody>
-                            {item.participants.map((participant, index) => (
+                            {item?.participants?.map((participant, index) => (
                               <tr key={participant._id}>
                                 <th scope='row'>{index + 1}</th>
                                 <td>{participant.name}</td>

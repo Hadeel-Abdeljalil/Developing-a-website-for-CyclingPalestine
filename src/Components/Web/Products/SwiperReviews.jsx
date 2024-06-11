@@ -1,48 +1,40 @@
-import React from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import { FreeMode, Scrollbar, Mousewheel } from 'swiper/modules';
-import './SwiperProduct.css'
+import React from 'react';
+import './SwiperProduct.css';
+import Popup from 'reactjs-popup';
+
 export default function ({ data }) {
-  
+  const handleDeleteComment = (commentId) => {
+    // Implement your delete comment logic here
+    console.log(`Deleting comment with id: ${commentId}`);
+  };
+
   return (
-    <div className='d-flex justify-content-end mb-3'>
-      <div className='w-75 ' style={{ height: '350px' }}>
-
-        <Swiper
-          direction={'vertical'}
-          slidesPerView={'auto'}
-          freeMode={true}
-          scrollbar={true}
-          mousewheel={true}
-          modules={[FreeMode, Scrollbar, Mousewheel]}
-          className="mySwiper"
-        >
-          <div className="d-flex justify-content-center ">
-            {data.comments?.length ? data.comments?.map((review) => (
-              <SwiperSlide key={review._id} className=' p-0 m-0'>
-                <div className="d-flex justify-content-start dir mx-5 mt-4 ">
-                 <div className=''>
-                 <div className='bg-secondary-subtle rounded-3 me-3  d-flex'>
-                  <div className="px-5  ">
-                  <p className='dir text-end'>{review.userName}</p>
-
-                    <p>{review.text}</p>
-                  </div>
-                 </div>
+    <div className="comment-container">
+      {data.comments?.length ? (
+        <div className="comment-list">
+          {data.comments.map((review) => (
+            <div key={review._id} className=" text-end d-flex dir">
+              <img src={review.userImage.secure_url} alt="user" className="rounded-circle comment-image ms-1" />
+              <div className="">
+                <p className="p-0 m-0 mb-1">{review.userName}</p>
+                <div className='d-flex comment-text'>
+                  <p className=" bg-body-tertiary mx-2 p-3">{review.text}</p>
+                  <Popup
+                    trigger={<p className='d-flex align-items-center del'>...</p>}
+                  >
+                    <div className='shadow bg-white p-2 rounded-2 '>
+                      <button className='border-0 bg-white d-block pb-1'>تعديل</button>
+                      <button className='border-0 bg-white d-block'>حذف</button>
+                    </div>
+                  </Popup>
                 </div>
-                 </div>
-
-              </SwiperSlide>
-            )) : <p>لا يوجد تعليقات</p>}
-
-          </div>
-        </Swiper>
-      </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="no-comments">لا يوجد تعليقات</p>
+      )}
     </div>
-  )
-  
+  );
 }
