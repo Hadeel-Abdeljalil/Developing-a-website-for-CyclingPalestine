@@ -57,3 +57,16 @@
     white-space: pre-wrap;
     word-wrap: break-word;
   }
+  .custom-popup {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-popup-content {
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-60%, -40%);
+}

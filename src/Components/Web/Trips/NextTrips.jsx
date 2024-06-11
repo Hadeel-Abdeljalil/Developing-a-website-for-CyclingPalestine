@@ -16,11 +16,12 @@ import Comment from './Comment.jsx';
 
 
 export default function NextTrips() {
-  const {  userToken, userData } = useContext(UserContext);
+  const { userToken, userData } = useContext(UserContext);
   const [tracks, setTracks] = useState([]);
   const [searchDate, setSearchDate] = useState('');
   const [searchName, setSearchName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [details, setDetails] = useState(null)
   const tripsPerPage = 6;
   const role = userData?.role;
 
@@ -37,7 +38,15 @@ export default function NextTrips() {
     getTracks();
   }, []);
 
-
+  const getDetails = async (trackId) => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}track/getDetails/${trackId}`);
+      setDetails(data.track.participants)
+      console.log(details)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const toastConfig = {
     position: "top-right",
@@ -233,38 +242,47 @@ export default function NextTrips() {
                   <h2>{item.trackName}</h2>
                   <p className='text-dark pt-2 pe-3'>{item.difficulty_level}</p>
                 </div>
-                <div>
+                <div >
                   <div className='d-flex'>
-                    <Popup
-                      trigger={<button className='text-dark border-0 bg-white'> المشاركين({item.number_of_participants})</button>}
-                      position='center center'
-                    >
-                      <div className='table-responsive'>
-                        <table className='table dir'>
-                          <thead>
-                            <tr>
-                              <th scope='col'>#</th>
-                              <th scope='col'>الاسم</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {item?.participants?.map((participant, index) => (
-                              <tr key={participant._id}>
-                                <th scope='row'>{index + 1}</th>
-                                <td>{participant.name}</td>
-                           
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </Popup>
+                    <div>
+                      <Popup
+                        trigger={<button className='text-dark border-0 bg-white'> المشاركين({item.number_of_participants})</button>}
+                        onOpen={() => getDetails(item.id)}
+                         position='center center'
+                        className='custom-popup'
+                      >
+                        <div className='table table-bordered users-table shadow bg-white p-1 rounded-2  dir'>
+                          {details ? (
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>الاسم</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {details.map((x, index) => (
+                                  <tr key={index}>
+                                    <td>{index}</td>
+                                    <td>{x.name}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          ) : (
+                            'noo'
+                          )}
+                        </div>
+                      </Popup>
+                    </div>
+
                     <div>
                       <Popup
                         trigger={<Link className='small me-3 color'>عرض المزيد</Link>}
                         position='center center'
+                        className='custom-popup'
                       >
-                        <div className='border shadow bg-white p-3 rounded-3 '>
+                        <div className='border shadow bg-white p-3 rounded-3 custom-popup-content'>
                           <div className='w-100 d-flex justify-content-center'>
                             <h2 className='dir'>{item.trackName}</h2>
                           </div>
@@ -285,6 +303,7 @@ export default function NextTrips() {
                         </div>
                       </Popup>
                     </div>
+
                   </div>
                 </div>
                 <div className='d-flex'>

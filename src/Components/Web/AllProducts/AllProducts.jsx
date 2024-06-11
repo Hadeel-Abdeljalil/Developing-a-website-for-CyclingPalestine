@@ -14,7 +14,7 @@ export default function AllProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState('price');
   const [ltePrice, setLtePrice] = useState(5000);
   const [gtePrice, setGtePrice] = useState(0);
@@ -25,16 +25,14 @@ export default function AllProducts() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getActive`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getAll`, {
         params: {
-          status: 'Active',
           page: currentPage,
           limit,
           sort,
           search,
           'price[lte]': ltePrice,
           'price[gte]': gtePrice,
-          categoryId: categoryFilter,
         },
       });
       setProducts(data);
