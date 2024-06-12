@@ -193,7 +193,7 @@ export default function Categories() {
           )}
         <div className='d-flex justify-content-end mt-3'>
           <button type="submit" className="btn btn-outline-dark">
-            إضافة مسار
+            إضافة فئة
           </button>
         </div>
       </form>

@@ -248,31 +248,35 @@ export default function NextTrips() {
                       <Popup
                         trigger={<button className='text-dark border-0 bg-white'> المشاركين({item.number_of_participants})</button>}
                         onOpen={() => getDetails(item.id)}
-                         position='center center'
+                        position='center center'
                         className='custom-popup'
                       >
-                        <div className='table table-bordered users-table shadow bg-white p-1 rounded-2  dir'>
-                          {details ? (
-                            <table>
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>الاسم</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {details.map((x, index) => (
-                                  <tr key={index}>
-                                    <td>{index}</td>
-                                    <td>{x.name}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          ) : (
-                            'noo'
-                          )}
-                        </div>
+ <div className='table-container dir'>
+      {details && details.length > 0 ? (
+        <table className='custom-table'>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>الهاتف</th>
+              <th>البريد الالكتروني</th>
+            </tr>
+          </thead>
+          <tbody>
+            {details.map((x, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{x.name}</td>
+                <td>{x.phone}</td>
+                <td>{x.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className='no-data'>لا توجد بيانات للعرض</div>
+      )}
+    </div>
                       </Popup>
                     </div>
 

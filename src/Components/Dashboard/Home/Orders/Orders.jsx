@@ -21,7 +21,7 @@ export default function Orders() {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}order/getAll`, {
         headers: { Authorization: `Rufaidah__${userToken}` }
       });
-      setOrders(response.data.orders);
+      setOrders(response.data.orders.reverse());
     } catch (error) {
       setError(error);
     } finally {
@@ -44,7 +44,7 @@ export default function Orders() {
 
   const handleChangeStatus = async (orderId, status) => {
     try {
-      await axios.post(
+      await axios.patch(
         `${import.meta.env.VITE_API_URL}order/changeStatus/${orderId}`,
         { status },
         {
@@ -58,8 +58,10 @@ export default function Orders() {
         )
       );
     } catch (error) {
+      console.error("Error:", error.response.data);
       setError(error);
     }
+    
   };
 
   if (loading) {
@@ -76,29 +78,37 @@ export default function Orders() {
       <table className="table table-bordered users-table">
         <thead>
           <tr>
-            <th>الزبون</th>
-            <th>العنوان</th>
-            <th>رقم الهاتف</th>
-            <th>المبلغ</th>
-            <th>نوع الدفع</th>
-            <th>الحالة</th>
-            <th>تغيير الحالة</th>
+            <th className='text-center'>الزبون</th>
+            <th className='text-center'>العنوان</th>
+            <th className='text-center'>رقم الهاتف</th>
+            <th className='text-center'>المنتجات</th>
+            <th className='text-center'>المبلغ</th>
+            <th className='text-center'>نوع الدفع</th>
+            <th className='text-center'>الحالة</th>
+            <th className='text-center'>تغيير الحالة</th>
           </tr>
         </thead>
         <tbody>
           {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
             <tr key={order._id}>
-              <td>{order.customer}</td>
-              <td>{order.address}</td>
-              <td>{order.phoneNumber}</td>
-              <td>{order.amount}</td>
-              <td>{order.paymentType}</td>
-              <td>{order.status}</td>
-              <td>
+              <td className='text-center'>{order.userId?.userName?order.userId?.userName:''}</td>
+              <td className='text-center'>{order.address}</td>
+              <td className='text-center'>{order.phoneNumber}</td>
+              <td className='text-center'> <ul>
+                {order.products.map((product) => (
+                  <li>{product.productName}/
+                    <span className='text-danger '>الكمية(<span className='text-dark'>{product.quantity}</span>)</span>
+                  </li>
+                ))}
+              </ul></td>
+              <td className='text-center'>{order.amount}</td>
+              <td className='text-center'>{order.paymentType}</td>
+              <td className='text-center'>{order.status}</td>
+              <td className='text-center'>
                 <div className="btn-group">
                   {order.status !== 'confirmed' && (
                     <button
-                      className="btn btn-secondary mx-2 border rounded-2 bg-success"
+                      className="btn btn-secondary  border rounded-2 bg-success"
                       onClick={() => handleChangeStatus(order._id, 'confirmed')}
                     >
                       <BsCheck />
@@ -129,7 +139,7 @@ export default function Orders() {
           <tr>
             <CustomTablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'الكل', value: -1 }]}
-              colSpan={7}
+              colSpan={8}
               count={orders.length}
               rowsPerPage={rowsPerPage}
               page={page}

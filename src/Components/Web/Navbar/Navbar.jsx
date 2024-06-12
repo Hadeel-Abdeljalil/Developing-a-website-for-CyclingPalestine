@@ -116,9 +116,9 @@ export default function Navbar() {
                   trigger={<button className="btn"><FontAwesomeIcon icon={faBell} /></button>}
                   
                 >
-                  <div className='bg-white  position-relative comment-container rounded-3'>
+                  <div className='bg-body-tertiary  position-relative comment-container rounded-3'>
                     {notifications.length > 0 ? notifications.map((not) => (
-                      <div key={not._id} className=''>
+                      <div key={not._id} className='p-1'>
                         <p className='color'>{not.createdAt.split('T')[0]}</p>
                         <p className='text-end me-3'>{not.content}</p>
                         <hr />

@@ -43,7 +43,6 @@ export default function News() {
     }
   };
 
-  const today = new Date().toISOString().split('T')[0];
 
   return (
     <div className="container mt-3">
@@ -69,7 +68,6 @@ export default function News() {
               name="date"
               value={formData.date}
               onChange={handleChange}
-              min={today}
               required
             />
           </div>

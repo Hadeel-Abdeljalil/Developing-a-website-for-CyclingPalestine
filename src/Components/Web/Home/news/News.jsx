@@ -6,18 +6,21 @@ import 'swiper/css';
 import './News.css';
 import './NewsMedia.css';
 import { UserContext } from '../../Context/FeatureUser.jsx';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 export default function News() {
-  const {userToken}=useContext(UserContext)
+  const { userToken ,userData } = useContext(UserContext);
   const [news, setNews] = useState([]);
   const [error, setError] = useState(null);
+  const role = userData?.role;
 
   useEffect(() => {
     // Function to fetch data from the API
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}news/`,{
-          headers :{Authorization :`Rufaidah__${userToken}`}
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}news/`, {
+          headers: { Authorization: `Rufaidah__${userToken}` },
         });
         setNews(data.news);
       } catch (error) {
@@ -27,10 +30,56 @@ export default function News() {
     };
 
     fetchData();
-  }, []);
+  }, [userToken]); // Add userToken to the dependency array
 
+// Function to format the date
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+const toastConfig = {
+  position: "top-right",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+};
+const deleteNews = async (trackId) => {
+  console.log(trackId)
+  try {
+    const confirmation = await Swal.fire({
+      title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+      confirmButtonText: "<span class=''>نعم</span>",
+      cancelButtonText: "<span class='mb-3'>لا</span>",
+      showCancelButton: true,
+      showCloseButton: true,
+      customClass: {
+        confirmButton: 'btn bg-white border border-success text-dark',
+        cancelButton: 'btn bg-white border text-dark'
+      },
+    });
+    if (confirmation.isConfirmed) {
+      const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}news/delete/${trackId}`,
+        { headers: { Authorization: `Rufaidah__${userToken}` } }
+      );
+      console.log(data)
+      if (data.message == 'success') {
+        toast.success("تم حذف الخبر بنجاح", toastConfig);
+        location.reload();
+      }
+    }
+
+  } catch (error) {
+    console.log(error)
+  }
+}
   return (
-    <>
       <section className="notice">
         <div className="container d-flex">
           <div className="border-c">
@@ -44,12 +93,26 @@ export default function News() {
                 loop={true}
                 autoplay={{ delay: 9000 }}
               >
-                {news.length ? news.map((newsItem, index) => (
-                  <SwiperSlide key={index} className='text-end hi'>
-                    <div className='me-5'>
+                {news.length > 0 ? news.map((newsItem, index) => (
+                  <SwiperSlide key={index} className="text-end hi">
+                    <div className="me-5">
+                      <p>{formatDate(newsItem.date)}</p>
+                      <h1>{newsItem.title}</h1>
                       <p>{newsItem.content}</p>
-                      <h1>{newsItem.content}</h1>
-                      <p>{newsItem.content}</p>
+                      {
+                    role==='Admin'? <div className='d-flex w-25'>
+                    <button
+                           className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
+                           onClick={() => deleteNews(newsItem._id)}>
+                           حذف
+                         </button>
+                         <button
+                           className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 '
+                           onClick={() => deleteNews(newsItem._id)}>
+                           تعديل
+                         </button>
+                    </div>:''
+                   }
                     </div>
                   </SwiperSlide>
                 )) : ''}
@@ -58,6 +121,6 @@ export default function News() {
           </div>
         </div>
       </section>
-    </>
+  
   );
 }

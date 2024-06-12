@@ -1,6 +1,68 @@
 .shadow-bottom {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* You can adjust the shadow values as needed */
   }
+  .table-container {
+    max-height: 500px; /* Set this value based on your requirement */
+    overflow-y: auto; /* Adds vertical scroll */
+    overflow-x: hidden; /* Prevents horizontal scroll */
+  }
+  
+  .table-container {
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto; /* For horizontal scrolling on small screens */
+  }
+  
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+  }
+  
+  .custom-table thead {
+    background-color: #5F8559; /* New green color */
+    color: white;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .custom-table th {
+    background-color: #e7f0e7; /* Light green shade for the header */
+    color: #000; /* New green color */
+  }
+  
+  .custom-table tbody tr:nth-child(even) {
+    background-color: #f2f7f2; /* Light greenish background for even rows */
+  }
+  
+  .custom-table tbody tr:hover {
+    background-color: #e7f0e7; /* Slightly darker light green on hover */
+  }
+  
+  .no-data {
+    text-align: center;
+    color: #6c757d;
+    padding: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .custom-table th, .custom-table td {
+      padding: 8px;
+    }
+  }
+  
+  .dir {
+    direction: rtl;
+  }
+  
 .input{
     direction: rtl;
     padding: 9px 5px;

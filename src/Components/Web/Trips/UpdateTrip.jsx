@@ -8,20 +8,20 @@ import { toast } from 'react-toastify';
 export default function UpdateTrip({ item }) {
     const { userToken } = useContext(UserContext);
 
-  const toastConfig = {
-    position: "top-right",
-    autoClose: 2000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-  };
+    const toastConfig = {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    };
 
     const onSubmit = async (values) => {
         try {
-            
+
             const confirmation = await Swal.fire({
                 title: "<div class='pt-3'>هل أنت متأكد؟</div>",
                 confirmButtonText: "<span class=''>نعم</span>",
@@ -53,7 +53,7 @@ export default function UpdateTrip({ item }) {
     const formatDate = (dateString) => {
         // Clean up the date string to remove any unwanted characters
         const cleanedDateString = dateString.replace(/<.*>/, ''); // Remove <URL> part
-    
+
         // Attempt to parse the cleaned date string
         const dateObject = new Date(cleanedDateString);
         if (isNaN(dateObject.getTime())) {
@@ -64,7 +64,7 @@ export default function UpdateTrip({ item }) {
         const year = dateObject.getFullYear();
         const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
         const day = dateObject.getDate().toString().padStart(2, '0');
-    
+
         return `${year}-${month}-${day}`;
     };
     const initialValues = {
@@ -109,71 +109,71 @@ export default function UpdateTrip({ item }) {
                 />
             </div>
             {/* Other form fields */}
-<div className="form-group justify-content-around mb-2">
-    <label className='label-width'>المسافة:</label>
-    <input
-        type="number"
-        className="form-control "
-        name="distance"
-        value={formik.values.distance}
-        onChange={formik.handleChange}
-        required
-    />
-</div>
-<div className="form-group justify-content-around mb-2">
-    <label className='label-width'>نقطة البداية:</label>
-    <input
-        type="text"
-        className="form-control  "
-        name="start_point"
-        value={formik.values.start_point}
-        onChange={formik.handleChange}
-        required
-    />
-</div>
-<div className="form-group justify-content-around mb-2">
-    <label className='label-width'>نقطة النهاية:</label>
-    <input
-        type="text"
-        className="form-control "
-        name="end_point"
-        value={formik.values.end_point}
-        onChange={formik.handleChange}
-        required
-    />
-</div>
-<div className="form-group justify-content-around mb-2">
-    <label className='label-width'>مستوى الصعوبة:</label>
-    <input
-        type="text"
-        className="form-control "
-        name="difficulty_level"
-        value={formik.values.difficulty_level}
-        onChange={formik.handleChange}
-        required
-    />
-</div>
-<div className="form-group justify-content-around mb-2">
-    <label className='label-width'>الوصف:</label>
-    <textarea
-        className="form-control "
-        name="description"
-        value={formik.values.description}
-        onChange={formik.handleChange}
-        required
-    />
-</div>
-<div className="form-group justify-content-around mb-2">
-    <label className='label-width'>الحد الأقصى للمشاركين:</label>
-    <input
-        type="number"
-        className="form-control "
-        name="maxParticipants"
-        value={formik.values.maxParticipants}
-        onChange={formik.handleChange}
-        required
-    />
-</div>
+            <div className="form-group justify-content-around mb-2">
+                <label className='label-width'>المسافة:</label>
+                <input
+                    type="number"
+                    className="form-control "
+                    name="distance"
+                    value={formik.values.distance}
+                    onChange={formik.handleChange}
+                    required
+                />
+            </div>
+            <div className="form-group justify-content-around mb-2">
+                <label className='label-width'>نقطة البداية:</label>
+                <input
+                    type="text"
+                    className="form-control  "
+                    name="start_point"
+                    value={formik.values.start_point}
+                    onChange={formik.handleChange}
+                    required
+                />
+            </div>
+            <div className="form-group justify-content-around mb-2">
+                <label className='label-width'>نقطة النهاية:</label>
+                <input
+                    type="text"
+                    className="form-control "
+                    name="end_point"
+                    value={formik.values.end_point}
+                    onChange={formik.handleChange}
+                    required
+                />
+            </div>
+            <div className="form-group justify-content-around mb-2">
+                <label className='label-width'>مستوى الصعوبة:</label>
+                <input
+                    type="text"
+                    className="form-control "
+                    name="difficulty_level"
+                    value={formik.values.difficulty_level}
+                    onChange={formik.handleChange}
+                    required
+                />
+            </div>
+            <div className="form-group justify-content-around mb-2">
+                <label className='label-width'>الوصف:</label>
+                <textarea
+                    className="form-control "
+                    name="description"
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    required
+                />
+            </div>
+            <div className="form-group justify-content-around mb-2">
+                <label className='label-width'>الحد الأقصى للمشاركين:</label>
+                <input
+                    type="number"
+                    className="form-control "
+                    name="maxParticipants"
+                    value={formik.values.maxParticipants}
+                    onChange={formik.handleChange}
+                    required
+                />
+            </div>
 
             <div className=' d-flex justify-content-end mt-3'>
                 <button type="submit" className="btn btn-outline-dark">
