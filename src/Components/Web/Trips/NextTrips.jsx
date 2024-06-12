@@ -28,15 +28,18 @@ export default function NextTrips() {
   useEffect(() => {
     const getTracks = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}track/allTracks`);
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}track/allTracks?page=${currentPage}&limit=${tripsPerPage}`,
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
+        );
         setTracks(data.tracks);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
-    getTracks();
-  }, []);
+  
+    getTracks(); 
+  }, [currentPage, tripsPerPage, userToken]);
 
   const getDetails = async (trackId) => {
     try {
@@ -117,27 +120,25 @@ export default function NextTrips() {
           cancelButton: 'btn bg-white border text-dark'
         },
       });
-
-
       if (confirmation.isConfirmed) {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}track/${trackId}/participating`, {},
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}track/${trackId}/participating`,
+          {},
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
         console.log(response.data.message);
-        if (response.data.message == 'success') {
+        if (response.data.message === 'success') {
           toast.success("تمت المشاركة بنجاح", toastConfig);
           location.reload();
-        } else if (response.data == 'Enter your date of birth in your profile plz') {
-          toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig)
-
-        } else if (response.data.message == "Your age is less than the permissible limit ") {
-          toast.warn("عمرك أقل من الحد المسموح به ", toastConfig)
-        }
-        else if (response.data.message == 'Sorry! The track is full.') {
+        } else if (response.data.message === 'Enter your date of birth in your profile plz') {
+          toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig);
+        } else if (response.data.message === "Your age is less than the permissible limit ") {
+          toast.warn("عمرك أقل من الحد المسموح به ", toastConfig);
+        } else if (response.data.message === 'Sorry! The track is full.') {
           toast.warn("نأسف! المسار ممتلئ.", toastConfig);
-        } else if (response.data.message == 'this track is finished') {
+        } else if (response.data.message === 'this track is finished') {
           toast.warn("تم الانتهاء من هذا المسار", toastConfig);
-        } else if (response.data.message == 'You have already participated in this track.') {
+        } else if (response.data.message === 'You have already participated in this track.') {
           toast.warn("انت مشارك بالفعل في هذا المسار", toastConfig);
         }
       }
@@ -145,6 +146,7 @@ export default function NextTrips() {
       console.error(error);
     }
   };
+  
 
   const check = (item) => {
     let isUserParticipating = false;
@@ -251,32 +253,32 @@ export default function NextTrips() {
                         position='center center'
                         className='custom-popup'
                       >
- <div className='table-container dir'>
-      {details && details.length > 0 ? (
-        <table className='custom-table'>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>الاسم</th>
-              <th>الهاتف</th>
-              <th>البريد الالكتروني</th>
-            </tr>
-          </thead>
-          <tbody>
-            {details.map((x, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{x.name}</td>
-                <td>{x.phone}</td>
-                <td>{x.email}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div className='no-data'>لا توجد بيانات للعرض</div>
-      )}
-    </div>
+                        <div className='table-container dir'>
+                          {details && details.length > 0 ? (
+                            <table className='custom-table'>
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>الاسم</th>
+                                  <th>الهاتف</th>
+                                  <th>البريد الالكتروني</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {details.map((x, index) => (
+                                  <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{x.name}</td>
+                                    <td>{x.phone}</td>
+                                    <td>{x.email}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          ) : (
+                            <div className='no-data'>لا توجد بيانات للعرض</div>
+                          )}
+                        </div>
                       </Popup>
                     </div>
 

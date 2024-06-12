@@ -44,13 +44,14 @@ export default function Orders() {
 
   const handleChangeStatus = async (orderId, status) => {
     try {
-      await axios.patch(
+    const response=  await axios.patch(
         `${import.meta.env.VITE_API_URL}order/changeStatus/${orderId}`,
         { status },
         {
           headers: { Authorization: `Rufaidah__${userToken}` }
         }
       );
+      console.log(response)
       // Update the order status locally
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
