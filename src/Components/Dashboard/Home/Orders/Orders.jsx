@@ -107,7 +107,7 @@ export default function Orders() {
               <td className='text-center'>{order.status}</td>
               <td className='text-center'>
                 <div className="btn-group">
-                  {order.status !== 'confirmed' && (
+                  {order.status !== 'confirmed' && order.status !== 'cancelled' &&  (
                     <button
                       className="btn btn-secondary  border rounded-2 bg-success"
                       onClick={() => handleChangeStatus(order._id, 'confirmed')}
@@ -115,9 +115,9 @@ export default function Orders() {
                       <BsCheck />
                     </button>
                   )}
-                  {order.status !== 'onway' && (
+                  {order.status !== 'onway' && order.status !== 'cancelled' &&  (
                     <button
-                      className="btn btn-secondary mx-2 border rounded-2 bg-info"
+                      className="btn btn-secondary  border rounded-2 bg-info"
                       onClick={() => handleChangeStatus(order._id, 'onway')}
                     >
                       <BsBicycle />
