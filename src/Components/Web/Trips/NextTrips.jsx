@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import Trips from '../../Dashboard/Home/Trips/Trips.jsx';
 import UpdateTrip from './UpdateTrip.jsx';
 import Comment from './Comment.jsx';
+import Likes from '../Likes/Likes.jsx';
 
 
 export default function NextTrips() {
@@ -314,7 +315,7 @@ export default function NextTrips() {
                 </div>
                 <div className='d-flex'>
                   <div className='text-danger p-2 mx-1'>
-                    <BsHeart />
+                    <Likes tripId={item._id} val={"track"}/>
                   </div>
                   <div className='p-2 color'>|</div>
                   <Popup

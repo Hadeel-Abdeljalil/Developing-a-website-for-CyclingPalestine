@@ -7,6 +7,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
 import { styled } from '@mui/system';
 import '.././Users/Users.css'
+import Swal from 'sweetalert2';
 
 export default function Orders() {
   const { userToken } = useContext(UserContext);
@@ -44,6 +45,18 @@ export default function Orders() {
 
   const handleChangeStatus = async (orderId, status) => {
     try {
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      if (confirmation.isConfirmed) {
     const response=  await axios.patch(
         `${import.meta.env.VITE_API_URL}order/changeStatus/${orderId}`,
         { status },
@@ -57,7 +70,7 @@ export default function Orders() {
         prevOrders.map((order) =>
           order._id === orderId ? { ...order, status } : order
         )
-      );
+      );}
     } catch (error) {
       console.error("Error:", error.response.data);
       setError(error);
@@ -115,7 +128,7 @@ export default function Orders() {
                       <BsCheck />
                     </button>
                   )}
-                  {order.status !== 'onway' && order.status !== 'cancelled' &&  (
+                  {order.status !== 'onway' && order.status !== 'cancelled' && order.status !== 'pending' && (
                     <button
                       className="btn btn-secondary  border rounded-2 bg-info"
                       onClick={() => handleChangeStatus(order._id, 'onway')}

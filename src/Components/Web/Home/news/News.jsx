@@ -74,7 +74,6 @@ const deleteNews = async (trackId) => {
         location.reload();
       }
     }
-
   } catch (error) {
     console.log(error)
   }
