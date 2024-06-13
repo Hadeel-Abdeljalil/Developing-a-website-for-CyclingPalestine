@@ -11,6 +11,7 @@ import Popup from 'reactjs-popup';
 import UpdateTrip from './UpdateTrip.jsx';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import Likes from '../Likes/Likes.jsx';
 
 export default function PrevTrips() {
   const { loading, userData,userToken } = useContext(UserContext);
@@ -115,8 +116,8 @@ export default function PrevTrips() {
               <div className='col-lg-4 d-flex flex-column justify-content-between'>
                 <h2>{item.title}</h2>
                 <div className='d-flex'>
-                  <div className='text-danger p-2 mx-1'>
-                    <BsHeart />
+                <div className='text-danger p-2 mx-1'>
+                    <Likes tripId={item._id} val={"post"}/>
                   </div>
                   <div className='p-2 color'>|</div>
                   <div className=' p-2 mx-1'>

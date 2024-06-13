@@ -27,8 +27,8 @@ export default function Likes({ tripId, val }) {
                 const {data} = await axios.get(`${import.meta.env.VITE_API_URL}${val}/getDetails/${tripId}`, 
                     { headers: { Authorization: `Rufaidah__${userToken}` } }
                 );
-                 setLikesCount(data.track.like.length)
-                console.log(data.track.like.length)
+                 setLikesCount(data[val].like.length)
+                console.log(data[val].like.length)
             } catch (error) {
                 console.error("Error fetching the initial likes count:", error);
             }
