@@ -27,7 +27,6 @@ export default function PrevTrips() {
       try {
         setIsLoading(true)
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}post/`);
-        console.log(data)
         setPosts(data.posts);
         setIsLoading(false)
       } catch (error) {
@@ -74,7 +73,6 @@ export default function PrevTrips() {
       });
       if (confirmation.isConfirmed) {
         const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}post/delete/${postId}`);
-        console.log(data)
         if (data.message == 'success') {
           toast.success("تم حذف الرحلة بنجاح", toastConfig);
           location.reload()

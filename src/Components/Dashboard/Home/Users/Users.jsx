@@ -13,6 +13,8 @@ export default function Users() {
   const [selectedRole, setSelectedRole] = useState('All');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     getUsers();
@@ -20,9 +22,12 @@ export default function Users() {
 
   const getUsers = async (page = 1) => {
     try {
+      setLoading(true)
       const response = await axios.get(`${import.meta.env.VITE_API_URL}user/getAll?page=${page}`, {
         headers: { Authorization: `Rufaidah__${userToken}` }
       });
+      setLoading(false)
+
       if (response.data && Array.isArray(response.data.users)) {
         setUsers(response.data.users);
       } else {
@@ -111,6 +116,15 @@ export default function Users() {
     : filteredUsers;
 
   const emptyRows = rowsPerPage - displayedUsers.length;
+
+  if (loading) {
+    return (
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
+      </div>
+
+    );
+  }
 
   return (
     <Root sx={{ maxWidth: '100%' }}>

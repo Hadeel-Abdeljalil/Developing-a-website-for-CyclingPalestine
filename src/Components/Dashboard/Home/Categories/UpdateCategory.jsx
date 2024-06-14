@@ -6,6 +6,7 @@ export default function UpdateCategory({ category, userToken }) {
   const [categoryName, setCategoryName] = useState(category.name);
   const [selectedFile, setSelectedFile] = useState(null);
   const [status, setStatus] = useState(category.status || 'active');
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -34,6 +35,7 @@ export default function UpdateCategory({ category, userToken }) {
         },
       });
       if (confirmation.isConfirmed) {
+        setLoading(true)
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}category/update/${category._id}`,
         formData,
@@ -44,13 +46,21 @@ export default function UpdateCategory({ category, userToken }) {
           },
         }
       );
-
+      setLoading(false)
     }} catch (error) {
       console.error('Error updating category:', error);
      
     }
   };
 
+  if (loading) {
+    return (
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
+      </div>
+
+    );
+  }
   return (
     <form className='border shadowx p-3 py-5 dir' onSubmit={handleUpdate}>
       <div className="form-group justify-content-around mb-2">

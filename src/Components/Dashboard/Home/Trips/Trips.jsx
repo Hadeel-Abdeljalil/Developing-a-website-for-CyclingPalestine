@@ -6,6 +6,7 @@ import './Trips.css';
 
 export default function Trips() {
   const { userToken } = useContext(UserContext);
+  const [loading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     trackName: '',
     date: '',
@@ -30,6 +31,7 @@ export default function Trips() {
     const toastConfig = { position: "top-right", autoClose: 2000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, theme: "light" };
 
     try {
+      setIsLoading(true)
       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}track`, formData,
        { headers: { Authorization: `Rufaidah__${userToken}` } });
        if(data.message =="success"){
@@ -47,12 +49,21 @@ export default function Trips() {
         maxParticipants: '',
         description: '',
       });
+      setIsLoading(false)
+
     } catch (error) {
       toast.error(error.message);
       console.error('Error:', error);
     }
   };
+  if (loading) {
+    return (
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
+      </div>
 
+    );
+  }
   const today = new Date().toISOString().split('T')[0];
 
   return (

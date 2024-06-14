@@ -15,7 +15,6 @@ import UpdateTrip from './UpdateTrip.jsx';
 import Comment from './Comment.jsx';
 import Likes from '../Likes/Likes.jsx';
 
-
 export default function NextTrips() {
   const { userToken, userData } = useContext(UserContext);
   const [tracks, setTracks] = useState([]);
@@ -26,8 +25,6 @@ export default function NextTrips() {
   const [loading, setIsLoading] = useState(false);
   const tripsPerPage = 6;
   const role = userData?.role;
-
-
 
   useEffect(() => {
     const getTracks = async () => {
@@ -62,7 +59,6 @@ export default function NextTrips() {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}track/getDetails/${trackId}`);
       setDetails(data.track.participants)
-      console.log(details)
     } catch (error) {
       console.log(error)
     }
@@ -91,7 +87,6 @@ export default function NextTrips() {
   });
 
   const formatDate = (dateStr) => {
-    // Extract the date part from the ISO string (YYYY-MM-DD)
     return dateStr.split('T')[0];
   };
 
@@ -111,12 +106,9 @@ export default function NextTrips() {
 
       if (confirmation.isConfirmed) {
         const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`);
-        console.log(data);
         if (data.message == 'You have successfully canceled your subscription to this track') {
           toast.success("تم الغاء المشاركة في هذا المسار", toastConfig);
-
         }
-
       }
     } catch (error) {
       // Handle errors here
@@ -143,7 +135,6 @@ export default function NextTrips() {
           {},
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
-        console.log(response.data.message);
         if (response.data.message === 'success') {
           toast.success("تمت المشاركة بنجاح", toastConfig);
           location.reload();
@@ -193,7 +184,6 @@ export default function NextTrips() {
         const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/delete/${trackId}`,
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
-        console.log(data)
         if (data.message == 'success') {
           toast.success("تم حذف الرحلة بنجاح", toastConfig);
         }
