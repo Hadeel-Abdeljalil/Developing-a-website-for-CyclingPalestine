@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
-import { BsBicycle, BsCheck } from 'react-icons/bs';
+import { BsBicycle, BsBox, BsBox2, BsCheck, BsGift } from 'react-icons/bs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
 import { styled } from '@mui/system';
 import '.././Users/Users.css'
 import Swal from 'sweetalert2';
+import { DeliveryDiningRounded } from '@mui/icons-material';
 
 export default function Orders() {
   const { userToken } = useContext(UserContext);
@@ -57,25 +58,26 @@ export default function Orders() {
         },
       });
       if (confirmation.isConfirmed) {
-    const response=  await axios.patch(
-        `${import.meta.env.VITE_API_URL}order/changeStatus/${orderId}`,
-        { status },
-        {
-          headers: { Authorization: `Rufaidah__${userToken}` }
-        }
-      );
-      console.log(response)
-      // Update the order status locally
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status } : order
-        )
-      );}
+        const response = await axios.patch(
+          `${import.meta.env.VITE_API_URL}order/changeStatus/${orderId}`,
+          { status },
+          {
+            headers: { Authorization: `Rufaidah__${userToken}` }
+          }
+        );
+        console.log(response)
+        // Update the order status locally
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === orderId ? { ...order, status } : order
+          )
+        );
+      }
     } catch (error) {
       console.error("Error:", error.response.data);
       setError(error);
     }
-    
+
   };
 
   if (loading) {
@@ -110,7 +112,7 @@ export default function Orders() {
         <tbody>
           {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
             <tr key={order._id}>
-              <td className='text-center'>{order.userId?.userName?order.userId?.userName:''}</td>
+              <td className='text-center'>{order.userId?.userName ? order.userId?.userName : ''}</td>
               <td className='text-center'>{order.address}</td>
               <td className='text-center'>{order.phoneNumber}</td>
               <td className='text-center'> <ul>
@@ -125,31 +127,42 @@ export default function Orders() {
               <td className='text-center'>{order.status}</td>
               <td className='text-center'>
                 <div className="btn-group">
-                  {order.status !== 'confirmed' && order.status !== 'cancelled' &&  (
+                  {order.status === 'pending' && order.status !== 'cancelled' && (
                     <button
-                      className="btn btn-secondary  border rounded-2 bg-success"
+                      className="btn btn-secondary border rounded-2 bg-success"
                       onClick={() => handleChangeStatus(order._id, 'confirmed')}
                     >
                       <BsCheck />
                     </button>
                   )}
-                  {order.status !== 'onway' && order.status !== 'cancelled' && order.status !== 'pending' && (
+                  {order.status === 'confirmed' && order.status !== 'cancelled' && (
                     <button
-                      className="btn btn-secondary  border rounded-2 bg-info"
+                      className="btn btn-secondary border rounded-2 bg-info"
                       onClick={() => handleChangeStatus(order._id, 'onway')}
                     >
                       <BsBicycle />
                     </button>
                   )}
-                  {order.status !== 'cancelled' && (
+                  {order.status === 'onway' && order.status !== 'cancelled' && (
                     <button
+                      className="btn btn-secondary border rounded-2 bg-warning"
+                      onClick={() => handleChangeStatus(order._id, 'delivered')}
+                    >
+                      <BsGift/>
+                    </button>
+                  )}
+                  {order.status !== 'cancelled' && order.status !== 'delivered' && (
+
+                    <button
+                    
                       className="btn btn-secondary bg-danger border rounded-2"
                       onClick={() => handleChangeStatus(order._id, 'cancelled')}
                     >
-                      <FontAwesomeIcon icon={faTimes} />
+                    <FontAwesomeIcon icon={faTimes} />
                     </button>
                   )}
                 </div>
+
               </td>
             </tr>
           ))}

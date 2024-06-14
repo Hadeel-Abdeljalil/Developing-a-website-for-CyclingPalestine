@@ -154,31 +154,31 @@ export default function Users() {
       <table aria-label="custom pagination table" className="users-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>الاسم</th>
-            <th>البريد</th>
-            <th>الحالة</th>
-            <th>الدور</th>
-            <th>حظر</th>
-            <th>إضافة أدمن</th>
+            <th className='text-center'>#</th>
+            <th className='text-center'>الاسم</th>
+            <th className='text-center'>البريد</th>
+            <th className='text-center'>الحالة</th>
+            <th className='text-center'>الدور</th>
+            <th className='text-center'>حظر</th>
+            <th className='text-center'>إضافة أدمن</th>
           </tr>
         </thead>
         <tbody>
           {displayedUsers.map((user, index) => (
-            <tr key={user._id}>
+            <tr className='text-center' key={user._id}>
               <td>{index + 1}</td>
-              <td>{user.userName}</td>
-              <td>{user.email}</td>
-              <td>{user.status}</td>
-              <td>{user.role}</td>
-              <td>
+              <td className='text-center'>{user.userName}</td>
+              <td className='text-center'>{user.email}</td>
+              <td className='text-center'>{user.status}</td>
+              <td className='text-center'>{user.role}</td>
+              <td className='text-center'>
                 {user.status === 'Active' ? (
                   <button className='text-dark bg-transparent' onClick={() => handleBlockToggle(user._id)}>حظر</button>
                 ) : (
                   <button className='bg-dark' onClick={() => handleUnBlockToggle(user._id)}>الغاء الحظر</button>
                 )}
               </td>
-              <td>
+              <td className='text-center'>
                 {user.role === 'User' ? (
                   <button className='text-dark bg-transparent p-2 ' onClick={() => handelAdminChange(user)}>اضافة أدمن</button>
                 ) : (
