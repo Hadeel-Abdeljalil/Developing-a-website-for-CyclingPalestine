@@ -12,7 +12,8 @@ export default function Products() {
     subImages: [],
     price: '',
     discount: '',
-    categoryId: ''
+    categoryId: '',
+    stock:'',
   });
   const [categories, setCategories] = useState([]);
   const [mainImagePreview, setMainImagePreview] = useState(null);
@@ -86,6 +87,7 @@ export default function Products() {
       formDataToSend.append('mainImage', formData.mainImage);
       formDataToSend.append('price', formData.price);
       formDataToSend.append('discount', formData.discount);
+      formDataToSend.append('stock', formData.stock);
       formDataToSend.append('categoryId', formData.categoryId);
 
       formData.subImages.forEach(image => {
@@ -108,7 +110,8 @@ export default function Products() {
           subImages: [],
           price: '',
           discount: '',
-          categoryId: ''
+          categoryId: '',
+          stock:'',
         });
         setMainImagePreview(null);
         setImagePreviews([]);
@@ -146,7 +149,7 @@ export default function Products() {
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
         <div className="row mb-3">
           <div className="col-lg-6 d-flex">
-            <label className='label-width '>اسم المنتج:</label>
+            <label className='px-1 '>الاسم: </label>
             <input
               type="text"
               className="form-control"
@@ -157,7 +160,7 @@ export default function Products() {
             />
           </div>
           <div className="col-lg-6 d-flex">
-            <label className='label-width'>الفئة:</label>
+            <label className='px-1'>الفئة:</label>
             <div className='w-100'>
               <select
                 className="form-control bg-white text-dark w-100"
@@ -178,7 +181,7 @@ export default function Products() {
         </div>
         <div className="row mb-3">
           <div className="col-lg-6 d-flex">
-            <label className='label-width'>السعر:</label>
+            <label className='px-1'>السعر:</label>
             <input
               type="number"
               className="form-control"
@@ -189,7 +192,7 @@ export default function Products() {
             />
           </div>
           <div className="col-lg-6 d-flex">
-            <label className='label-width'>الخصم:</label>
+            <label className='px-1'>الخصم:</label>
             <input
               type="number"
               className="form-control"
@@ -199,10 +202,21 @@ export default function Products() {
             />
           </div>
         </div>
+        <div className="row mb-3">
+          <div className="col-lg-6 d-flex">
+            <label className='px-1'>العدد:</label>
+            <input
+              type="number"
+              className="form-control"
+              name="stock"
+              value={formData.stock}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
         <div className="row mb-3 ">
-
-          <div className="col-lg-12 ">
-            <label className='label-width'>الوصف:</label>
+          <div className="col-lg-9 d-flex ">
+            <label className='px-1'>الوصف:</label>
             <textarea
               className="form-control"
               name="description"
@@ -214,9 +228,9 @@ export default function Products() {
         </div>
 
         <div className="row mb-3 ">
-        <div className="col-lg-6">
+        <div className="col-lg-7">
           <div className='d-flex'>
-            <label className='label-width'>الصورة الرئيسية:</label>
+            <label className='label-width px-1'>الصورة الرئيسية:</label>
             <input
               type="file"
               className="form-control"
@@ -239,8 +253,8 @@ export default function Products() {
             </div>
           )}
         </div>
-          <div className="col-lg-6">
-            <label className='label-width'>صور إضافية:</label>
+          <div className="col-lg-5">
+            <label className='px-1'>صور إضافية:</label>
             <input
               type="file"
               className="form-control d-none"
@@ -253,17 +267,11 @@ export default function Products() {
               اختر الصور
             </button>
             {imagePreviews.length > 0 && (
-              <div className="image-previews mt-2">
-                {imagePreviews.map((preview, index) => (
-                  <img
-                    key={index}
-                    src={preview}
-                    alt={`Preview ${index + 1}`}
-                    className="img-thumbnail m-2"
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                  />
-                ))}
-              </div>
+              <div className="image-previews">
+            {imagePreviews.map((url, index) => (
+              <img key={index} src={url} alt={`preview ${index}`} className="img-thumbnail m-1" />
+            ))}
+          </div>
             )}
           </div>
         </div>

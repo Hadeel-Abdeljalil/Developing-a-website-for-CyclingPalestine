@@ -115,7 +115,7 @@ export default function News() {
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
         <div className="row">
           <div className="col-lg-6 mb-3 d-flex">
-            <label className='label-width'>عنوان الخبر:</label>
+            <label className='px-1'>العنوان:</label>
             <input
               type="text"
               className="form-control input-width"
@@ -126,7 +126,7 @@ export default function News() {
             />
           </div>
           <div className="col-lg-6 mb-3 d-flex">
-            <label className='label-width'>التاريخ:</label>
+            <label className='px-1'>التاريخ:</label>
             <input
               type="date"
               className="form-control input-width"
@@ -138,7 +138,7 @@ export default function News() {
           </div>
         </div>
         <div className="col-lg-12 mb-3">
-          <label className='label-width'>المحتوى:</label>
+          <label className='px-1'>المحتوى:</label>
           <textarea
             className="form-control input-width"
             name="content"
@@ -149,7 +149,7 @@ export default function News() {
         </div>
         <div className='d-flex'>
         <div className="col-lg-6 mb-3 mx-1">
-          <label className='label-width'>صور:</label>
+          <label className='px-1'>صور:</label>
           <input
             key={fileInputKey}
             type="file"
@@ -166,7 +166,7 @@ export default function News() {
           </div>
         </div>
         <div className="col-lg-6 mb-3 mx-1">
-          <label className='label-width'>فيديو:</label>
+          <label className='px-1'>فيديو:</label>
           <input
             key={fileInputKey}
             type="file"
