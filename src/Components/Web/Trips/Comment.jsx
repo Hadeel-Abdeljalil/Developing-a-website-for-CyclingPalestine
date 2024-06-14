@@ -1,27 +1,41 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination, FreeMode, Scrollbar, Mousewheel } from 'swiper/modules';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { FreeMode, Scrollbar, Mousewheel } from 'swiper/modules';
 import axios from 'axios';
 import { UserContext } from '../Context/FeatureUser.jsx';
-export default function Comment({item}) {
-    const {userToken}= useContext(UserContext);
-    
-    const comment =async()=>{
-        try{
-            const data =await axios.post(`${import.meta.env.VITE_API_URL}track/comment/${item._id}`,{
-                header:{ Authorization: `Rufaidah__${userToken}`}
-            })
-            console.log(data)
-        }catch(error){
-            console.log(error)
-        }
+import Popup from 'reactjs-popup';
+import { FaComment } from 'react-icons/fa';
+
+export default function Comment({ itemId, val }) {
+  const { userToken } = useContext(UserContext);
+  const [data, setData] = useState({ reviews: [] });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const comment = async (itemId) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}${val}/comment/${itemId}`, 
+        {}, 
+        { headers: { Authorization: `Rufaidah__${userToken}` } }
+      );
+      setData(response.data);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
     }
+  };
+
   return (
-    <div className='d-flex justify-content-end'>
+    <Popup
+      trigger={<div className=' p-2 mx-1'><FaComment /></div>}
+    >
+  <div className='d-flex justify-content-end'>
       <div className='w-75 ' style={{ height: '300px' }}>
 
         <Swiper
@@ -79,5 +93,6 @@ export default function Comment({item}) {
         </Swiper>
       </div>
     </div>
-  )
+    </Popup>
+  );
 }

@@ -31,7 +31,11 @@ const TripDetails = () => {
   }, [postId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
+      </div>
+    );
   }
 
   if (error) {
@@ -46,7 +50,7 @@ const TripDetails = () => {
     <div className='container mt-5 pt-5 mb-5'>
       <div className='d-flex justify-content-center'>
         <div className='container-fluid w-75 h-100'>
-        <div className='mt-4 d-flex justify-content-end align-items-center'>
+          <div className='mt-4 d-flex justify-content-end align-items-center'>
             <h1>{trip.title}</h1>
           </div>
           <p className='dir text-wrap text-break'>{trip.description}</p>
@@ -75,12 +79,10 @@ const TripDetails = () => {
             ))}
           </Swiper>
 
-       <div className='mt-5'>
-        <h1 className='dir'>التعليقات</h1>
-        <TripComments postId={trip._id}  />
-
-       </div>
-
+          <div className='mt-5'>
+            <h1 className='dir'>التعليقات</h1>
+            <TripComments postId={trip._id} />
+          </div>
         </div>
       </div>
     </div>

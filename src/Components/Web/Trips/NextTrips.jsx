@@ -23,24 +23,40 @@ export default function NextTrips() {
   const [searchName, setSearchName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [details, setDetails] = useState(null)
+  const [loading, setIsLoading] = useState(false);
   const tripsPerPage = 6;
   const role = userData?.role;
+
+
 
   useEffect(() => {
     const getTracks = async () => {
       try {
+        setIsLoading(true)
+
         const { data } = await axios.get(
           `${import.meta.env.VITE_API_URL}track/allTracks?page=${currentPage}&limit=${tripsPerPage}`,
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
         setTracks(data.tracks);
+        setIsLoading(false)
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-  
-    getTracks(); 
+
+    getTracks();
   }, [currentPage, tripsPerPage, userToken]);
+
+  if (loading) {
+    return (
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
+      </div>
+
+    );
+  }
 
   const getDetails = async (trackId) => {
     try {
@@ -147,7 +163,7 @@ export default function NextTrips() {
       console.error(error);
     }
   };
-  
+
 
   const check = (item) => {
     let isUserParticipating = false;
@@ -179,8 +195,9 @@ export default function NextTrips() {
         );
         console.log(data)
         if (data.message == 'success') {
-          toast.success("تمت حذف الرحلة بنجاح", toastConfig);
+          toast.success("تم حذف الرحلة بنجاح", toastConfig);
         }
+        location.reload();
       }
 
     } catch (error) {
@@ -231,7 +248,7 @@ export default function NextTrips() {
 
             <div
               key={item.id}
-              className='row border rounded-2 border-2 color p-3 mt-3'
+              className='row border rounded-2 border-2 color p-3 mt-3 shadow'
             >
               <div className='col-lg-3'>
                 <img
@@ -254,32 +271,36 @@ export default function NextTrips() {
                         position='center center'
                         className='custom-popup'
                       >
-                        <div className='table-container dir'>
-                          {details && details.length > 0 ? (
-                            <table className='custom-table'>
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>الاسم</th>
-                                  <th>الهاتف</th>
-                                  <th>البريد الالكتروني</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {details.map((x, index) => (
-                                  <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{x.name}</td>
-                                    <td>{x.phone}</td>
-                                    <td>{x.email}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          ) : (
-                            <div className='no-data'>لا توجد بيانات للعرض</div>
-                          )}
-                        </div>
+                        {
+                          role === "Admin" ?
+                            <div className='table-container dir'>
+                              {details && details.length > 0 ? (
+                                <table className='custom-table'>
+                                  <thead>
+                                    <tr>
+                                      <th>#</th>
+                                      <th>الاسم</th>
+                                      <th>الهاتف</th>
+                                      <th>البريد الالكتروني</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {details.map((x, index) => (
+                                      <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{x.name}</td>
+                                        <td>{x.phone}</td>
+                                        <td>{x.email}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              ) : (
+                                <div className='no-data'>لا توجد بيانات للعرض</div>
+                              )}
+                            </div>
+                            : ''
+                        }
                       </Popup>
                     </div>
 
@@ -314,8 +335,8 @@ export default function NextTrips() {
                   </div>
                 </div>
                 <div className='d-flex'>
-                  <div className='text-danger p-2 mx-1'>
-                    <Likes tripId={item._id} val={"track"}/>
+                  <div className='text-danger  mx-1'>
+                    <Likes tripId={item._id} val={"track"} />
                   </div>
                   <div className='p-2 color'>|</div>
                   <Popup
@@ -325,7 +346,7 @@ export default function NextTrips() {
                     position='center center'
                   >
                     <Comment
-                      item={item} />
+                      item={item} val={"post"} />
                   </Popup>
                 </div>
               </div>
@@ -338,7 +359,7 @@ export default function NextTrips() {
                       <div className='d-flex mb-2  w-50'>
                         <Popup
                           trigger={<button
-                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'
+                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1 shadow'
                           >
                             تعديل
                           </button>}
@@ -346,10 +367,11 @@ export default function NextTrips() {
                         >
                           <UpdateTrip
                             item={item}
-                            trackId={item._id} />
+                            val1={'track'}
+                            val2={"Track"} />
                         </Popup>
                         <button
-                          className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
+                          className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 shadow'
                           onClick={() => deleteTrack(item._id)}>
                           حذف
                         </button></div>
@@ -359,14 +381,14 @@ export default function NextTrips() {
                   <div>
                     {check(item) ? (
                       <button
-                        className='btn bg-color text-white w-50 rounded-2 p-2'
+                        className='btn bg-color text-white w-50 rounded-2 p-2 shadow'
                         onClick={() => cancelparticipating(item._id)}>
                         الغاء الاشتراك
                       </button>
                     )
                       :
                       (<button
-                        className='btn bg-color text-white w-50 rounded-2 p-2'
+                        className='btn bg-color text-white w-50 rounded-2 p-2 shadow'
                         onClick={() => handelparticipating(item._id)}>
                         شارك
                       </button>

@@ -9,16 +9,10 @@ import * as Yup from 'yup';
 import Popup from 'reactjs-popup';
 
 export default function TripComments({ postId }) {
-    const { getUserOrdersContext, userToken } = useContext(UserContext);
+    const { userToken, userData } = useContext(UserContext);
     const [comments, setComments] = useState([]);
 
-    const initialValues = {
-        text: '',
-    };
-
-    const validationSchema = Yup.object({
-        text: Yup.string().required('Text is required'),
-    });
+    const validationSchema = Yup.object({ text: Yup.string().required('Text is required') });
 
     const toastConfig = {
         position: "top-right",
@@ -40,7 +34,7 @@ export default function TripComments({ postId }) {
             );
             if (data.message === 'success') {
                 resetForm();
-                setComments(prevComments => [...prevComments, { text: values.text, _id: data.commentId }]);
+                setComments(prev => [...prev, { text: values.text, _id: data.commentId }]);
             }
         } catch (error) {
             console.error(error);
@@ -48,57 +42,28 @@ export default function TripComments({ postId }) {
         }
     };
 
-    const formik = useFormik({
-        initialValues,
-        validationSchema,
-        onSubmit,
-    });
+    const formik = useFormik({ initialValues: { text: '' }, validationSchema, onSubmit });
 
-    const inputs = [
-        {
-            type: 'text',
-            id: 'text',
-            name: 'text',
-            title: 'text',
-            placeholder: 'أكتب تعليق',
-            value: formik.values.text,
-        },
-    ];
-
-    const renderInputs = inputs.map((input, index) => (
+    const renderInputs = (
         <Input
-            key={index}
-            type={input.type}
-            id={input.id}
-            name={input.name}
-            title={input.title}
-            value={input.value}
+            type="text"
+            id="text"
+            name="text"
+            title="text"
+            value={formik.values.text}
             errors={formik.errors}
-            placeholder={input.placeholder}
+            placeholder='أكتب تعليق'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             touched={formik.touched}
-            autocomplete={input.name}
+            autocomplete="text"
         />
-    ));
-
-    const getUserOrders = async () => {
-        try {
-            const res = await getUserOrdersContext();
-            return res.orders || [];
-        } catch (error) {
-            console.error('Error fetching user orders:', error);
-            return [];
-        }
-    };
-
-    const { data: orders, isLoading: isOrdersLoading } = useQuery('get-user-orders', getUserOrders);
+    );
 
     const fetchComments = async () => {
         try {
             const { data } = await axios.get(`${import.meta.env.VITE_API_URL}post/getDetails/${postId}`);
-            console.log(data)
-            return data.post.comments || [];
+            return data.post.comments.reverse() || [];
         } catch (error) {
             console.error('Error fetching comments:', error);
             return [];
@@ -109,12 +74,26 @@ export default function TripComments({ postId }) {
         onSuccess: (data) => setComments(data),
     });
 
-    if (isOrdersLoading || isCommentsLoading) {
+    if (isCommentsLoading) {
         return (
-            <div className="loading bg-transfer w-100 d-flex justify-content-center align-items-center z-3">
-                <span className="loader"></span>
+            <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+                <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
             </div>
         );
+    }
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}post/deleteComment/${commentId}`,
+                { headers: { Authorization: `Rufaidah__${userToken}` } }
+            );
+
+            if (data.message === "comment deleted successfully") {
+                location.reload()
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -140,21 +119,18 @@ export default function TripComments({ postId }) {
                 <div className="comment-container">
                     {comments?.length ? (
                         <div className="comment-list">
-                            {comments?.map((review) => (
-                                <div key={review._id} className=" text-end d-flex dir">
-                                    <img src={review?.userImage?.secure_url} alt="user" className="rounded-circle comment-image ms-1" />
-                                    <div className="">
+                            {comments.map((review, index) => (
+                                <div key={index} className="text-end d-flex dir">
+                                    <img src={review?.userImage?.secure_url || '/images/profile.jpeg'} alt="user" className="rounded-circle comment-image ms-1" />
+                                    <div>
                                         <p className="p-0 m-0 mb-1">{review.userName}</p>
                                         <div className='d-flex comment-text'>
-                                            <p className=" bg-body-tertiary mx-2 p-3">{review.text}</p>
-                                            <Popup
-                                                trigger={<p className='d-flex align-items-center del'>...</p>}
-                                            >
-                                                <div className='shadow bg-white p-2 rounded-2 '>
-                                                    <button className='border-0 bg-white d-block pb-1'>تعديل</button>
-                                                    <button className='border-0 bg-white d-block'>حذف</button>
-                                                </div>
-                                            </Popup>
+                                            <p className="bg-body-tertiary mx-2 p-3">{review.text}</p>
+                                            {review.user_id === userData._id && (
+                                                <Popup trigger={<p className='d-flex align-items-center del'>...</p>}>
+                                                    <button className='border-0 bg-white d-block shadow bg-white p-2 rounded-2' onClick={() => handleDeleteComment(review._id)}>حذف</button>
+                                                </Popup>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -164,6 +140,7 @@ export default function TripComments({ postId }) {
                         <p className="no-comments">لا يوجد تعليقات</p>
                     )}
                 </div>
+
             </div>
         </div>
     );

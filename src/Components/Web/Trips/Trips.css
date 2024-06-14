@@ -6,7 +6,9 @@
     overflow-y: auto; /* Adds vertical scroll */
     overflow-x: hidden; /* Prevents horizontal scroll */
   }
-  
+  .coo{
+    background-color: #FCFEFC !important;
+  }
   .table-container {
     border: 1px solid #ddd;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

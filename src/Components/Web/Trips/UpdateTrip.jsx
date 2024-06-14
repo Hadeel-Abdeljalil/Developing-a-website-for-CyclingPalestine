@@ -5,7 +5,7 @@ import axios from 'axios';
 import { UserContext } from '../Context/FeatureUser.jsx';
 import { toast } from 'react-toastify';
 
-export default function UpdateTrip({ item }) {
+export default function UpdateTrip({ item,val1,val2 }) {
     const { userToken } = useContext(UserContext);
 
     const toastConfig = {
@@ -34,7 +34,7 @@ export default function UpdateTrip({ item }) {
                 },
             });
             if (confirmation.isConfirmed) {
-                const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}track/updateTrack/${item._id}`, values, {
+                const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}${val1}/update${val2}/${item._id}`, values, {
                     headers: { Authorization: `Rufaidah__${userToken}` }
                 });
                 console.log(data);

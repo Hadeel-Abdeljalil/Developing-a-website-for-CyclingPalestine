@@ -12,23 +12,28 @@ import UpdateTrip from './UpdateTrip.jsx';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import Likes from '../Likes/Likes.jsx';
+import Comment from './Comment.jsx';
 
 export default function PrevTrips() {
-  const { loading, userData,userToken } = useContext(UserContext);
+  const { userData, userToken } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setIsLoading] = useState(false);
   const tripsPerPage = 6;
-  const role=userData?.role;
+  const role = userData?.role;
 
   useEffect(() => {
     const getPosts = async () => {
       try {
+        setIsLoading(true)
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}post/`);
         console.log(data)
         setPosts(data.posts);
+        setIsLoading(false)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+
     };
 
     getPosts();
@@ -36,9 +41,10 @@ export default function PrevTrips() {
 
   if (loading) {
     return (
-      <div className="loading bg-white w-100 vh-100 d-flex justify-content-center align-items-center z-3">
-        <span className="loader"></span>
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
       </div>
+
     );
   }
 
@@ -85,7 +91,7 @@ export default function PrevTrips() {
   const currentTrips = sortedTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
   return (
-    <div className='container'>
+    <div className='container coo'>
       <div className="d-flex justify-content-center ">
         <Stack spacing={3}>
           <Pagination
@@ -104,7 +110,7 @@ export default function PrevTrips() {
           {currentTrips.map((item) => (
             <div
               key={item.id}
-              className='row border rounded-2 border-2 color p-3 mt-3'
+              className='row border rounded-2 border-2 color p-3 mt-3 shadow'
             >
               <div className='col-lg-3'>
                 <img
@@ -116,13 +122,11 @@ export default function PrevTrips() {
               <div className='col-lg-4 d-flex flex-column justify-content-between'>
                 <h2>{item.title}</h2>
                 <div className='d-flex'>
-                <div className='text-danger p-2 mx-1'>
-                    <Likes tripId={item._id} val={"post"}/>
+                  <div className='text-danger mx-1'>
+                    <Likes tripId={item._id} val={"post"} />
                   </div>
                   <div className='p-2 color'>|</div>
-                  <div className=' p-2 mx-1'>
-                    <FaComment />
-                  </div>
+                  <Comment tripId={item._id} val={"post"} />
                 </div>
               </div>
               <div className='col-lg-5  dir2 d-flex flex-column justify-content-between'>
@@ -134,16 +138,19 @@ export default function PrevTrips() {
                       <div className='d-flex mb-2  w-50'>
                         <Popup
                           trigger={<button
-                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1'     
+                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1 shadow'
                           >
                             تعديل
                           </button>}
                           position='center center'
                         >
-                          hh
+                          <UpdateTrip
+                            item={item}
+                            val1={'post'}
+                            val2={""} />
                         </Popup>
                         <button
-                          className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
+                          className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 shadow'
                           onClick={() => deletePost(item._id)}>
                           حذف
                         </button></div>
@@ -151,14 +158,14 @@ export default function PrevTrips() {
                   }
 
                   <Link to={`/trip/${item._id}`}>
-                 
-                      <button
-                        className='btn bg-color text-white w-50 rounded-2 p-2'
-                        >
-                         شاهد
-                      </button>
-                    
-                     
+
+                    <button
+                      className='btn bg-color text-white w-50 rounded-2 p-2 shadow'
+                    >
+                      شاهد
+                    </button>
+
+
                   </Link>
                 </div>
               </div>
