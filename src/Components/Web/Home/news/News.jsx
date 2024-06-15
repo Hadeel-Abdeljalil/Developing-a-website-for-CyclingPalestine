@@ -78,10 +78,14 @@ export default function News() {
       console.log(error)
     }
   }
+  const [isExpanded, setIsExpanded] = useState(false);
+  const toggleExpansion = () => {
+    setIsExpanded(!isExpanded);
+  };
   return (
-    <section className="vh-100 dir mt-3">
-      <div className="container d-flex">
-        <div className="h-100">
+    <section className="p-5 my-5 w-100  dir mt-3">
+      <div className="h-100 w-100 ">
+        <div className=" container ">
           {error ? (
             <p>{error}</p>
           ) : (
@@ -94,11 +98,22 @@ export default function News() {
             >
               {news.length > 0 ? (
                 news.map((newsItem, index) => (
-                  <SwiperSlide key={index} className="text-center bg-info w-100 slider ">
+                  <SwiperSlide key={index} className="text-center   w-100 slider ">
                     <div className="">
-                      <p>{formatDate(newsItem.date)}</p>
                       <h1>{newsItem.title}</h1>
-                      <p>{newsItem.content}</p>
+                      <p className='text-end'>{formatDate(newsItem.date)}</p>
+
+                      <div className='text-end  '>
+                        <p>
+                          {isExpanded ? newsItem.content : newsItem.content.length > 150 ? newsItem.content.substring(0, 500) + ' ... ' : newsItem.content}
+                          {newsItem.content.length > 500 && (
+                          <span className='color ' onClick={toggleExpansion}>
+                            {isExpanded ? 'عرض أقل' : 'عرض المزيد'}
+                          </span>
+                        )}
+                        </p>
+                       
+                      </div>
 
                       {/* Display images if available */}
                       {newsItem.images.length > 0 && (
@@ -127,7 +142,7 @@ export default function News() {
 
                       {/* Admin actions */}
                       {role === 'Admin' && (
-                        <div className="d-flex w-25">
+                        <div className="d-flex w-25  ">
                           <button
                             className="btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2"
                             onClick={() => deleteNews(newsItem._id)}
@@ -147,7 +162,7 @@ export default function News() {
                   </SwiperSlide>
                 ))
               ) : (
-                <p>لا يوجد أخبار :\</p>
+                <p>لا يوجد أخبار </p>
               )}
             </Swiper>
           )}

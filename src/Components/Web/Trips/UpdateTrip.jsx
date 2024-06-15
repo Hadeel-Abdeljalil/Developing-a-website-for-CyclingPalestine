@@ -52,7 +52,7 @@ export default function UpdateTrip({ item,val1,val2 }) {
     }
     const formatDate = (dateString) => {
         // Clean up the date string to remove any unwanted characters
-        const cleanedDateString = dateString.replace(/<.*>/, ''); // Remove <URL> part
+        const cleanedDateString = dateString.split('T')[0]; // Remove <URL> part
 
         // Attempt to parse the cleaned date string
         const dateObject = new Date(cleanedDateString);
@@ -96,7 +96,8 @@ export default function UpdateTrip({ item,val1,val2 }) {
                     required
                 />
             </div>
-            <div className="form-group justify-content-around mb-2">
+            {
+                val1 === 'track'?<div className="form-group justify-content-around mb-2">
                 <label className='label-width'>التاريخ:</label>
                 <input
                     type="date"
@@ -107,7 +108,8 @@ export default function UpdateTrip({ item,val1,val2 }) {
                     min={today} // Set the min attribute to today's date
                     required
                 />
-            </div>
+            </div>:''
+            }
             {/* Other form fields */}
             <div className="form-group justify-content-around mb-2">
                 <label className='label-width'>المسافة:</label>

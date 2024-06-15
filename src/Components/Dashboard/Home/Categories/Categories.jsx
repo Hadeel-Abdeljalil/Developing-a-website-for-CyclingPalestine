@@ -108,7 +108,6 @@ export default function Categories() {
       progress: undefined,
       theme: "light"
     };
-
     try {
       setLoading(true);
       const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}category/delete/${id}`, {
@@ -116,8 +115,9 @@ export default function Categories() {
           Authorization: `Rufaidah__${userToken}`
         }
       });
+      console.log(data)
 
-      if (data && data.message === "success") {
+      if (data && data.message === "category successfully deleted") {
         toast.success('تم حذف الفئة بنجاح', toastConfig);
         getCategories();  // Fetch categories again to update the table
       } else {

@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import Likes from '../Likes/Likes.jsx';
 import Comment from './Comment.jsx';
+import UpdatePost from './UpdatePost.jsx';
 
 export default function PrevTrips() {
   const { userData, userToken } = useContext(UserContext);
@@ -27,6 +28,7 @@ export default function PrevTrips() {
       try {
         setIsLoading(true)
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}post/`);
+        console.log(data)
         setPosts(data.posts.reverse());
         setIsLoading(false)
       } catch (error) {
@@ -147,10 +149,10 @@ export default function PrevTrips() {
                           </button>}
                           position='center center'
                         >
-                          <UpdateTrip
+                          <UpdatePost
                             item={item}
-                            val1={'post'}
-                            val2={""} />
+                            
+                            />
                         </Popup>
                         <button
                           className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 shadow'
