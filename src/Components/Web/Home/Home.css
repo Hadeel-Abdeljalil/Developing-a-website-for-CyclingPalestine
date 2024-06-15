@@ -110,11 +110,6 @@ font-family: "Inria Serif", serif;
     mix-blend-mode: screen;
     
 }
-.notice{
-    height: 400px;
-    margin: 100px;
-    direction: rtl;
-}
 
 .about{
     direction: rtl;

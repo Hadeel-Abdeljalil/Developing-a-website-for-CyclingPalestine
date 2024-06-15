@@ -27,7 +27,6 @@ export default function Home() {
         <li>إضافة منتجات وفئات للمتجر</li>
         <li>إضافة أخبار الى الصفحة الرئيسية</li>
 
-
       </ul>
     </div>
   );

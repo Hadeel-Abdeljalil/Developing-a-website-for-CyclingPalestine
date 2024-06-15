@@ -27,7 +27,7 @@ export default function PrevTrips() {
       try {
         setIsLoading(true)
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}post/`);
-        setPosts(data.posts);
+        setPosts(data.posts.reverse());
         setIsLoading(false)
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -72,7 +72,12 @@ export default function PrevTrips() {
         },
       });
       if (confirmation.isConfirmed) {
-        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}post/delete/${postId}`);
+        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}post/delete/${postId}`,
+          {   headers: {
+            Authorization: `Rufaidah__${userToken}`,
+        },}
+        );
+        console.log(data)
         if (data.message == 'success') {
           toast.success("تم حذف الرحلة بنجاح", toastConfig);
           location.reload()

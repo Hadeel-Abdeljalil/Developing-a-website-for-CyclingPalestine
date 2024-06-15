@@ -42,7 +42,6 @@ export default function Post() {
       }));
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const toastConfig = {
@@ -55,12 +54,10 @@ export default function Post() {
       progress: undefined,
       theme: "light"
     };
-
     if (formData.images.length < 4) {
       toast.error('يرجى تحميل ما لا يقل عن  4 صور', toastConfig);
       return;
     }
-
     try {
       setLoading(true)
       const formDataToSend = new FormData();
@@ -72,15 +69,8 @@ export default function Post() {
         formDataToSend.append('images', image);
       });
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}post/`, formDataToSend, {
-        headers: {
-          Authorization: `Rufaidah__${userToken}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}post/`, formDataToSend);
       const { data } = response;
-
       console.log(data);
 
       if (data && data.message === "success") {

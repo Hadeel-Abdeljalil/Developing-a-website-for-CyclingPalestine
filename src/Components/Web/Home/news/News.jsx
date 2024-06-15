@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
 export default function News() {
-  const { userToken ,userData } = useContext(UserContext);
+  const { userToken, userData } = useContext(UserContext);
   const [news, setNews] = useState([]);
   const [error, setError] = useState(null);
   const role = userData?.role;
@@ -32,94 +32,128 @@ export default function News() {
     fetchData();
   }, [userToken]); // Add userToken to the dependency array
 
-// Function to format the date
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-const toastConfig = {
-  position: "top-right",
-  autoClose: 2000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-};
-const deleteNews = async (trackId) => {
-  console.log(trackId)
-  try {
-    const confirmation = await Swal.fire({
-      title: "<div class='pt-3'>هل أنت متأكد؟</div>",
-      confirmButtonText: "<span class=''>نعم</span>",
-      cancelButtonText: "<span class='mb-3'>لا</span>",
-      showCancelButton: true,
-      showCloseButton: true,
-      customClass: {
-        confirmButton: 'btn bg-white border border-success text-dark',
-        cancelButton: 'btn bg-white border text-dark'
-      },
-    });
-    if (confirmation.isConfirmed) {
-      const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}news/delete/${trackId}`,
-        { headers: { Authorization: `Rufaidah__${userToken}` } }
-      );
-      console.log(data)
-      if (data.message == 'success') {
-        toast.success("تم حذف الخبر بنجاح", toastConfig);
-        location.reload();
+  // Function to format the date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
+  const deleteNews = async (trackId) => {
+    console.log(trackId)
+    try {
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      if (confirmation.isConfirmed) {
+        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}news/delete/${trackId}`,
+          { headers: { Authorization: `Rufaidah__${userToken}` } }
+        );
+        console.log(data)
+        if (data.message == 'success') {
+          toast.success("تم حذف الخبر بنجاح", toastConfig);
+          location.reload();
+        }
       }
+    } catch (error) {
+      console.log(error)
     }
-  } catch (error) {
-    console.log(error)
   }
-}
   return (
-      <section className="notice">
-        <div className="container d-flex">
-          <div className="border-c">
-            {error ? (
-              <p>{error}</p>
-            ) : (
-              <Swiper
-                modules={[Scrollbar, Autoplay]}
-                spaceBetween={70}
-                slidesPerView={1}
-                loop={true}
-                autoplay={{ delay: 9000 }}
-              >
-                {news.length > 0 ? news.map((newsItem, index) => (
-                  <SwiperSlide key={index} className="text-end hi">
-                    <div className="me-5">
+    <section className="vh-100 dir mt-3">
+      <div className="container d-flex">
+        <div className="h-100">
+          {error ? (
+            <p>{error}</p>
+          ) : (
+            <Swiper
+              modules={[Scrollbar, Autoplay]}
+              spaceBetween={70}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{ delay: 7000 }}
+            >
+              {news.length > 0 ? (
+                news.map((newsItem, index) => (
+                  <SwiperSlide key={index} className="text-center bg-info w-100 slider ">
+                    <div className="">
                       <p>{formatDate(newsItem.date)}</p>
                       <h1>{newsItem.title}</h1>
                       <p>{newsItem.content}</p>
-                      {
-                    role==='Admin'? <div className='d-flex w-25'>
-                    <button
-                           className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 '
-                           onClick={() => deleteNews(newsItem._id)}>
-                           حذف
-                         </button>
-                         <button
-                           className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 '
-                           onClick={() => deleteNews(newsItem._id)}>
-                           تعديل
-                         </button>
-                    </div>:''
-                   }
+
+                      {/* Display images if available */}
+                      {newsItem.images.length > 0 && (
+                        <div className="mb-3">
+                          {newsItem.images.map((image, idx) => (
+                            <img
+                              key={idx}
+                              src={image.secure_url}
+                              alt={`Image ${idx + 1}`}
+                              className="img-fluid rounded mx-1"
+                              style={{ maxWidth: '150px', maxHeight: '150px' }}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Display video if available */}
+                      {newsItem.video && (
+                        <div className="mb-3">
+                          <video controls className="img-fluid rounded w-50">
+                            <source src={newsItem.video.secure_url} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+                      )}
+
+                      {/* Admin actions */}
+                      {role === 'Admin' && (
+                        <div className="d-flex w-25">
+                          <button
+                            className="btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2"
+                            onClick={() => deleteNews(newsItem._id)}
+                          >
+                            حذف
+                          </button>
+                          {/* Add edit functionality */}
+                          <button
+                            className="btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2"
+                            onClick={() => editNews(newsItem._id)} // Replace with edit function
+                          >
+                            تعديل
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </SwiperSlide>
-                )) : ''}
-              </Swiper>
-            )}
-          </div>
+                ))
+              ) : (
+                <p>لا يوجد أخبار :\</p>
+              )}
+            </Swiper>
+          )}
         </div>
-      </section>
-  
+      </div>
+    </section>
+
   );
 }
