@@ -13,14 +13,54 @@ export default function Products() {
     price: '',
     discount: '',
     categoryId: '',
-    stock:'',
+    stock: '',
   });
   const [categories, setCategories] = useState([]);
   const [mainImagePreview, setMainImagePreview] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [excel, setexcel] = useState(null);
+  const [excelPreview, setExcelPreview] = useState(null);
+  const excelInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const mainImageInputRef = useRef(null);
+
+  const handleexcelChange = (e) => {
+    const file = e.target.files[0];
+    setexcel(file);
+    setExcelPreview(file ? URL.createObjectURL(file) : null);
+  };
+
+
+  const addFile = async () => {
+    try {
+      if (!excel) {
+        console.error('No file selected');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('excel', excel);
+
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}product/createFromExcel`,
+        formData,
+        {
+          headers: {
+            Authorization: `Rufaidah__${userToken}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      console.log('File upload successful:', data);
+      // Optionally, reset state or perform any other actions upon successful upload
+    } catch (error) {
+      console.error('Error uploading file:', error.response.data);
+      // Handle specific errors or provide user feedback based on error.response.data.message
+    }
+  };
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -111,7 +151,7 @@ export default function Products() {
           price: '',
           discount: '',
           categoryId: '',
-          stock:'',
+          stock: '',
         });
         setMainImagePreview(null);
         setImagePreviews([]);
@@ -133,6 +173,7 @@ export default function Products() {
   const handleSubImagesUploadClick = () => {
     fileInputRef.current.click();
   };
+
 
   if (loading) {
     return (
@@ -228,31 +269,31 @@ export default function Products() {
         </div>
 
         <div className="row mb-3 ">
-        <div className="col-lg-7">
-          <div className='d-flex'>
-            <label className='label-width px-1'>الصورة الرئيسية:</label>
-            <input
-              type="file"
-              className="form-control"
-              name="mainImage"
-              ref={mainImageInputRef}
-              onChange={handleChange}
-            />
-            <button type="button" className="btn btn-outline-secondary me-2" onClick={handleMainImageClick}>
-              حدد
-            </button>
-          </div>
-          {mainImagePreview && (
-            <div className="mt-2">
-              <img
-                src={mainImagePreview}
-                alt="Main preview"
-                className="img-thumbnail"
-                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+          <div className="col-lg-7">
+            <div className='d-flex'>
+              <label className='label-width px-1'>الصورة الرئيسية:</label>
+              <input
+                type="file"
+                className="form-control"
+                name="mainImage"
+                ref={mainImageInputRef}
+                onChange={handleChange}
               />
+              <button type="button" className="btn btn-outline-secondary me-2" onClick={handleMainImageClick}>
+                حدد
+              </button>
             </div>
-          )}
-        </div>
+            {mainImagePreview && (
+              <div className="mt-2">
+                <img
+                  src={mainImagePreview}
+                  alt="Main preview"
+                  className="img-thumbnail"
+                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                />
+              </div>
+            )}
+          </div>
           <div className="col-lg-5">
             <label className='px-1'>صور إضافية:</label>
             <input
@@ -268,10 +309,10 @@ export default function Products() {
             </button>
             {imagePreviews.length > 0 && (
               <div className="image-previews">
-            {imagePreviews.map((url, index) => (
-              <img key={index} src={url} alt={`preview ${index}`} className="img-thumbnail m-1" />
-            ))}
-          </div>
+                {imagePreviews.map((url, index) => (
+                  <img key={index} src={url} alt={`preview ${index}`} className="img-thumbnail m-1" />
+                ))}
+              </div>
             )}
           </div>
         </div>
@@ -281,6 +322,36 @@ export default function Products() {
           </button>
         </div>
       </form>
+      <div className='bg-white shadow mt-3 p-3'>
+        او قم بالاضافة من خلال :
+        <div className="col-lg-9 d-flex mt-4">
+          <label className="px-5">ملف Excel:</label>
+          <input
+            type="file"
+            className="form-control"
+            name="excel"
+            ref={excelInputRef}
+            onChange={handleexcelChange}
+          />
+          <button
+            type="button"
+            className="btn btn-outline-secondary ms-2 mx-2"
+            onClick={() => excelInputRef.current.click()}
+          >
+            اختر ملف Excel
+          </button>
+        </div>
+        <div className='d-flex justify-content-between mt-3'>
+          <a href="/File/products1.xlsx" download className="btn btn-outline-secondary">
+          تحميل نموذج لملف Excel
+          </a>
+          <button onClick={addFile} className="btn btn-outline-dark">
+            إضافة منتج
+          </button>
+        </div>
+      </div>
+
+
     </div>
   );
 }

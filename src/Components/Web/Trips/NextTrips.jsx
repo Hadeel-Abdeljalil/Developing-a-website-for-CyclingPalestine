@@ -35,6 +35,7 @@ export default function NextTrips() {
           `${import.meta.env.VITE_API_URL}track/allTracks?page=${currentPage}&limit=${tripsPerPage}`,
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
+        console.log(data)
         setTracks(data.tracks);
         setIsLoading(false)
 
