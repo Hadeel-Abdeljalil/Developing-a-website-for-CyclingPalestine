@@ -103,18 +103,31 @@ export default function NextTrips() {
           cancelButton: 'btn bg-white border text-dark'
         },
       });
-
+  
       if (confirmation.isConfirmed) {
-        const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`);
-        if (data.message == 'You have successfully canceled your subscription to this track') {
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}track/${trackId}/participating/cancel`, {
+          headers: { Authorization: `Rufaidah__${userToken}` }
+        });
+        
+        const data = response.data;
+  
+        if (data.message === 'You have successfully canceled your subscription to this track') {
           toast.success("تم الغاء المشاركة في هذا المسار", toastConfig);
+          location.reload()
+        } else {
+          toast.error("حدث خطأ أثناء إلغاء المشاركة", toastConfig);
         }
       }
     } catch (error) {
-      // Handle errors here
+      if (error.response && error.response.status === 401) {
+        toast.error("غير مصرح، يرجى تسجيل الدخول مرة أخرى", toastConfig);
+      } else {
+        toast.error("حدث خطأ غير متوقع", toastConfig);
+      }
       console.error(error);
     }
   };
+  
 
   const handelparticipating = async (trackId) => {
     try {
@@ -156,16 +169,14 @@ export default function NextTrips() {
   };
 
 
-  const check = (item) => {
-    let isUserParticipating = false;
-    item?.participants?.forEach((participant) => {
-      if (participant.user_id === userData._id) {
-        isUserParticipating = true;
-      }
-    });
-    return isUserParticipating;
-  }
-
+  const check = (item) => {  
+    // Ensure item and participants array are defined before calling some
+    if (item?.participants) {
+      return item.participants.some(participant => participant?.user_id === userData?._id);
+    }
+    return false;
+  };
+  
   const deleteTrack = async (trackId) => {
     console.log(trackId)
     try {

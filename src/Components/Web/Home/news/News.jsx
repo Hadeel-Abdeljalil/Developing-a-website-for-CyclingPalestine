@@ -116,7 +116,7 @@ export default function News() {
                       </div>
 
                       {/* Display images if available */}
-                      {newsItem.images.length > 0 && (
+                      {newsItem.images.length > 0 && isExpanded &&(
                         <div className="mb-3">
                           {newsItem.images.map((image, idx) => (
                             <img
@@ -131,7 +131,7 @@ export default function News() {
                       )}
 
                       {/* Display video if available */}
-                      {newsItem.video && (
+                      {newsItem.video && isExpanded &&(
                         <div className="mb-3">
                           <video controls className="img-fluid rounded w-50">
                             <source src={newsItem.video.secure_url} type="video/mp4" />

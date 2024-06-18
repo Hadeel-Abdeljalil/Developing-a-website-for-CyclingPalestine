@@ -77,19 +77,17 @@ export default function UserInfo() {
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}user/updateProfile/${userData._id}`,
         {
-          userName: values.userName,
-          birthdate: values.birthdate,
-          gender: values.gender,
-          phone: values.phone,
-          Address: values.Address,
+          userName: values.userName || ' ',
+          birthdate: values.birthdate || ' ',
+          gender: values.gender || ' ',
+          phone: values.phone || ' ',
+          Address: values.Address || ' ',
         },
         { headers: { Authorization: `Rufaidah__${userToken}` } }
       );
-
+    
       const { data } = response;
-
-      console.log('Server response:', data);
-
+    
       if (data.message === 'success') {
         setUserData({ ...userData, ...values });
         toast.success('تم تحديث المعلومات بنجاح', toastConfig);
@@ -99,7 +97,7 @@ export default function UserInfo() {
       }
     } catch (error) {
       toast.error('خطأ في تحديث المعلومات');
-      console.error('Error updating info:', error);
+      console.error('Error updating info:', error.response.data); // Log the detailed error
     } finally {
       setIsLoading(false);
       setIsEditingInfo(false);
