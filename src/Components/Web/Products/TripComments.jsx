@@ -98,13 +98,13 @@ export default function TripComments({ postId }) {
 
     return (
         <div className='d-flex justify-content-end '>
-            <div className='w-100'>
+            <div className='w-100 dir'>
                 <form onSubmit={formik.handleSubmit}>
                     {userToken ? (
-                        <div>
+                        <div className='w-50'>
                             {renderInputs}
-                            <div>
-                                <button className="btn" type="submit">
+                            <div className='text-start'>
+                                <button className="btn " type="submit">
                                     انشر تعليقك
                                 </button>
                             </div>
@@ -113,7 +113,7 @@ export default function TripComments({ postId }) {
                             ) : null}
                         </div>
                     ) : (
-                        <div>يرجى تسجيل الدخول لإضافة تعليق</div>
+                        <div className='dir'>يرجى تسجيل الدخول لإضافة تعليق</div>
                     )}
                 </form>
                 <div className="comment-container">
