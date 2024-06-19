@@ -52,9 +52,11 @@ export default function Products() {
           }
         }
       );
-
-      console.log('File upload successful:', data);
-      // Optionally, reset state or perform any other actions upon successful upload
+      if(data.message="success"){
+        toast.success("تمت اضافة المنتجات بنجاح")
+      }else{
+        toast.warning("يرجى المحاولة مرة أخرى ")
+      }
     } catch (error) {
       console.error('Error uploading file:', error.response.data);
       // Handle specific errors or provide user feedback based on error.response.data.message

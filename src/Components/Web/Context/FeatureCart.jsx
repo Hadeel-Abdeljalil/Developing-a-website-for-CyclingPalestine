@@ -5,7 +5,6 @@ export const CartContext = createContext(null);
 
 export function CartContextProvider({ children }) {
     let [count, setCount] = useState(0);
-    let [favCount, setFavCount] = useState(0);
     const [cart, setCart] = useState(null);
     const [cartItems, setCartItems] = useState([]);
     const [cartCleared, setCartCleared] = useState(false);

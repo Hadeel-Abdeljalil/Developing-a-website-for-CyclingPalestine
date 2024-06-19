@@ -14,7 +14,7 @@ export default function({data}) {
     <Swiper
     modules={[Navigation, Pagination,Scrollbar,Autoplay]}
     spaceBetween={70}
-    slidesPerView={5.5}
+    slidesPerView={3}
     navigation
     loop={true}
     autoplay={{ delay: 2000 }} 

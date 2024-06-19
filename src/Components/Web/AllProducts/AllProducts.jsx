@@ -147,28 +147,39 @@ export default function AllProducts() {
 
           <div className="row gap-3 justify-content-center p-5">
             {products.products ? products.products.map(product => (
-              <Link className="col-lg-3 ps-0 mb-3" to={`/products/${product._id}`} style={{ width: '17rem', position: 'relative' }} key={product._id}>
-                <div className="image-container position-relative">
-                <img
+              <div className="col-lg-3 ps-0 mb-3" style={{ width: '17rem', position: 'relative' }} key={product._id}>
+                <Link to={`/products/${product._id}`}>
+                  <div className="image-container position-relative">
+                    <img
                       className="w-100 h-100 product-image"
                       src={product.mainImage.secure_url}
                       alt="Card image cap"
                     />
-                  <div className="icon-container position-absolute bottom-0 start-50 mb-3 d-flex justify-content-center d-icon">
-                    <Link onClick={() => addToCartContext(product._id)} className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3">
-                      <BsCartPlus className="icon-animation" />
-                    </Link>
-                    <Link className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 mx-3">
-                      <BsHeart className="icon-animation" />
-                    </Link>
-                    <Link className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 me-5">
-                      <BsEye className="icon-animation" />
-                    </Link>
+                    <div className="icon-container position-absolute bottom-0 start-50 mb-3 d-flex justify-content-center d-icon">
+                      <button
+                        onClick={(e) => { e.preventDefault(); addToCartContext(product._id); }}
+                        className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 border-0"
+                      >
+                        <BsCartPlus className="icon-animation" />
+                      </button>
+                      <button
+                        onClick={(e) => { e.preventDefault(); /* handle add to wishlist */ }}
+                        className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 mx-3 border-0"
+                      >
+                        <BsHeart className="icon-animation" />
+                      </button>
+                      <button
+                        onClick={(e) => { e.preventDefault(); /* handle view details */ }}
+                        className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 me-5 border-0"
+                      >
+                        <BsEye className="icon-animation" />
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </Link>
                 <p className="text-center">{product.name}</p>
                 <p className="text-center text-secondary dir">{product.price} شيكل</p>
-              </Link>
+              </div>
             )) : <h2 className="dir">لا يوجد منتجات</h2>}
           </div>
         </div>
