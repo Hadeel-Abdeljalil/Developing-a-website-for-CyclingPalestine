@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
+
 export const CartContext = createContext(null);
 
 export function CartContextProvider({ children }) {
@@ -20,118 +21,115 @@ export function CartContextProvider({ children }) {
         progress: undefined,
         theme: "light",
     };
+
     const addToCartContext = async (productId) => {
         try {
             const token = localStorage.getItem('userToken');
             const { data } = await axios.post(`${import.meta.env.VITE_API_URL}cart/create`, { productId }, { headers: { Authorization: `Rufaidah__${token}` } });
-            console.log(data)
-            if (data.message === 'success') {
-                toast.success('تم إضافة المنتج بنجاح على السلة ', toastConfig);
+
+            if (data.message === 'product added to cart' || data.message === 'success' ) {
+                toast.success('تم إضافة المنتج بنجاح على السلة', toastConfig);
             }
+
             setCount(prevCount => prevCount + 1);
             setCart(data);
             setCartItems(data);
             return data;
         } catch (error) {
-            if (error.response.status === 409) {
+            if (error.response?.status === 401) {
                 toast.info('تمت إضافة المنتج مسبقاً لزيادة الكمية الرجاء زيارة عربة التسوق', toastConfig);
             } else {
-                console.log(error);
+                console.error(error);
             }
         }
-    }
+    };
 
     const getCartContext = async () => {
         try {
             const token = localStorage.getItem('userToken');
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}cart`,
-                { headers: { Authorization: `Rufaidah__${token}` } });
-            setCount(data.count);
-            setCart(data.cart);
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}cart`, { headers: { Authorization: `Rufaidah__${token}` } });
+
+            setCount(data.numberOfProducts);
+            setCart(data.finalProductsList);
             return data;
+        } catch (error) {
+            console.error(error);
         }
-        catch (error) {
-            console.log(error);
-        }
-    }
+    };
+
     const removeFromCartContext = async (productId) => {
         try {
             const token = localStorage.getItem('userToken');
-            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/removeItem`,
-
-                { productId },
+            const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}cart/remove/${productId}`, {}, 
                 { headers: { Authorization: `Rufaidah__${token}` } });
-            if (data.message == 'success') {
-                toast.warn('تم حذف المنتج ', toastConfig);
-            }
-            setCount(--count);
+
+                if(data.message === "product removed"){
+                    toast.success("تم  حذف المنتج بنجاح")
+                }
+            setCount(prevCount => prevCount - 1);
             setCart(null);
-            setCartItems(data.cart)
+            setCartItems(data.cart);
+            
             return data;
+        } catch (error) {
+            console.error(error);
         }
-        catch (error) {
-            console.log(error);
-        }
-    }
+    };
+    
+
     const clearCartContext = async () => {
         try {
             const token = localStorage.getItem('userToken');
-            const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}cart/clear`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Rufaidah__${token}`,
-                    },
-                }
-            );
+            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/clear`, {}, 
+            { headers: { Authorization: `Rufaidah__${token}` } });
+
             setCount(0);
-            setCart(null)
+            setCart(null);
             setCartItems([]);
             setCartCleared(true);
-            toast.warn(' تم تفريغ السلة', toastConfig);
-            console.log(data);
-
+            toast.warn('تم تفريغ السلة', toastConfig);
             return data;
-        }
-        catch (error) {
-            console.log(error);
+        } catch (error) {
+            console.error(error);
             setCartCleared(false);
-        }}
+        }
+    };
 
     const increaseQuantityContext = async (productId) => {
         try {
             const token = localStorage.getItem('userToken');
-            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/incraseQuantity`,
-                { productId },
-                { headers: { Authorization: `Rufaidah__${token}` } }
-            );
+            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/increaseQuantity`, { productId }, { headers: { Authorization: `Rufaidah__${token}` } });
+
             return data;
+        } catch (error) {
+            console.error(error);
         }
-        catch (error) {
-            console.log(error);
-        }
-    }
+    };
+
     const decreaseQuantityContext = async (productId) => {
         try {
             const token = localStorage.getItem('userToken');
-            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/decraseQuantity`,
-                { productId },
-                { headers: { Authorization: `Rufaidah__${token}` } }
-            );
-            console.log(data);
-            setQuantity(--quantity);
+            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/decreaseQuantity`, { productId }, { headers: { Authorization: `Rufaidah__${token}` } });
+
+            setQuantity(prevQuantity => prevQuantity - 1);
             return data;
+        } catch (error) {
+            console.error(error);
         }
-        catch (error) {
-            console.log(error);
-        }
-    }
-    const calculateTotalPriceContext = async () => {
-        return getCartContext().reduce((total, product) => total + product.details.price * product.quantity, 0);
     };
 
-    return <CartContext.Provider value={{ addToCartContext, getCartContext, removeFromCartContext, cart, setCart, count, setCount, clearCartContext, increaseQuantityContext, decreaseQuantityContext, calculateTotalPriceContext }}>
-        {children}
-    </CartContext.Provider>;
+    const calculateTotalPriceContext = async () => {
+        try {
+            const cart = await getCartContext();
+            return cart.reduce((total, product) => total + product.details.price * product.quantity, 0);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    return (
+        <CartContext.Provider value={{ addToCartContext, getCartContext, removeFromCartContext, cart, setCart, count, setCount, clearCartContext, increaseQuantityContext, decreaseQuantityContext, calculateTotalPriceContext }}>
+            {children}
+        </CartContext.Provider>
+    );
 }

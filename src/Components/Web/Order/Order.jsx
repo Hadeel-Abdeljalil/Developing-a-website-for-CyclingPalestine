@@ -35,11 +35,11 @@ export default function Order() {
         const token = localStorage.getItem('userToken');
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}order/`,
+                `${import.meta.env.VITE_API_URL}order/create`,
                 { phone: formik.values.phone, address: formik.values.address },
                 { headers: { Authorization: `Rufaidah__${token}` } }
             );
-
+            console.log(data)
             if (data.message == 'success') {
                 toast.success(`تم تأكيد الطلب بنجاح`, {
                     position: "top-right",
@@ -102,7 +102,6 @@ export default function Order() {
 
     )
     const { data, isLoading } = useQuery('cart-content-order', getCart);
-
     if (isLoading) {
         return <div className="loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3">
             <span className="loader"></span>
@@ -112,17 +111,17 @@ export default function Order() {
         <div className='container my-5 pt-5'>
             <h2 className='dir'>أكمل الطلب</h2>
             <div className="row justify-content-center align-items-center pb-5">
-                {data.products?.length ? data.products.map((product) =>
+                {data.finalProductsList?.length ? data.finalProductsList.map((product) =>
                      <div
                      className="col-lg-3 ps-0 mb-3 "
-                     to={`/products/${product._id}`}
+                     to={`/products/${product.productId}`}
                      style={{ width: '17rem', position: 'relative' }}
                      key={product._id}
                    >
                      <div className="image-container position-relative">
                        <img
                          className="w-100 h-100 product-image"
-                         src={product.details.mainImage.secure_url}
+                         src={product.mainImage.secure_url}
                          alt="Card image cap"
                        />
                        <div className="icon-container position-absolute bottom-0 start-50 mb-3  d-flex justify-content-center d-icon ">
@@ -136,17 +135,10 @@ export default function Order() {
                        </div>
                      </div>
              
-                     <p className='text-center'>{product.details.name}</p>
+                     <p className='text-center'>{product.name}</p>
                      <p className='text-center text-secondary '>الكمية: {product.quantity} </p>
              
                    </div>
-                    // <div className="card col-lg-4" style={{ width: '10rem' }} key={prod._id}>
-                    //     <img src={prod.details.mainImage.secure_url} className="card-img-top img-fluid" />
-                    //     <div className="card-body">
-                    //         <h5 className="card-title"><span className='text-secondary'>اسم المنتج:</span> {prod.details.name}</h5>
-                    //         <p className="card-text"><span className='text-secondary'>الكمية:</span> {prod.quantity}</p>
-                    //     </div>
-                    // </div>
                 ) : <h2>هناك خطأ</h2>}
             </div>
             <form onSubmit={formik.handleSubmit}>

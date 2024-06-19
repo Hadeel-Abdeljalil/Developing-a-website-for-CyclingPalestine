@@ -26,7 +26,6 @@ export default function Products() {
 
   const getProduct = async () => {
     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getDetails/${productId}`);
-    console.log(data)
     return data.product;
   };
 

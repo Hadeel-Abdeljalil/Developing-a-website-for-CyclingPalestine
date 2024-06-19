@@ -38,9 +38,8 @@ export default function Cart() {
     try {
       setLoading(true);
       const res = await removeFromCartContext(productId);
-      if (res.message === 'success') {
-        await getCart();
-      }
+      console.log(res)
+     
       setLoading(false);
     } catch (error) {
       console.error("Error removing from cart:", error);
@@ -96,47 +95,11 @@ export default function Cart() {
   return (
     <div className="cart mt-5">
       <div className="container">
-        <div className="row">
+        <div className=" d-flex justify-content-center">
           <div className="cart-items ">
-            <div className="cart-summary  dir">
-              <h2>تفاصيل السلة</h2>
-              <div className="summery-items">
-                <div className="summary-item">
-                  <div className="form-group">
-                    <input type="radio" /> <label>الشحن مجاناََ</label>
-                  </div>
-                  <span> ₪ 0.00</span>
-                </div>
-                <div className="summary-item">
-                  <div className="form-group">
-                    <input type="radio" /> <label>الشحن السريع</label>
-                  </div>
-                  <span>+ ₪ 15.00</span>
-                </div>
-                <div className="summary-item">
-                  <div className="form-group">
-                    <input type="radio" /> <label>الإستلام من الموقع</label>
-                  </div>
-                  <span>%21.00</span>
-                </div>
-                <div className="summary-footer">
-                  <label>المجموع </label>
-                  <span>₪</span>
-                </div>
-                <div className="summary-footer">
-                  <label className="total">المجموع الكلي</label>
-                  <span>{`₪ `}</span>
-                </div>
-                <div className="checkout">
-                  <Link to='/order'> دفع </Link>
-                </div>
-              </div>
-            </div>
-
             <div className="products " id="products">
               <div className="item dir">
-
-                <div className="product-info d-flex justify-content-center">
+                <div className="product-info d-flex justify-content-start">
                   <h2>المنتج</h2>
                 </div>
                 <div className="quantity d-flex justify-content-center">
@@ -149,16 +112,13 @@ export default function Cart() {
                   <h2>المجموع</h2>
                 </div>
               </div>
-
               <div>
                 {products ? (products.map((product) =>
                   <div className="item dir" key={product.productId}>
-
                     <div className="product-info">
                       <img src={product.mainImage.secure_url} className='' />
                       <div className="product">
                         <h2>{product.name}</h2>
-                        <span>{`اللون : ${product.color}`}</span>
                         <Link href="#" onClick={() => removeFromCart(product.productId)}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -222,8 +182,8 @@ export default function Cart() {
                         </svg>
                       </button>
                     </div>
-                    <div className="price">{product.finalPrice}</div>
-                    <div className="subtotal">{product.totalPrice}</div>
+                    <div className="price d-flex justify-content-center">{product.finalPrice}</div>
+                    <div className="subtotal d-flex justify-content-center">{product.totalPrice}</div>
                   </div>
                 )) : <>
                   <div className='dir'>
@@ -233,12 +193,16 @@ export default function Cart() {
                   </div>
                 </>}
               </div>
-              <div className='w-50'>
-                <button className='btn btn-outline-danger border border-danger  text-center mx-3 w-25' onClick={clearCart} disabled={count == 0}>تفريغ السلة</button>
+              <div className='d-flex  w-50'>
+                <div className=' '>
+                  <button className='btn btn-outline-danger border border-danger  text-center mx-3' onClick={clearCart} disabled={count == 0}>تفريغ السلة</button>
+                </div>
+                <div className=" ">
+                    <Link to='/order'> <button className='btn btn-outline-info border border-info  text-center mx-3 '>دفع</button> </Link>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
