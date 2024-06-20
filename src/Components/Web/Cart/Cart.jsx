@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../Context/FeatureCart';
 import { Link } from 'react-router-dom';
 import './Cart.css';
+import { toast } from 'react-toastify';
 
 export default function Cart() {
   const {
@@ -17,6 +18,17 @@ export default function Cart() {
   const [isLoading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
+
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
 
   const getCart = async () => {
     try {
@@ -36,9 +48,13 @@ export default function Cart() {
 
   const removeFromCart = async (productId) => {
     try {
-      setLoading(true);
       const res = await removeFromCartContext(productId);
       console.log(res)
+      if(res.message =="product removed"){
+        location.reload();
+        toast.success("تم حذف المنتج من السلة",toastConfig)
+
+      }
 
       setLoading(false);
     } catch (error) {
@@ -83,12 +99,12 @@ export default function Cart() {
   };
 
 
-
   if (isLoading) {
     return (
-      <div className="loading bg-transfer w-100 d-flex justify-content-center align-items-center z-3">
-        <span className="loader"></span>
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
       </div>
+
     );
   }
 
@@ -199,7 +215,7 @@ export default function Cart() {
                     <button className='btn btn-outline-danger border border-danger  text-center mx-3' onClick={clearCart} disabled={count == 0}>تفريغ السلة</button>
                   </div>
                   <div className=" ">
-                    <Link to='/order'> <button className='btn btn-outline-info border border-info  text-center mx-3 '>دفع</button> </Link>
+                    <Link to='/order'> <button className='btn btn-outline-info border border-info  text-center mx-3 '>إكمال الطلب</button> </Link>
                   </div>
 
                 </div> : <div className=" ">

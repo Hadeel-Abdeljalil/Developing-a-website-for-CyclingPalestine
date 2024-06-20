@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CartContext } from '../Context/FeatureCart';
 import { UserContext } from '../Context/FeatureUser';
 import SwiperReviews from './SwiperReviews';
@@ -11,19 +11,36 @@ import { BiCart } from 'react-icons/bi';
 import './Products.css';
 import { BsHeart } from 'react-icons/bs';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
+import Popup from 'reactjs-popup';
+import { toast } from 'react-toastify';
+import UpdateProduct from './UpdateProduct.jsx';
+import Swal from 'sweetalert2';
 
 export default function Products() {
   const { productId } = useParams();
+  const {userData}=useContext(UserContext);
   const { addToCartContext } = useContext(CartContext);
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageOpacity, setImageOpacity] = useState({}); // Store opacity for each image
+  const role = userData?.role;
+  const navigate = useNavigate();
 
   let ratCount = 0;
   let ratsNum = 0;
   let AvgRating = 0;
   const { userToken, getUserOrdersContext } = useContext(UserContext);
 
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
   const getProduct = async () => {
     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getDetails/${productId}`);
     return data.product;
@@ -97,6 +114,33 @@ export default function Products() {
       </div>
     );
   }
+  const deleteProduct = async (productId)=>{
+    try{
+      const confirmation = await Swal.fire({
+        title: "<div class='pt-3'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+            confirmButton: 'btn bg-white border border-success text-dark',
+            cancelButton: 'btn bg-white border text-dark'
+        },
+    });
+
+    if (confirmation.isConfirmed) {
+      const {data} = await axios.delete(`${import.meta.env.VITE_API_URL}product/delete/${productId}`,
+        { headers: { Authorization: `Rufaidah__${userToken}` } });
+      console.log(data)
+      if(data.message =="product successfully deleted",toastConfig){
+        navigate(-1);
+        toast.success("تم حذف المنتج ")
+      }
+
+    }}catch(error){
+      console.log(error)
+    }
+  }
 
   return (
     <div className="container pt-5 mt-5 pb-5 mb-5">
@@ -104,7 +148,32 @@ export default function Products() {
         <div className="col-lg-10">
           <div className='pb-5 d-flex'>
             <div className='dir col-lg-6 pe-5'>
-              <h2 className="fw-bold">{data.name}</h2>
+            <h2 className="fw-bold">{data.name}</h2>
+
+            {
+                    role == "Admin" ? (
+                      <div className='d-flex mb-2  w-50'>
+                        <Popup
+                          trigger={<button
+                            className='btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2 mx-1 shadow'
+                          >
+                            تعديل
+                          </button>}
+                          position='center center'
+                        >
+                        <div className='  position-absolute '>
+                        <UpdateProduct 
+                           item={productId}
+                         />
+                        </div>
+                        </Popup>
+                        <button
+                          className='btn bg-white text-danger btn-outline-danger w-50 me-1 rounded-2 p-2 shadow'
+                          onClick={() => deleteProduct(productId)}>
+                          حذف
+                        </button></div>
+                    ) : ""
+                  }
               <div className='pe-4 pt-3 d-flex'>
                 <p>
                   السعر: <span className="text-decoration-line-through opacity-50">{product.price} ₪</span>
@@ -112,7 +181,7 @@ export default function Products() {
                 <p className='pe-2 text-danger'>{product.finalPrice} ₪ </p>
               </div>
               <div className='pe-4'>
-                <p>{product.discount >0 ?<span className='text-white bg-color rounded-5 p-3'>متوفر</span>:<span className='text-white bg-danger rounded-5 p-3'>غير متوفر</span>}</p>
+                <p>{product.discount > 0 ? <span className='text-white bg-color rounded-5 p-3'>متوفر</span> : <span className='text-white bg-danger rounded-5 p-3'>غير متوفر</span>}</p>
               </div>
               <div className='pe-4'>
                 <p>{product.description}</p>
@@ -121,7 +190,7 @@ export default function Products() {
                 <p className='mb-0'>في حال لديك ملاحظات خاصة للبائع</p>
                 <textarea className='mt-0 w-100 textarea'></textarea>
               </div>
-             
+
               <div className='d-flex justify-content-center'>
                 <div className='d-flex justify-content-center'>
                   <button
@@ -187,10 +256,12 @@ export default function Products() {
       <h2 className="text-center py-4 fw-bolder">
         ما مدى رضاك عن منتجنا؟
       </h2>
-      <div className='mt-5'>
-            <h1 className='dir'>التعليقات</h1>
-            <TripComments productId={productId} />
-          </div>
+      <div className=' d-flex justify-content-center'>
+        <div className='mt-5 w-50 '>
+          <h1 className='dir'>التعليقات</h1>
+          <TripComments productId={productId} />
+        </div>
+      </div>
     </div>
   );
 }

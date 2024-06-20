@@ -101,7 +101,7 @@ export default function TripComments({ postId }) {
             <div className='w-100 dir'>
                 <form onSubmit={formik.handleSubmit}>
                     {userToken ? (
-                        <div className='w-50'>
+                        <div className=''>
                             {renderInputs}
                             <div className='text-start'>
                                 <button className="btn " type="submit">

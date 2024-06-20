@@ -79,9 +79,11 @@ const TripDetails = () => {
             ))}
           </Swiper>
 
-          <div className='mt-5'>
+          <div className='d-flex justify-content-center'>
+          <div className='mt-5 w-50'>
             <h1 className='dir'>التعليقات</h1>
             <TripComments postId={trip._id} />
+          </div>
           </div>
         </div>
       </div>
