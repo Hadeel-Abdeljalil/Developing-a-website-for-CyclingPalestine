@@ -103,35 +103,23 @@ export default function News() {
                       <h1>{newsItem.title}</h1>
                       <p className='text-end'>{formatDate(newsItem.date)}</p>
 
-                      <div className='text-end  '>
-                        <p>
-                          {isExpanded ? newsItem.content : newsItem.content.length > 150 ? newsItem.content.substring(0, 500) + ' ... ' : newsItem.content}
-                          {newsItem.content.length > 500 && (
-                          <span className='color ' onClick={toggleExpansion}>
-                            {isExpanded ? 'عرض أقل' : 'عرض المزيد'}
-                          </span>
-                        )}
-                        </p>
-                       
-                      </div>
-
                       {/* Display images if available */}
-                      {newsItem.images.length > 0 && isExpanded &&(
+                      {newsItem.images.length > 0 && (
                         <div className="mb-3">
                           {newsItem.images.map((image, idx) => (
                             <img
                               key={idx}
                               src={image.secure_url}
                               alt={`Image ${idx + 1}`}
-                              className="img-fluid rounded mx-1"
-                              style={{ maxWidth: '150px', maxHeight: '150px' }}
+                              className="img-fluid rounded mx-1 w-100"
+                              style={{ maxWidth: '250px', maxHeight: '250px' }}
                             />
                           ))}
                         </div>
                       )}
 
                       {/* Display video if available */}
-                      {newsItem.video && isExpanded &&(
+                      {newsItem.video && (
                         <div className="mb-3">
                           <video controls className="img-fluid rounded w-50">
                             <source src={newsItem.video.secure_url} type="video/mp4" />
@@ -139,8 +127,18 @@ export default function News() {
                           </video>
                         </div>
                       )}
+                      <div className='text-end  '>
+                        <p>
+                          {isExpanded ? newsItem.content : newsItem.content.length > 150 ? newsItem.content.substring(0, 500) + ' ... ' : newsItem.content}
+                          {newsItem.content.length > 500 && (
+                            <span className='color ' onClick={toggleExpansion}>
+                              {isExpanded ? 'عرض أقل' : 'عرض المزيد'}
+                            </span>
+                          )}
+                        </p>
 
-                      {/* Admin actions */}
+                      </div>
+
                       {role === 'Admin' && (
                         <div className="d-flex w-25  ">
                           <button
@@ -149,10 +147,10 @@ export default function News() {
                           >
                             حذف
                           </button>
-                          {/* Add edit functionality */}
+
                           <button
                             className="btn bg-white text-info btn-outline-info w-50 me-1 rounded-2 p-2"
-                            onClick={() => editNews(newsItem._id)} // Replace with edit function
+                            onClick={() => editNews(newsItem._id)}
                           >
                             تعديل
                           </button>

@@ -93,11 +93,15 @@ export default function News() {
 
       } else {
         toast.warning(data.message, toastConfig);
+        setIsLoading(false)
+
       }
     } catch (error) {
       toast.error(error.message, toastConfig);
       console.error('Error:', error);
       console.error('Response:', error.response?.data);
+      setIsLoading(false)
+
     }
   };
   if (loading) {
@@ -159,6 +163,7 @@ export default function News() {
             accept="image/*"
             onChange={handleChange}
           />
+          <p  className='text-black small opacity-75 px-3'>يمكن اضافة 10 صور فقط كحد أقصى </p>
           <div className="image-previews">
             {imagePreviews.map((url, index) => (
               <img key={index} src={url} alt={`preview ${index}`} className="img-thumbnail m-1" />
