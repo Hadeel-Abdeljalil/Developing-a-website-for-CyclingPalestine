@@ -39,7 +39,7 @@ export default function Cart() {
       setLoading(true);
       const res = await removeFromCartContext(productId);
       console.log(res)
-     
+
       setLoading(false);
     } catch (error) {
       console.error("Error removing from cart:", error);
@@ -93,7 +93,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="cart mt-5">
+    <div className="cart pt-5 vh-100">
       <div className="container">
         <div className=" d-flex justify-content-center">
           <div className="cart-items ">
@@ -193,14 +193,20 @@ export default function Cart() {
                   </div>
                 </>}
               </div>
-              <div className='d-flex  w-50'>
-                <div className=' '>
-                  <button className='btn btn-outline-danger border border-danger  text-center mx-3' onClick={clearCart} disabled={count == 0}>تفريغ السلة</button>
-                </div>
-                <div className=" ">
+              {
+                count ? <div className='d-flex  w-50'>
+                  <div className=' '>
+                    <button className='btn btn-outline-danger border border-danger  text-center mx-3' onClick={clearCart} disabled={count == 0}>تفريغ السلة</button>
+                  </div>
+                  <div className=" ">
                     <Link to='/order'> <button className='btn btn-outline-info border border-info  text-center mx-3 '>دفع</button> </Link>
+                  </div>
+
+                </div> : <div className=" ">
+                  <p className='dir'>لا يوجد منتجات في السلة</p>
+                  <Link to='/products'> <button className='btn btn-outline-success border border-success  text-center mx-3 '>العودة الى المتجر</button> </Link>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>

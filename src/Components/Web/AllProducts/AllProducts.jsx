@@ -7,41 +7,52 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { BsHeart, BsCartPlus, BsEye } from 'react-icons/bs';
 import { CartContext } from '../Context/FeatureCart.jsx';
-import { UserContext } from '../Context/FeatureUser.jsx';
 import './AllProducts.css';
 
 export default function AllProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState('price');
   const [ltePrice, setLtePrice] = useState(5000);
   const [gtePrice, setGtePrice] = useState(0);
-  const [categoryFilter, setCategoryFilter] = useState('664c8ae88c57dbaf72c3974f');
   const [search, setSearch] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const { addToCartContext } = useContext(CartContext);
-  const { userToken } = useContext(UserContext);
+  const productsPerPage = 12;
+  const typedElement = useRef(null);
 
+  // Fetch products based on filters
   const fetchProducts = async () => {
-    try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getAll`, {
-        params: {
-          page: currentPage,
-          limit,
-          sort,
-          search,
-          'price[lte]': ltePrice,
-          'price[gte]': gtePrice,
-        },
-      });
-      setProducts(data);
-    } catch (error) {
-      console.error(error);
+    if (categoryFilter != "all") {
+      const params = {
+        status: 'Active',
+        page: currentPage,
+        sort,
+        search,
+        'price[lte]': ltePrice,
+        'price[gte]': gtePrice,
+        categoryId: categoryFilter,
+      };
+      try {
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getActive`, { params });
+        setProducts(data.products);
+      } catch (error) {
+        console.error(error);
+      }
+
+    } else {
+      try {
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getAll`);
+        setProducts(data.products)
+      } catch (error) {
+        console.log(error)
+      }
     }
   };
 
-  const getCategories = async () => {
+  // Fetch categories
+  const fetchCategories = async () => {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getActive`);
       setCategories(data.categories);
@@ -50,14 +61,18 @@ export default function AllProducts() {
     }
   };
 
+  // Initial data fetch
   useEffect(() => {
     fetchProducts();
-    getCategories();
-  }, [currentPage, limit, sort, categoryFilter, ltePrice, gtePrice, search]);
+    fetchCategories();
+  }, [currentPage, sort, categoryFilter, ltePrice, gtePrice, search]);
 
-  const totalPages = Math.ceil((products.total || 0) / limit);
+  // Reset to first page on filter change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sort, categoryFilter, ltePrice, gtePrice, search]);
 
-  const typedElement = useRef(null);
+  // Initialize Typed.js
   useEffect(() => {
     const typed = new Typed(typedElement.current, {
       strings: ["معدات", "دراجات جديدة", "دراجات مستعملة", "تأجير دراجات"],
@@ -67,6 +82,8 @@ export default function AllProducts() {
     });
     return () => typed.destroy();
   }, []);
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
 
   return (
     <div className="pb-5 mt-5">
@@ -79,9 +96,6 @@ export default function AllProducts() {
           </div>
         </div>
       </div>
-
-      <Categories />
-
       <div className="container">
         <div className="container-fluid">
           <div className="pb-4 container-fluid pt-5">
@@ -89,104 +103,126 @@ export default function AllProducts() {
             <hr />
           </div>
 
-          <div className="d-flex gap-2 justify-content-center">
-            <input
-              type="text"
-              className="form-control w-25"
-              placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <div>
+            <div className="d-flex gap-2 justify-content-center">
 
-            <div className="dropdown">
-              <button className="btn btn-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                حدد
-              </button>
-              <ul className="dropdown-menu">
-                {Array.from({ length: Math.max(1, totalPages) }, (_, index) => (
-                  <li key={index}>
-                    <button className="dropdown-item" onClick={() => setLimit(index + 1)}>
-                      {index + 1}
-                    </button>
-                  </li>
+              <div className="dropdown">
+                <button className="btn btn-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  ترتيب حسب
+                </button>
+                <ul className="dropdown-menu">
+                  <li><button className="dropdown-item" onClick={() => setSort('name')}>الاسم</button></li>
+                  <li><button className="dropdown-item" onClick={() => setSort('price')}>السعر</button></li>
+                  <li><button className="dropdown-item" onClick={() => setSort('rating')}>الأعلى تقييم</button></li>
+                </ul>
+              </div>
+
+              <div className="dropdown">
+                <button className="btn btn-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  تصفية حسب السعر
+                </button>
+                <ul className="dropdown-menu p-4">
+                  <div className="text-center">من:</div>
+                  <input
+                    type="number"
+                    className="form-control mb-2"
+                    placeholder="First Number"
+                    onChange={(e) => setGtePrice(Number(e.target.value))}
+                  />
+                  <div className="text-center">إلى:</div>
+                  <input
+                    type="number"
+                    className="form-control mb-2"
+                    placeholder="Last Number"
+                    onChange={(e) => setLtePrice(Number(e.target.value))}
+                  />
+                </ul>
+              </div>
+
+              <select className="form-select bg-color form-select-sm w-25" onChange={(e) => setCategoryFilter(e.target.value === 'all' ? e.target.value = 'all' : e.target.value)}>
+                <option className="dir" value="all">التصفية حسب الفئة</option>
+                {categories.map(category => (
+                  <option className="dir" key={category._id} value={category._id}>{category.name}</option>
                 ))}
-              </ul>
+              </select>
             </div>
+            <Categories />
 
-            <div className="dropdown">
-              <button className="btn btn-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                ترتيب حسب
-              </button>
-              <ul className="dropdown-menu">
-                <li><button className="dropdown-item" onClick={() => setSort('name')}>الاسم</button></li>
-                <li><button className="dropdown-item" onClick={() => setSort('price')}>السعر</button></li>
-                <li><button className="dropdown-item" onClick={() => setSort('rating')}>الأعلى تقييم</button></li>
-              </ul>
+            <div className='d-flex justify-content-center'>
+              <input
+                type="text"
+                className='my-5 mx-1 border border-secondary rounded shadow-bottom input w-50'
+                placeholder="أكتب اسم المنتج"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-
-            <div className="dropdown">
-              <button className="btn btn-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                تصفية حسب السعر
-              </button>
-              <ul className="dropdown-menu p-4">
-                <div className="text-center">من:</div>
-                <input type="number" className="form-control mb-2" placeholder="First Number" onChange={(e) => setGtePrice(e.target.value)} />
-                <div className="text-center">إلى:</div>
-                <input type="number" className="form-control mb-2" placeholder="Last Number" onChange={(e) => setLtePrice(e.target.value)} />
-                <button className="btn btn-outline-secondary w-100" type="button" onClick={fetchProducts}>اذهب</button>
-              </ul>
-            </div>
-
-            <select className="form-select bg-color form-select-sm w-25" onChange={(e) => setCategoryFilter(e.target.value === 'all' ? null : e.target.value)}>
-              <option className="dir" value="all">التصفية حسب الفئة</option>
-              {categories.map(category => (
-                <option className="dir" key={category._id} value={category._id}>{category.name}</option>
-              ))}
-            </select>
           </div>
 
-          <div className="row gap-3 justify-content-center p-5">
-            {products.products ? products.products.map(product => (
-              <div className="col-lg-3 ps-0 mb-3" style={{ width: '17rem', position: 'relative' }} key={product._id}>
-                <Link to={`/products/${product._id}`}>
-                  <div className="image-container position-relative">
-                    <img
-                      className="w-100 h-100 product-image"
-                      src={product.mainImage.secure_url}
-                      alt="Card image cap"
-                    />
-                    <div className="icon-container position-absolute bottom-0 start-50 mb-3 d-flex justify-content-center d-icon">
-                      <button
-                        onClick={(e) => { e.preventDefault(); addToCartContext(product._id); }}
-                        className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 border-0"
-                      >
-                        <BsCartPlus className="icon-animation" />
-                      </button>
-                      <button
-                        onClick={(e) => { e.preventDefault(); /* handle add to wishlist */ }}
-                        className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 mx-3 border-0"
-                      >
-                        <BsHeart className="icon-animation" />
-                      </button>
-                      <button
-                        onClick={(e) => { e.preventDefault(); /* handle view details */ }}
-                        className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 me-5 border-0"
-                      >
-                        <BsEye className="icon-animation" />
-                      </button>
+          <div className="d-flex justify-content-center mb-4">
+            <Stack spacing={3}>
+              <Pagination
+                count={totalPages}
+                variant="outlined"
+                shape="rounded"
+                color="standard"
+                page={currentPage}
+                onChange={(event, value) => setCurrentPage(value)}
+              />
+            </Stack>
+          </div>
+
+          <div className="row gap-3 justify-content-center">
+            {products.length > 0 ? (
+              products.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage).map(product => (
+                <div className="col-lg-3 ps-0 mb-3" style={{ width: '17rem', position: 'relative' }} key={product._id}>
+                  <Link to={`/products/${product._id}`}>
+                    <div className="image-container position-relative">
+                      <img
+                        className="w-100 h-100 product-image"
+                        src={product.mainImage.secure_url}
+                        alt="Card image cap"
+                      />
+                      <div className="icon-container position-absolute bottom-0 start-50 mb-3 d-flex justify-content-center d-icon">
+                        <button
+                          onClick={(e) => { e.preventDefault(); addToCartContext(product._id); }}
+                          className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 border-0"
+                        >
+                          <BsCartPlus className="icon-animation" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); /* handle add to wishlist */ }}
+                          className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 mx-3 border-0"
+                        >
+                          <BsHeart className="icon-animation" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); /* handle view details */ }}
+                          className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 me-5 border-0"
+                        >
+                          <BsEye className="icon-animation" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-                <p className="text-center">{product.name}</p>
-                <p className="text-center text-secondary dir">{product.price} شيكل</p>
-              </div>
-            )) : <h2 className="dir">لا يوجد منتجات</h2>}
+                  </Link>
+                  <p className="text-center">{product.name}</p>
+                  <p className="text-center text-secondary dir">{product.price} شيكل</p>
+                </div>
+              ))
+            ) : <h2 className="dir">لا يوجد منتجات</h2>}
           </div>
         </div>
 
         <div className="d-flex justify-content-center">
           <Stack spacing={3}>
-            <Pagination count={totalPages} variant="outlined" shape="rounded" color="standard" page={currentPage} onChange={(e, value) => setCurrentPage(value)} />
+            <Pagination
+              count={totalPages}
+              variant="outlined"
+              shape="rounded"
+              color="standard"
+              page={currentPage}
+              onChange={(event, value) => setCurrentPage(value)}
+            />
           </Stack>
         </div>
 

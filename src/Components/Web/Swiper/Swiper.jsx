@@ -14,7 +14,7 @@ export default function({data}) {
     <Swiper
     modules={[Navigation, Pagination,Scrollbar,Autoplay]}
     spaceBetween={70}
-    slidesPerView={3}
+    slidesPerView={5}
     navigation
     loop={true}
     autoplay={{ delay: 2000 }} 
@@ -23,8 +23,9 @@ export default function({data}) {
     {data?.length ? data.map((category) => (
       <SwiperSlide key={category._id}>
         <Link to={`/products/category/${category._id}`}>
-          <div className='category py-5'>
+          <div className='category pt-5'>
             <img src={category.image.secure_url} className='img-fluid' />
+            <p>{category.name}</p>
           </div>
         </Link>
       </SwiperSlide>

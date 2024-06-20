@@ -100,7 +100,7 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            {userToken ? (
+            { role === 'User' ?(
               <li className="nav-item me-4">
                 <NavLink className="nav-link border-nav" activeclassname="active" to="/cart">
                   السلة <span className="badge badge-info bg-secondary">{count}</span>
