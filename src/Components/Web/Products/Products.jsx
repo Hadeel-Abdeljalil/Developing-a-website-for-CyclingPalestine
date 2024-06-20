@@ -181,7 +181,8 @@ export default function Products() {
                 <p className='pe-2 text-danger'>{product.finalPrice} ₪ </p>
               </div>
               <div className='pe-4'>
-                <p>{product.discount > 0 ? <span className='text-white bg-color rounded-5 p-3'>متوفر</span> : <span className='text-white bg-danger rounded-5 p-3'>غير متوفر</span>}</p>
+                <p>{product.stock}</p>
+                <p>{product.stock > 0 ? <span className='text-white bg-color rounded-5 p-3'>متوفر</span> : <span className='text-white bg-danger rounded-5 p-3'>غير متوفر</span>}</p>
               </div>
               <div className='pe-4'>
                 <p>{product.description}</p>

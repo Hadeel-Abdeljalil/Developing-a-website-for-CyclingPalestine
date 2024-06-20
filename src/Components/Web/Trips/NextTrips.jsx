@@ -149,6 +149,8 @@ export default function NextTrips() {
           {},
           { headers: { Authorization: `Rufaidah__${userToken}` } }
         );
+        // console.log(response)
+        console.log(userToken)
         if (response.data.message === 'success') {
           toast.success("تمت المشاركة بنجاح", toastConfig);
           location.reload();
@@ -165,7 +167,12 @@ export default function NextTrips() {
         }
       }
     } catch (error) {
-      console.error(error);
+      if(error.response.data?.message=="our age is less than the permissible limit"){
+        toast.warn("عمرك أقل من الحد المسموح به ", toastConfig);
+      }else  if(error.response.data?.message=="Enter your date of birth in your profile plz"){
+        toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig);
+      }
+      console.error(error.response.data.message);
     }
   };
 

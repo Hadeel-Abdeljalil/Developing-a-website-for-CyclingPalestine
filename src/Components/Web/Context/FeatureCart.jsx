@@ -26,10 +26,10 @@ export function CartContextProvider({ children }) {
         try {
             const token = localStorage.getItem('userToken');
             const { data } = await axios.post(`${import.meta.env.VITE_API_URL}cart/create`, { productId }, { headers: { Authorization: `Rufaidah__${token}` } });
-
             if (data.message === 'product added to cart' || data.message === 'success' ) {
                 toast.success('تم إضافة المنتج بنجاح على السلة', toastConfig);
             }
+            console.log(data)
 
             setCount(prevCount => prevCount + 1);
             setCart(data);
@@ -38,8 +38,11 @@ export function CartContextProvider({ children }) {
         } catch (error) {
             if (error.response?.status === 401) {
                 toast.info('تمت إضافة المنتج مسبقاً لزيادة الكمية الرجاء زيارة عربة التسوق', toastConfig);
-            } else {
-                console.error(error);
+            } else if (error.response.data?.message=="product not found"){
+                toast.warning('لم يعد هذا المنتج متوفر')
+            }
+            else {
+                console.error(error.response.data.message);
             }
         }
     };
@@ -53,7 +56,7 @@ export function CartContextProvider({ children }) {
             setCart(data.finalProductsList);
             return data;
         } catch (error) {
-            console.error(error);
+            console.error(error.response.data.message);
         }
     };
 
@@ -76,7 +79,6 @@ export function CartContextProvider({ children }) {
         }
     };
     
-
     const clearCartContext = async () => {
         try {
             const token = localStorage.getItem('userToken');
@@ -95,23 +97,12 @@ export function CartContextProvider({ children }) {
         }
     };
 
-    const increaseQuantityContext = async (productId) => {
+    const updateQuantityContext = async (productId,quantity,operatorQ) => {
         try {
             const token = localStorage.getItem('userToken');
-            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/increaseQuantity`, { productId }, { headers: { Authorization: `Rufaidah__${token}` } });
-
-            return data;
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const decreaseQuantityContext = async (productId) => {
-        try {
-            const token = localStorage.getItem('userToken');
-            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/decreaseQuantity`, { productId }, { headers: { Authorization: `Rufaidah__${token}` } });
-
-            setQuantity(prevQuantity => prevQuantity - 1);
+            const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/updateQ/${productId}`, 
+                { quantity,operatorQ }, { headers: { Authorization: `Rufaidah__${token}` } });
+            console.log(data)
             return data;
         } catch (error) {
             console.error(error);
@@ -128,7 +119,7 @@ export function CartContextProvider({ children }) {
     };
 
     return (
-        <CartContext.Provider value={{ addToCartContext, getCartContext, removeFromCartContext, cart, setCart, count, setCount, clearCartContext, increaseQuantityContext, decreaseQuantityContext, calculateTotalPriceContext }}>
+        <CartContext.Provider value={{ addToCartContext, getCartContext, removeFromCartContext, cart, setCart, count, setCount, clearCartContext, updateQuantityContext, calculateTotalPriceContext }}>
             {children}
         </CartContext.Provider>
     );

@@ -85,6 +85,7 @@ export default function News() {
   return (
     <section className="p-5 my-5 w-100  dir mt-3">
       <div className="h-100 w-100 ">
+        <h1 className='text-center'>أخبار فلسطين على البسكليت</h1>
         <div className=" container ">
           {error ? (
             <p>{error}</p>
@@ -100,9 +101,21 @@ export default function News() {
                 news.map((newsItem, index) => (
                   <SwiperSlide key={index} className="text-center   w-100 slider ">
                     <div className="">
-                      <h1>{newsItem.title}</h1>
-                      <p className='text-end'>{formatDate(newsItem.date)}</p>
+                    <div className='d-flex pb-3'>
+                    <h1>{newsItem.title}</h1>
+                    <p className='text-end pt-3 pe-2'>{formatDate(newsItem.date)}</p>
+                    </div>
+                      <div className='text-end  '>
+                        <p className='text-center'>
+                          {isExpanded ? newsItem.content : newsItem.content.length > 150 ? newsItem.content.substring(0, 500) + ' ... ' : newsItem.content}
+                          {newsItem.content.length > 500 && (
+                            <span className='color ' onClick={toggleExpansion}>
+                              {isExpanded ? 'عرض أقل' : 'عرض المزيد'}
+                            </span>
+                          )}
+                        </p>
 
+                      </div>
                       {/* Display images if available */}
                       {newsItem.images.length > 0 && (
                         <div className="mb-3">
@@ -127,17 +140,7 @@ export default function News() {
                           </video>
                         </div>
                       )}
-                      <div className='text-end  '>
-                        <p>
-                          {isExpanded ? newsItem.content : newsItem.content.length > 150 ? newsItem.content.substring(0, 500) + ' ... ' : newsItem.content}
-                          {newsItem.content.length > 500 && (
-                            <span className='color ' onClick={toggleExpansion}>
-                              {isExpanded ? 'عرض أقل' : 'عرض المزيد'}
-                            </span>
-                          )}
-                        </p>
-
-                      </div>
+                   
 
                       {role === 'Admin' && (
                         <div className="d-flex w-25  ">
