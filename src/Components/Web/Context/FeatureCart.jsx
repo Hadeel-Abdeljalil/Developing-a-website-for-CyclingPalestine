@@ -102,7 +102,6 @@ export function CartContextProvider({ children }) {
             const token = localStorage.getItem('userToken');
             const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}cart/updateQ/${productId}`, 
                 { quantity,operatorQ }, { headers: { Authorization: `Rufaidah__${token}` } });
-            console.log(data)
             return data;
         } catch (error) {
             console.error(error);

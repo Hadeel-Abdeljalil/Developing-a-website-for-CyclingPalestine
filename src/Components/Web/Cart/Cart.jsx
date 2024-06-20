@@ -71,7 +71,8 @@ export default function Cart() {
     }
   };
 
-  const updateQuantity = async (productId, quantity, operatorQ) => {
+  const updateQuantity = async (productId,productQ,product, quantity, operatorQ) => {
+  if(productQ<product.stock || (productQ>=product.stock && operatorQ == "-" )){
     try {
       const res = await updateQuantityContext(productId, quantity, operatorQ);
       if (res.message === 'success') {
@@ -80,6 +81,9 @@ export default function Cart() {
     } catch (error) {
       console.error("Error updating quantity:", error);
     }
+  }else{
+    toast.warning("لا يمكنك زيادة الكمية أكثر من الكمية المتوفرة", toastConfig)
+  }
   };
 
   if (isLoading) {
@@ -142,7 +146,7 @@ export default function Cart() {
                           className='ps-4'
                           onClick={() => {
                             if (product.quantity > 1) {
-                              updateQuantity(product.productId, 1, "-");
+                              updateQuantity(product.productId,product.quantity,product, 1, "-");
                             }
                           }} disabled={product.quantity === 1}>
                           <svg
@@ -164,7 +168,7 @@ export default function Cart() {
                         <span>{product.quantity}</span>
                         <button
                           className='pe-4'
-                          onClick={() => updateQuantity(product.productId, 1, "+")}>
+                          onClick={() => updateQuantity(product.productId,product.quantity,product, 1, "+")}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width={16}

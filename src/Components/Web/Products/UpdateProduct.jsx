@@ -159,8 +159,8 @@ export default function UpdateProduct({ item }) {
                 <input
                     type="number"
                     className="form-control"
-                    name="discount"
-                    value={formik.values.discount}
+                    name="stock"
+                    value={formik.values.stock}
                     onChange={formik.handleChange}
                     required
                 />
@@ -170,8 +170,8 @@ export default function UpdateProduct({ item }) {
                 <input
                     type="number"
                     className="form-control"
-                    name="stock"
-                    value={formik.values.stock}
+                    name="discount"
+                    value={formik.values.discount}
                     onChange={formik.handleChange}
                     required
                 />
