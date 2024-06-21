@@ -109,9 +109,10 @@ export default function Products() {
 
   if (isLoading || !product) {
     return (
-      <div className="loading bg-transfer w-100 d-flex justify-content-center align-items-center z-3">
-        <span className="loader"></span>
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
       </div>
+
     );
   }
   const deleteProduct = async (productId)=>{
@@ -141,6 +142,21 @@ export default function Products() {
       console.log(error)
     }
   }
+  const changeStatus = async (productId,status)=>{
+    status == "notActive"?status="Active":status="notActive";
+    try{
+      const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}product/changeStatus/${productId}`,{status},
+        { headers: { Authorization: `Rufaidah__${userToken}` } }
+      );
+      if(data.message == "success"){
+        location.reload();
+        toast.success("تم تغيير الحالة", toastConfig);
+      }
+      console.log(data.message)
+    }catch(error){
+      console.log(error)
+    }
+  }
 
   return (
     <div className="container pt-5 mt-5 pb-5 mb-5">
@@ -149,7 +165,7 @@ export default function Products() {
           <div className='pb-5 d-flex'>
             <div className='dir col-lg-6 pe-5'>
             <h2 className="fw-bold">{data.name}</h2>
-
+            
             {
                     role == "Admin" ? (
                       <div className='d-flex mb-2  w-50'>
@@ -174,6 +190,7 @@ export default function Products() {
                         </button></div>
                     ) : ""
                   }
+                  
               <div className='pe-4 pt-3 d-flex'>
                 <p>
                   السعر: <span className="text-decoration-line-through opacity-50">{product.price} ₪</span>
@@ -184,11 +201,20 @@ export default function Products() {
                 {
                   role== "Admin"?<p>الكمية : {product.stock}</p>:''
                 }
+                 {
+              role =="Admin"?
+              <div className='d-flex align-items-center'>
+                <p>الحالة : {data.status}</p>
+                <button className='border-0 bg-transparent pb-3' onClick={()=>changeStatus(productId,data.status)}>تغيير الحالة</button>
+              </div>
+              :''
+             }
                 <p>{product.stock > 0 ? <span className='text-white bg-color rounded-5 p-3'>متوفر</span> : <span className='text-white bg-danger rounded-5 p-3'>غير متوفر</span>}</p>
               </div>
               <div className='pe-4'>
                 <p>{product.description}</p>
               </div>
+              
               <div className='pe-2'>
                 <p className='mb-0'>في حال لديك ملاحظات خاصة للبائع</p>
                 <textarea className='mt-0 w-100 textarea'></textarea>

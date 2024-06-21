@@ -50,7 +50,12 @@ export default function Navbar() {
     }
   }, [userToken]);
 
-  window.addEventListener('scroll', changeBackground);
+  useEffect(() => {
+    window.addEventListener('scroll', changeBackground);
+    return () => {
+      window.removeEventListener('scroll', changeBackground);
+    };
+  }, []);
 
   return (
     <nav className={`navbar navbar-expand-lg fixed-top bg-nav ${navbar ? ' mt-0 nav x ' : ''}`}>
@@ -75,34 +80,34 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav m-auto mb-3 mb-lg-0 dir">
             <li className="nav-item me-4">
-              <NavLink className="nav-link border-nav" activeclassname="active" to="/">
+              <NavLink className="nav-link border-nav" activeClassName="active" to="/">
                 الرئيسية
               </NavLink>
             </li>
             <li className="nav-item me-4">
-              <NavLink className="nav-link border-nav" activeclassname="active" to="/trips">
+              <NavLink className="nav-link border-nav" activeClassName="active" to="/trips">
                 جولاتنا
               </NavLink>
             </li>
             <li className="nav-item me-4">
-              <NavLink className="nav-link border-nav" activeclassname="active" to="/about">
+              <NavLink className="nav-link border-nav" activeClassName="active" to="/about">
                 عنا
               </NavLink>
             </li>
             <li className="nav-item me-4">
-              <HashLink className="nav-link border-nav" activeclassname="active" smooth to="/#services">
+              <HashLink className="nav-link border-nav" activeClassName="active" smooth to="/#services">
                 خدماتنا
               </HashLink>
             </li>
             <li className="nav-item me-4">
-              <NavLink className="nav-link border-nav" activeclassname="active" to="/products">
+              <NavLink className="nav-link border-nav" activeClassName="active" to="/products">
                 المتجر
               </NavLink>
             </li>
 
-            { role === 'User' ?(
+            {role === 'User' ? (
               <li className="nav-item me-4">
-                <NavLink className="nav-link border-nav" activeclassname="active" to="/cart">
+                <NavLink className="nav-link border-nav" activeClassName="active" to="/cart">
                   السلة <span className="badge badge-info bg-secondary">{count}</span>
                 </NavLink>
               </li>
@@ -110,22 +115,31 @@ export default function Navbar() {
           </ul>
 
           <ul className="navbar-nav">
-            <li className='nav-item dropdown d-flex align-items-center '>
-              {userData? (
-                <Popup
-                  trigger={<button className="btn"><FontAwesomeIcon icon={faBell} /></button>}
-                  
-                >
-                  <div className='bg-body-tertiary  position-relative comment-container rounded-3'>
-                    {notifications.length > 0 ? notifications.map((not) => (
-                      <div key={not._id} className='p-1'>
-                        <p className='color'>{not.createdAt.split('T')[0]}</p>
-                        <p className='text-end me-3'>{not.content}</p>
-                        <hr />
-                      </div>
-                    )) : 'No notifications'}
+            <li className='nav-item dropdown d-flex align-items-center  '>
+              {userData ? (
+              <Popup
+              trigger={<button className="btn"><FontAwesomeIcon icon={faBell} /></button>}
+              position="bottom center"
+              closeOnDocumentClick
+              nested
+              arrow={false} // This line removes the arrow
+              contentStyle={{
+                borderRadius: '8px',
+                boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
+                padding: '13px',
+                minWidth: '200px'
+              }}
+            >
+              <div className='bg-body-tertiary position-relative comment-container rounded-3'>
+                {notifications.length > 0 ? notifications.map((not) => (
+                  <div key={not._id} className='p-1 shadow-sm '>
+                    <p className=' '>{not.createdAt.split('T')[0]}</p>
+                    <p className='text-end mb-0'>{not.content}</p>
                   </div>
-                </Popup>
+                )) : <p className="text-muted text-center my-2">لا يوجد اشعارات</p>}
+              </div>
+            </Popup>
+            
               ) : ''}
             </li>
             <li className="nav-item dropdown">
@@ -177,13 +191,11 @@ export default function Navbar() {
           </ul>
         </div>
       </div>
-      {
-        role === 'Admin' ? (
-          <Link to={'/dashboard/home'}>
-            <button className='btn btn-outline-dark me-2'>dashboard</button>
-          </Link>
-        ) : ''
-      }
+      {role === 'Admin' ? (
+        <Link to={'/dashboard/home'}>
+          <button className='btn btn-outline-dark me-2'>dashboard</button>
+        </Link>
+      ) : ''}
     </nav>
   );
 }

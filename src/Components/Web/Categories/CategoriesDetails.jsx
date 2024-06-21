@@ -40,9 +40,12 @@ export default function CategoriesDetails() {
   }, [data]);
 
   if (isLoading) {
-    return <div className="loading bg-transfer  w-100 d-flex justify-content-center align-items-center z-3">
-      <span className="loader"></span>
-    </div>
+    return (
+      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
+        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
+      </div>
+
+    );
   }
 
   if (isError) {

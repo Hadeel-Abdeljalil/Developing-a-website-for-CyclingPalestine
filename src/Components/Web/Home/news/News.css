@@ -28,7 +28,7 @@
     transition: transform 0.3s ease;
   }
   
-  .swiper-slide:hover {
+  .swiper-container .swiper-slide:hover {
     transform: translateY(-10px);
   }
   

@@ -24,30 +24,28 @@ export default function AllProducts() {
 
   // Fetch products based on filters
   const fetchProducts = async () => {
-    if (categoryFilter != "all") {
-      const params = {
-        status: 'Active',
-        page: currentPage,
-        sort,
-        search,
-        'price[lte]': ltePrice,
-        'price[gte]': gtePrice,
-        categoryId: categoryFilter,
-      };
-      try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getActive`, { params });
-        setProducts(data.products);
-      } catch (error) {
-        console.error(error);
-      }
+    const params = {
+      status: 'Active',
+      page: currentPage,
+      sort,
+      search,
+      'price[lte]': ltePrice,
+      'price[gte]': gtePrice,
+    };
 
-    } else {
-      try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getAll`);
-        setProducts(data.products)
-      } catch (error) {
-        console.log(error)
-      }
+    if (categoryFilter !== 'all') {
+      params.categoryId = categoryFilter;
+    }
+
+    const endpoint = categoryFilter === 'all'
+      ? `${import.meta.env.VITE_API_URL}product/getAll`
+      : `${import.meta.env.VITE_API_URL}product/getActive`;
+
+    try {
+      const { data } = await axios.get(endpoint, { params });
+      setProducts(data.products);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -139,7 +137,7 @@ export default function AllProducts() {
                 </ul>
               </div>
 
-              <select className="form-select bg-color form-select-sm w-25" onChange={(e) => setCategoryFilter(e.target.value === 'all' ? e.target.value = 'all' : e.target.value)}>
+              <select className="form-select bg-color form-select-sm w-25" onChange={(e) => setCategoryFilter(e.target.value)}>
                 <option className="dir" value="all">التصفية حسب الفئة</option>
                 {categories.map(category => (
                   <option className="dir" key={category._id} value={category._id}>{category.name}</option>

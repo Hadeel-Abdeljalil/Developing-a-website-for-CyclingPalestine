@@ -116,8 +116,8 @@ export default function News() {
                   <SwiperSlide key={index} className="swiper-slide">
                     <div>
                       <div className="d-flex justify-content-between align-items-center pb-3">
-                        <h2>{newsItem.title}</h2>
                         <p className="text-end pt-3 pe-2">{formatDate(newsItem.date)}</p>
+                        <h2>{newsItem.title}</h2>
                       </div>
                       <div className="text-end">
                         <p className="text-center">
