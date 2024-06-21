@@ -198,9 +198,9 @@ export default function Cart() {
                   </div>
                 )}
               </div>
-              <div  className='text-end'>
-              <p> المجموع الكلي   : {total}</p>
-              <p>عدد المنتجات في السلة : {quantity}</p>
+              <div  className='d-flex justify-content-between'>
+              <p > المجموع الكلي   : <span className='text-danger'>{total}</span></p>
+              <p>عدد المنتجات في السلة :<span className='text-danger'>{quantity}</span></p>
               </div>
              {products.length>0 && <div className='d-flex w-50'>
                 <div className=''>
