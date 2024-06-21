@@ -34,7 +34,8 @@ export default function Cart() {
     try {
       const res = await getCartContext();
       setProducts(res.finalProductsList || []);
-      setTotal(res.total || 0);
+      setTotal(res.totalPrice || 0);
+      setQuantity(res.numberOfProducts || 0)
       setLoading(false);
     } catch (error) {
       console.error("Error fetching cart:", error);
@@ -111,9 +112,7 @@ export default function Cart() {
                 <div className="price d-flex justify-content-center">
                   <h2>السعر</h2>
                 </div>
-                <div className="subtotal d-flex justify-content-center">
-                  <h2>السعر النهائي</h2>
-                </div>
+             
               </div>
               <div>
                 {products.length > 0 ? (
@@ -187,7 +186,6 @@ export default function Cart() {
                         </button>
                       </div>
                       <div className="price d-flex justify-content-center">{product.finalPrice}</div>
-                      <div className="subtotal d-flex justify-content-center">{product.totalPrice}</div>
                       
                     </div>
                   ))
@@ -199,6 +197,10 @@ export default function Cart() {
                     <Link to='/products' className='btn btn-outline-dark cart-product-link w-25'>المنتجات</Link>
                   </div>
                 )}
+              </div>
+              <div  className='text-end'>
+              <p> المجموع الكلي   : {total}</p>
+              <p>عدد المنتجات في السلة : {quantity}</p>
               </div>
              {products.length>0 && <div className='d-flex w-50'>
                 <div className=''>
