@@ -13,7 +13,7 @@ export default function AllProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [sort, setSort] = useState('price');
+  const [sort, setSort] = useState('name');
   const [ltePrice, setLtePrice] = useState(5000);
   const [gtePrice, setGtePrice] = useState(0);
   const [search, setSearch] = useState('');
@@ -43,6 +43,7 @@ export default function AllProducts() {
 
     try {
       const { data } = await axios.get(endpoint, { params });
+      console.log(data)
       setProducts(data.products);
     } catch (error) {
       console.error(error);
@@ -170,10 +171,10 @@ export default function AllProducts() {
             </Stack>
           </div>
 
-          <div className="row gap-3 justify-content-center">
+          <div className="row gap-3 justify-content-center dir">
             {products.length > 0 ? (
               products.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage).map(product => (
-                <div className="col-lg-3 ps-0 mb-3" style={{ width: '17rem', position: 'relative' }} key={product._id}>
+                <div className="col-lg-3 ps-0 mb-3 " style={{ width: '17rem', position: 'relative' }} key={product._id}>
                   <Link to={`/products/${product._id}`}>
                     <div className="image-container position-relative">
                       <img
