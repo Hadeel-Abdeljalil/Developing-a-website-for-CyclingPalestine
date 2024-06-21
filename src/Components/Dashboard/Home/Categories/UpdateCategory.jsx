@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 export default function UpdateCategory({ category, userToken }) {
   const [categoryName, setCategoryName] = useState(category.name);
@@ -11,6 +12,17 @@ export default function UpdateCategory({ category, userToken }) {
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
+
 
   const handleUpdate = async (event) => {
     event.preventDefault();
@@ -36,7 +48,7 @@ export default function UpdateCategory({ category, userToken }) {
       });
       if (confirmation.isConfirmed) {
         setLoading(true)
-      const response = await axios.patch(
+      const {data} = await axios.patch(
         `${import.meta.env.VITE_API_URL}category/update/${category._id}`,
         formData,
         {
@@ -46,6 +58,12 @@ export default function UpdateCategory({ category, userToken }) {
           },
         }
       );
+      if(data.message =="success"){
+        location.reload()
+        toast.success("تم تعديل الفئة",toastConfig)
+        
+      }
+      console.log(data)
       setLoading(false)
     }} catch (error) {
       console.error('Error updating category:', error);

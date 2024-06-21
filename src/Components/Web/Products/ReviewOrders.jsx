@@ -145,7 +145,7 @@ export default function ReviewOrders({ productId }) {
                           <div>
                               <p className="p-0 m-0 mb-1">{comment.userName}</p>
                               <div className='d-flex comment-text'>
-                                  <p className="bg-body-tertiary mx-2 p-3">{comment.text}</p>
+                                  <p className="bg-body-tertiary mx-2 p-3">{comment.comment}</p>
                                  
                               </div>
                           </div>

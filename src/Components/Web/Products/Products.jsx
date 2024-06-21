@@ -203,7 +203,7 @@ export default function Products() {
                  {
               role =="Admin"?
               <div className='d-flex align-items-center'>
-                <p>الحالة : {data.status}</p>
+                <p>الحالة : {data.status=="notActive"?"غير مفعل":"مفعل"}</p>
                 <button className='border-0 bg-transparent pb-3' onClick={()=>changeStatus(productId,data.status)}>تغيير الحالة</button>
               </div>
               :''

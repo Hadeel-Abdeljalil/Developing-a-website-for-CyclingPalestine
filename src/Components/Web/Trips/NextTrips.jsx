@@ -167,7 +167,7 @@ export default function NextTrips() {
         }
       }
     } catch (error) {
-      if(error.response.data?.message=="our age is less than the permissible limit"){
+      if(error.response.data?.message=="Your age is less than the permissible limit"){
         toast.warn("عمرك أقل من الحد المسموح به ", toastConfig);
       }else  if(error.response.data?.message=="Enter your date of birth in your profile plz"){
         toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig);
