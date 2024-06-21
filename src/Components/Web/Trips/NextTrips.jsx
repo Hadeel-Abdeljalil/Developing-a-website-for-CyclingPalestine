@@ -129,7 +129,6 @@ export default function NextTrips() {
     }
   };
   
-
   const handelparticipating = async (trackId) => {
     try {
       const confirmation = await Swal.fire({

@@ -112,7 +112,7 @@ export default function Cart() {
                   <h2>السعر</h2>
                 </div>
                 <div className="subtotal d-flex justify-content-center">
-                  <h2>المجموع</h2>
+                  <h2>السعر النهائي</h2>
                 </div>
               </div>
               <div>

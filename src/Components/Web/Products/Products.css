@@ -79,3 +79,6 @@ select{
     width: 30rem;
     height: 35rem;
 }
+.pointer:hover{
+cursor: pointer;
+}

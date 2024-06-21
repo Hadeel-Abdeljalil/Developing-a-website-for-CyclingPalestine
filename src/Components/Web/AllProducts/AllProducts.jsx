@@ -182,7 +182,7 @@ export default function AllProducts() {
                         src={product.mainImage.secure_url}
                         alt="Card image cap"
                       />
-                      <div className="icon-container position-absolute bottom-0 start-50 mb-3 d-flex justify-content-center d-icon">
+                      <div className="icon-container position-absolute bottom-0 start-50 mb-3 d-flex justify-content-center d-icon dir2">
                         <button
                           onClick={(e) => { e.preventDefault(); addToCartContext(product._id); }}
                           className="icon-card rounded-circle text-dark bg-white d-flex card-icon justify-content-center align-items-center w-100 h-100 col-lg-3 border-0"
