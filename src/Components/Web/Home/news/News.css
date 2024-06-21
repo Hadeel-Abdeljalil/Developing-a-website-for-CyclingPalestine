@@ -1,0 +1,127 @@
+/* General styling */
+.section {
+    padding: 2rem;
+    background-color: #f8f9fa;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .swiper-container .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .swiper-container .swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .swiper-slide:hover {
+    transform: translateY(-10px);
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-end {
+    text-align: right;
+  }
+  
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+  }
+  
+  .news-image {
+    max-width: 250px;
+    max-height: 250px;
+    margin: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .news-video {
+    max-width: 100%;
+    max-height: 500px;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .btn-outline-info {
+    color: #17a2b8;
+    border-color: #17a2b8;
+  }
+  
+  .btn-outline-info:hover {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+  
+  .toggle-text {
+    color: #007bff;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+  
+  .toggle-text:hover {
+    text-decoration: underline;
+  }
+  
+  /* Swiper modal custom styles */
+  .swiper-modal .swiper-button-next,
+  .swiper-modal .swiper-button-prev {
+    color: #fff;
+  }
+  
+  .swiper-modal .swiper-button-next {
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .swiper-modal .swiper-button-prev {
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  

@@ -50,7 +50,7 @@ export default function Cart() {
     try {
       const res = await removeFromCartContext(productId);
       if (res.message === "product removed") {
-        toast.success("تم حذف المنتج من السلة", toastConfig);
+        toast.success("تم حذف المنتج بنجاح", toastConfig);
         getCart(); // Fetch updated cart after removal
       }
     } catch (error) {

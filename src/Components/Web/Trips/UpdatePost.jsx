@@ -96,7 +96,7 @@ export default function UpdatePost({ item}) {
                     name="title"
                     value={formik.values.title}
                     onChange={formik.handleChange}
-                    required
+                    
                 />
             </div>
             <div className="form-group justify-content-around mb-2">
@@ -106,7 +106,7 @@ export default function UpdatePost({ item}) {
                     name="description"
                     value={formik.values.description}
                     onChange={formik.handleChange}
-                    required
+                    
                 />
             </div>
             <div className="form-group justify-content-around mb-2">
@@ -117,7 +117,7 @@ export default function UpdatePost({ item}) {
                     name="mainImage"
                     ref={mainImageInputRef}
                     onChange={handleChange}
-                    required
+                    
                 />
                 <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleMainImageClick}>
                     اختر الصورة

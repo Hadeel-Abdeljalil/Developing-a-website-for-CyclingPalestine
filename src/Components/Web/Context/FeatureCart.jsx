@@ -66,9 +66,6 @@ export function CartContextProvider({ children }) {
             const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}cart/remove/${productId}`, {}, 
                 { headers: { Authorization: `Rufaidah__${token}` } });
 
-                if(data.message === "product removed"){
-                    toast.success("تم  حذف المنتج بنجاح")
-                }
             setCount(prevCount => prevCount - 1);
             setCart(null);
             setCartItems(data.cart);
