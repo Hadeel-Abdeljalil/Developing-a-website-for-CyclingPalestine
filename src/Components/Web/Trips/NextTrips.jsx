@@ -154,23 +154,19 @@ export default function NextTrips() {
         if (response.data.message === 'success') {
           toast.success("تمت المشاركة بنجاح", toastConfig);
           location.reload();
-        } else if (response.data.message === 'Enter your date of birth in your profile plz') {
-          toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig);
-        } else if (response.data.message === "Your age is less than the permissible limit ") {
-          toast.warn("عمرك أقل من الحد المسموح به ", toastConfig);
-        } else if (response.data.message === 'Sorry! The track is full.') {
-          toast.warn("نأسف!  العدد اكتمل.", toastConfig);
-        } else if (response.data.message === 'this track is finished') {
-          toast.warn("تم الانتهاء من هذا المسار", toastConfig);
-        } else if (response.data.message === 'You have already participated in this track.') {
-          toast.warn("انت مشارك بالفعل في هذا المسار", toastConfig);
-        }
+        } 
       }
     } catch (error) {
       if(error.response.data?.message=="Your age is less than the permissible limit"){
         toast.warn("عمرك أقل من الحد المسموح به ", toastConfig);
       }else  if(error.response.data?.message=="Enter your date of birth in your profile plz"){
         toast.warn("أدخل تاريخ ميلادك في ملفك الشخصي من فضلك ", toastConfig);
+      } else if (error.response.data?.message == 'Sorry! The track is full.') {
+        toast.warn("نأسف!  العدد اكتمل.", toastConfig);
+      }else if (error.response.data?.message == 'this track is finished') {
+        toast.warn("تم الانتهاء من هذا المسار", toastConfig);
+      } else if (error.response.data?.message == 'You have already participated in this track.') {
+        toast.warn("انت مشارك بالفعل في هذا المسار", toastConfig);
       }
       console.error(error.response.data.message);
     }

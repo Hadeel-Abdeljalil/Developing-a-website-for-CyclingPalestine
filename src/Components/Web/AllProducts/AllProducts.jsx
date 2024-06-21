@@ -203,7 +203,7 @@ export default function AllProducts() {
                       </div>
                     </div>
                   </Link>
-                  <p className="text-center">{product.name}</p>
+                  <p className="text-center text-dark">{product.name}</p>
                   <p className="text-center text-secondary dir">{product.price} شيكل</p>
                 </div>
               ))
