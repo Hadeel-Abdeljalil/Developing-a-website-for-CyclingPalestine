@@ -37,6 +37,7 @@ export default function ReviewOrders({ productId }) {
                 { text: values.text },
                 { headers: { Authorization: `Rufaidah__${token}` } }
             );
+            
             if (data.message === 'success') {
                 resetForm();
                 setComments(prevComments => [...prevComments, { text: values.text, _id: data.commentId }]);
@@ -95,8 +96,10 @@ export default function ReviewOrders({ productId }) {
 
     const fetchComments = async () => {
         try {
-            const { data } = await axios.get(`https://cycling-palestine.onrender.com/post/comments/${productId}`);
-            return data.comments || [];
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/${productId}/review`);
+            console.log(data)
+            setComments(data.reviews)
+            return data.reviews || [];
         } catch (error) {
             console.error('Error fetching comments:', error);
             return [];
@@ -137,9 +140,16 @@ export default function ReviewOrders({ productId }) {
                 </form>
                 <div className="comments-section">
                     {comments.map(comment => (
-                        <div key={comment._id} className="comment">
-                            {comment.text}
-                        </div>
+                          <div key={comment._id} className="text-end d-flex dir">
+                          <img src={comment?.userImage?.secure_url || '/images/profile.jpeg'} alt="user" className="rounded-circle comment-image ms-1" />
+                          <div>
+                              <p className="p-0 m-0 mb-1">{comment.userName}</p>
+                              <div className='d-flex comment-text'>
+                                  <p className="bg-body-tertiary mx-2 p-3">{comment.text}</p>
+                                 
+                              </div>
+                          </div>
+                      </div>
                     ))}
                 </div>
             </div>

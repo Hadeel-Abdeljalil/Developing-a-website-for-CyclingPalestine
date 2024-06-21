@@ -159,7 +159,7 @@ export default function NextTrips() {
         } else if (response.data.message === "Your age is less than the permissible limit ") {
           toast.warn("عمرك أقل من الحد المسموح به ", toastConfig);
         } else if (response.data.message === 'Sorry! The track is full.') {
-          toast.warn("نأسف! المسار ممتلئ.", toastConfig);
+          toast.warn("نأسف!  العدد اكتمل.", toastConfig);
         } else if (response.data.message === 'this track is finished') {
           toast.warn("تم الانتهاء من هذا المسار", toastConfig);
         } else if (response.data.message === 'You have already participated in this track.') {
