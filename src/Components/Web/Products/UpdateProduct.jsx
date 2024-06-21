@@ -80,8 +80,8 @@ export default function UpdateProduct({ item }) {
                     formData.append('name', values.name);
                     formData.append('price', values.price);
                     formData.append('description', values.description);
-                    formData.append('stock', values.stock);
-                    formData.append('discount', values.discount);
+                    formData.append('stock', values.stock?values.stock: 0);
+                    formData.append('discount', values.discount? values.discount:0);
 
                     if (values.mainImage) {
                         formData.append('mainImage', values.mainImage);
@@ -160,7 +160,7 @@ export default function UpdateProduct({ item }) {
                     type="number"
                     className="form-control"
                     name="stock"
-                    value={formik.values.stock}
+                    value={formik.values.stock || 0}
                     onChange={formik.handleChange}
                     
                 />
@@ -171,7 +171,7 @@ export default function UpdateProduct({ item }) {
                     type="number"
                     className="form-control"
                     name="discount"
-                    value={formik.values.discount}
+                    value={formik.values.discount || 0}
                     onChange={formik.handleChange}
                     
                 />
@@ -231,6 +231,6 @@ export default function UpdateProduct({ item }) {
             </div>
         </form>
     ) : (
-        <p>Loading...</p>
+        ""
     );
 }
