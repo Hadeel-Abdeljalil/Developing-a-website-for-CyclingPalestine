@@ -151,7 +151,7 @@ export default function UpdateProduct({ item }) {
                     name="name"
                     value={formik.values.name}
                     onChange={formik.handleChange}
-                    required
+                    
                 />
             </div>
             <div className="form-group justify-content-around mb-2">
@@ -162,7 +162,7 @@ export default function UpdateProduct({ item }) {
                     name="stock"
                     value={formik.values.stock}
                     onChange={formik.handleChange}
-                    required
+                    
                 />
             </div>
             <div className="form-group justify-content-around mb-2">
@@ -173,7 +173,7 @@ export default function UpdateProduct({ item }) {
                     name="discount"
                     value={formik.values.discount}
                     onChange={formik.handleChange}
-                    required
+                    
                 />
             </div>
             <div className="form-group justify-content-around mb-2">
@@ -184,7 +184,7 @@ export default function UpdateProduct({ item }) {
                     name="price"
                     value={formik.values.price}
                     onChange={formik.handleChange}
-                    required
+                    
                 />
             </div>
             <div className="form-group justify-content-around mb-2">
@@ -194,7 +194,7 @@ export default function UpdateProduct({ item }) {
                     name="description"
                     value={formik.values.description}
                     onChange={formik.handleChange}
-                    required
+                    
                 />
             </div>
             <div className="form-group justify-content-around mb-2">
