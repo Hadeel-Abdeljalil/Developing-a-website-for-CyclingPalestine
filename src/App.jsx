@@ -38,7 +38,7 @@ export default function App() {
       >
         <BsWhatsapp className="" />
         {showMessage && (
-          <div className="message-box dir">
+          <div className="message-box dir ">
             مرحباً، كيف يمكننا مساعدتك؟
           </div>
         )}

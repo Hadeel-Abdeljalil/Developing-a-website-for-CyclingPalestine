@@ -20,6 +20,7 @@ export default function News() {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [videoPlaying, setVideoPlaying] = useState(false);
   const role = userData?.role;
 
   useEffect(() => {
@@ -96,9 +97,17 @@ export default function News() {
     setShowModal(true);
   };
 
+  const handleVideoPlay = () => {
+    setVideoPlaying(true);
+  };
+
+  const handleVideoPause = () => {
+    setVideoPlaying(false);
+  };
+
   return (
-    <section className="section my-5 swiper-container">
-      <div className="h-100 w-100">
+    <section className="section my-4 swiper-container">
+      <div className="">
         <h1>أخبار فلسطين على البسكليت</h1>
         <div className="container">
           {error ? (
@@ -108,7 +117,7 @@ export default function News() {
               modules={[Scrollbar, Autoplay]}
               spaceBetween={70}
               slidesPerView={1}
-              loop={true}
+              loop={!videoPlaying && !showModal} // Disable loop when video is playing or modal is open
               autoplay={{ delay: 7000 }}
             >
               {news.length > 0 ? (
@@ -132,13 +141,13 @@ export default function News() {
 
                       {/* Display images if available */}
                       {newsItem.images.length > 0 && (
-                        <div className="mb-3 d-flex justify-content-center flex-wrap">
+                        <div className="mb-3 d-flex justify-content-center flex-wrap ">
                           {newsItem.images.map((image, idx) => (
                             <img
                               key={idx}
                               src={image.secure_url}
                               alt={`Image ${idx + 1}`}
-                              className="img-fluid rounded mx-1 news-image"
+                              className="img-fluid rounded mx-1 news-image "
                               onClick={() => handleImageClick(newsItem.images)}
                             />
                           ))}
@@ -148,7 +157,12 @@ export default function News() {
                       {/* Display video if available */}
                       {newsItem.video && (
                         <div className="mb-3 d-flex justify-content-center">
-                          <video controls className="img-fluid rounded news-video">
+                          <video
+                            controls
+                            className="img-fluid rounded news-video w-50"
+                            onPlay={handleVideoPlay}
+                            onPause={handleVideoPause}
+                          >
                             <source src={newsItem.video.secure_url} type="video/mp4" />
                             Your browser does not support the video tag.
                           </video>
@@ -192,14 +206,18 @@ export default function News() {
             modules={[Pagination, Navigation]}
             spaceBetween={10}
             slidesPerView={1}
-            loop={true}
+            loop={true} // Always loop in the modal
             pagination={{ clickable: true }}
             navigation
             className="swiper-modal"
           >
             {selectedImages.map((image, idx) => (
               <SwiperSlide key={idx}>
-                <img src={image.secure_url} alt={`Image ${idx + 1}`} className="img-fluid rounded mx-auto d-block w-100" />
+                <img
+                  src={image.secure_url}
+                  alt={`Image ${idx + 1}`}
+                  className="img-fluid rounded mx-auto d-block w-100"
+                />
               </SwiperSlide>
             ))}
           </Swiper>

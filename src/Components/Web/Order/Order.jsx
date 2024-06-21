@@ -16,7 +16,14 @@ export default function Order() {
         phone: '',
         address: '',
     };
-    const { getCartContext } = useContext(CartContext);
+    const { getCartContext,clearCartContext } = useContext(CartContext);
+    const clearCart = async () => {
+        try {
+          await clearCartContext();
+        } catch (error) {
+          console.error("Error clearing cart:", error);
+        }
+      };
 
     const getCart = async () => {
         const res = await getCartContext();
@@ -51,6 +58,7 @@ export default function Order() {
             );
             console.log(data)
             if (data.message == 'success') {
+                clearCart()
                 toast.success(`تم تأكيد الطلب بنجاح`, toastConfig);
             }
             return data;

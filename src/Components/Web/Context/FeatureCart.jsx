@@ -86,7 +86,6 @@ export function CartContextProvider({ children }) {
             setCart(null);
             setCartItems([]);
             setCartCleared(true);
-            toast.warn('تم تفريغ السلة', toastConfig);
             return data;
         } catch (error) {
             console.error(error);

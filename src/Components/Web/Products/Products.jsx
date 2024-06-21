@@ -4,8 +4,7 @@ import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CartContext } from '../Context/FeatureCart';
 import { UserContext } from '../Context/FeatureUser';
-import SwiperReviews from './SwiperReviews';
-import TripComments from './TripComments';
+import ReviewOrders from './ReviewOrders.jsx'
 import InnerImageZoom from 'react-inner-image-zoom';
 import { BiCart } from 'react-icons/bi';
 import './Products.css';
@@ -287,8 +286,7 @@ export default function Products() {
       </h2>
       <div className=' d-flex justify-content-center'>
         <div className='mt-5 w-50 '>
-          <h1 className='dir'>التعليقات</h1>
-          <TripComments productId={productId} />
+          <ReviewOrders productId={productId}/>          
         </div>
       </div>
     </div>

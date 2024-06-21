@@ -65,6 +65,7 @@ export default function Cart() {
       setProducts([]);
       setTotal(0);
       setLoading(false);
+      toast.warn('تم تفريغ السلة', toastConfig);
     } catch (error) {
       console.error("Error clearing cart:", error);
       setLoading(false);
@@ -187,8 +188,10 @@ export default function Cart() {
                       </div>
                       <div className="price d-flex justify-content-center">{product.finalPrice}</div>
                       <div className="subtotal d-flex justify-content-center">{product.totalPrice}</div>
+                      
                     </div>
                   ))
+                  
                 ) : (
                   <div className='dir'>
                     <h2>السلة فارغة</h2>
@@ -197,20 +200,15 @@ export default function Cart() {
                   </div>
                 )}
               </div>
-              <div className='d-flex w-50'>
+             {products.length>0 && <div className='d-flex w-50'>
                 <div className=''>
                   <button className='btn btn-outline-danger border border-danger text-center mx-3' onClick={clearCart} disabled={count === 0}>تفريغ السلة</button>
                 </div>
                 <div className="">
                   <Link to='/order'><button className='btn btn-outline-info border border-info text-center mx-3'>إكمال الطلب</button></Link>
                 </div>
-              </div>
-              {products.length === 0 && (
-                <div className="dir mt-3">
-                  <p>لا يوجد منتجات في السلة</p>
-                  <Link to='/products'><button className='btn btn-outline-success border border-success text-center mx-3'>العودة الى المتجر</button></Link>
-                </div>
-              )}
+              </div>}
+              
             </div>
           </div>
         </div>
