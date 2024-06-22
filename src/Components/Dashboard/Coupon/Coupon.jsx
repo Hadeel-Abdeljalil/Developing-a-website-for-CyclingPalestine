@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../Web/Context/FeatureUser.jsx';
 import Popup from 'reactjs-popup';
+import Swal from 'sweetalert2';
 
 export default function Coupon() {
   const { userToken } = useContext(UserContext);
@@ -14,6 +15,16 @@ export default function Coupon() {
   const [loading, setLoading] = useState(false);
   const [coupons, setCoupons] = useState([]);
 
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light"
+  };
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -42,16 +53,7 @@ export default function Coupon() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const toastConfig = {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light"
-    };
+  
 
     try {
       setLoading(true);
@@ -93,16 +95,18 @@ export default function Coupon() {
   };
 
   const handleDelete = async (id) => {
-    const toastConfig = {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light"
-    };
+   const confirmation = await Swal.fire({
+        title: "<div class='p-3 pt-5'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      if (confirmation.isConfirmed) {
     try {
       const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}coupon/delete/${id}`, {
         headers: {
@@ -119,7 +123,7 @@ export default function Coupon() {
     } catch (error) {
       toast.error('حدث خطأ أثناء حذف الكوبون', toastConfig);
       console.error('Error during deletion:', error);
-    }
+    }}
   };
 
   useEffect(() => {

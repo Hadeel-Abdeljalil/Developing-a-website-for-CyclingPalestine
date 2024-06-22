@@ -4,6 +4,7 @@ import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
 import { toast } from 'react-toastify';
 import Popup from 'reactjs-popup';
 import UpdateCategory from './UpdateCategory.jsx';
+import Swal from 'sweetalert2';
 
 export default function Categories() {
   const { userToken } = useContext(UserContext);
@@ -15,6 +16,16 @@ export default function Categories() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const imageInputRef = useRef(null);
+  const toastConfig = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light"
+  };
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -35,16 +46,7 @@ export default function Categories() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const toastConfig = {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light"
-    };
+    
 
     try {
       setLoading(true);
@@ -103,16 +105,18 @@ export default function Categories() {
   };
 
   const handleDelete = async (id) => {
-    const toastConfig = {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light"
-    };
+     const confirmation = await Swal.fire({
+        title: "<div class='p-3 pt-5'>هل أنت متأكد؟</div>",
+        confirmButtonText: "<span class=''>نعم</span>",
+        cancelButtonText: "<span class='mb-3'>لا</span>",
+        showCancelButton: true,
+        showCloseButton: true,
+        customClass: {
+          confirmButton: 'btn bg-white border border-success text-dark',
+          cancelButton: 'btn bg-white border text-dark'
+        },
+      });
+      if (confirmation.isConfirmed) {
     try {
       setLoading(true);
       const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}category/delete/${id}`, {
@@ -134,7 +138,7 @@ export default function Categories() {
       setLoading(false);
       toast.error('حدث خطأ أثناء حذف الفئة', toastConfig);
       console.error('Error during deletion:', error);
-    }
+    }}
     setLoading(false);
   };
 
@@ -223,7 +227,7 @@ export default function Categories() {
                 <img src={category.image.secure_url} alt={category.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
               </td>
               <td>{new Date(category.createdAt).toLocaleDateString()}</td>
-              <td>{category.status}</td>
+              <td>{category.status =="Active"?"مفعل":" غير مفعل"}</td>
               <td >
                 <button className="btn btn-danger" onClick={() => handleDelete(category._id)}>
                   حذف
