@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 export default function UpdateCategory({ category, userToken }) {
   const [categoryName, setCategoryName] = useState(category.name);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [status, setStatus] = useState(category.status || 'active');
+  const [status, setStatus] = useState(category.status || 'Active');
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
@@ -59,7 +59,6 @@ export default function UpdateCategory({ category, userToken }) {
         }
       );
       if(data.message =="success"){
-        location.reload()
         toast.success("تم تعديل الفئة",toastConfig)
         
       }
@@ -110,8 +109,8 @@ export default function UpdateCategory({ category, userToken }) {
           onChange={(e) => setStatus(e.target.value)}
           required
         >
-          <option value="active">نشط</option>
-          <option value="inactive">غير نشط</option>
+          <option value="Active">نشط</option>
+          <option value="notActive">غير نشط</option>
         </select>
       </div>
       <div className='d-flex justify-content-end mt-3'>

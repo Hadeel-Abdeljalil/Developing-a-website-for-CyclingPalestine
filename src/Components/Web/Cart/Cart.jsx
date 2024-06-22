@@ -17,7 +17,7 @@ export default function Cart() {
   const [isLoading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
 
   const toastConfig = {
     position: "top-right",

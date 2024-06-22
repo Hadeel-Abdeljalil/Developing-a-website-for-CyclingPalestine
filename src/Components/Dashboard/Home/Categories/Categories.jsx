@@ -88,7 +88,12 @@ export default function Categories() {
 
   const getCategories = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getActive`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}category/getAll`,{
+        headers: {
+          Authorization: `Rufaidah__${userToken}`,
+        },
+      });
+      console.log(data)
       if (data && data.message === "success") {
         setCategories(data.categories);
       }
@@ -205,7 +210,8 @@ export default function Categories() {
           <tr>
             <th>الاسم</th>
             <th>الصورة</th>
-            <th>التاريخ</th>
+            <th>تاريخ الانشاء</th>
+            <th>الحالة</th>
             <th>إجراءات</th>
           </tr>
         </thead>
@@ -217,6 +223,7 @@ export default function Categories() {
                 <img src={category.image.secure_url} alt={category.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
               </td>
               <td>{new Date(category.createdAt).toLocaleDateString()}</td>
+              <td>{category.status}</td>
               <td >
                 <button className="btn btn-danger" onClick={() => handleDelete(category._id)}>
                   حذف

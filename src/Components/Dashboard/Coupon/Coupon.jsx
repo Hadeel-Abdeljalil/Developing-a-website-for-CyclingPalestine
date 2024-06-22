@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../Web/Context/FeatureUser.jsx';
@@ -9,34 +9,34 @@ export default function Coupon() {
   const [formData, setFormData] = useState({
     code: '',
     discountPercentage: '',
-    expiredDate:'',
+    expiredDate: '',
   });
   const [loading, setLoading] = useState(false);
   const [coupons, setCoupons] = useState([]);
 
-
   const handleChange = e => {
-    const { name, value} = e.target;
-   
-      setFormData(prevState => ({
-        ...prevState,
-        [name]: value
-      }));
-    
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   const getCoupons = async () => {
+    setLoading(true);
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}coupon/getAll`,
-        { headers: {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}coupon/getAll`, {
+        headers: {
           Authorization: `Rufaidah__${userToken}`
-        }}
-      );
+        }
+      });
       if (data && data.message === "success") {
         setCoupons(data.coupons);
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +52,7 @@ export default function Coupon() {
       progress: undefined,
       theme: "light"
     };
-  
+
     try {
       setLoading(true);
       const formDataToSend = {
@@ -60,52 +60,39 @@ export default function Coupon() {
         discountPercentage: formData.discountPercentage,
         expiredDate: formData.expiredDate
       };
-  
+
       const response = await axios.post(`${import.meta.env.VITE_API_URL}coupon/create`, formDataToSend, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Rufaidah__${userToken}`
         }
       });
-  
+
       const { data } = response;
-  
-      console.log(data);
-  
+
       if (data && data.message === "coupon created successfully") {
         toast.success('تمت إضافة الكوبون بنجاح', toastConfig);
         setFormData({
           code: '',
-          discountPercentage: 0,
+          discountPercentage: '',
           expiredDate: '',
         });
-      } else if(data && data.message === "name already exists"){
-        toast.success('الكوبون موجود مسبقاً', toastConfig);
-      }
-      else {
-        setLoading(false);
+        getCoupons();  // Refresh the coupon list
+      } else if (data && data.message === "name already exists") {
+        toast.warn('الكوبون موجود مسبقاً', toastConfig);
+      } else {
         toast.error('حدث خطأ أثناء إضافة الكوبون', toastConfig);
         console.error('Server data error:', data);
       }
     } catch (error) {
-      setLoading(false);
       toast.error('حدث خطأ أثناء إضافة الكوبون', toastConfig);
       console.error('Error during submission:', error);
-  
-      if (error.response) {
-        setLoading(false);
-        console.error('Server error data:', error.response.data);
-      } else if (error.request) {
-        console.error('No data received:', error.request);
-      } else {
-        console.error('Error message:', error.message);
-      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDelete = async (id) => {
-    console.log(id)
     const toastConfig = {
       position: "top-right",
       autoClose: 2000,
@@ -122,7 +109,6 @@ export default function Coupon() {
           Authorization: `Rufaidah__${userToken}`
         }
       });
-      console.log(data)
       if (data && data.message === "coupon deleted successfully") {
         toast.success('تم حذف الكوبون بنجاح', toastConfig);
         getCoupons();
@@ -131,23 +117,15 @@ export default function Coupon() {
         console.error('Server data error:', data);
       }
     } catch (error) {
+      toast.error('حدث خطأ أثناء حذف الكوبون', toastConfig);
       console.error('Error during deletion:', error);
     }
-    setLoading(false);
   };
-  
-  if (loading) {
-    return (
-      <div className="loading bg-transfer w-100 vh-100 d-flex justify-content-center align-items-center z-3">
-        <img src="/images/xxx.gif" alt="ss" className="img-fluid" style={{ width: '200px' }} />
-      </div>
-
-    );
-  }
 
   useEffect(() => {
     getCoupons();
   }, []);
+
   const today = new Date().toISOString().split('T')[0];
 
   return (
@@ -197,7 +175,7 @@ export default function Coupon() {
           </button>
         </div>
       </form>
-      
+
       <h2 className='mt-5'> الكوبونات</h2>
       <table className="table table-bordered mt-3">
         <thead>
@@ -217,23 +195,26 @@ export default function Coupon() {
               <td>%{coupon.discountPercentage}</td>
               <td>{new Date(coupon.createdAt).toLocaleDateString()}</td>
               <td>{new Date(coupon.expiredDate).toLocaleDateString()}</td>
-              <td>{
+              <td>
                 <ul>
-                  {coupon.usedBy.map((user)=>{
-                    <li>{}</li>
-                  })}
+                  {coupon?.usedBy.map((user) => (
+                    <li key={user.id}>{user.userName}</li>
+                  ))}
                 </ul>
-                }</td>
-              <td >
+              </td>
+              <td>
                 <button className="btn btn-danger" onClick={() => handleDelete(coupon._id)}>
                   حذف
                 </button>
                 <Popup
-                  trigger={<button className="btn btn-info me-2" onClick={() => handleUpdate(coupon._id)}>
+                  trigger={<button className="btn btn-info me-2">
                     تعديل
                   </button>}
                   position='center center'
                 >
+                  <div>
+                    {/* Place your update form or component here */}
+                  </div>
                 </Popup>
               </td>
             </tr>
