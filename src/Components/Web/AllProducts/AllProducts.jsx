@@ -11,11 +11,11 @@ import './AllProducts.css';
 import { UserContext } from '../Context/FeatureUser.jsx';
 
 export default function AllProducts() {
-  const {userToken} =useContext(UserContext)
+  const {userToken, userData} =useContext(UserContext)
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [sort, setSort] = useState('name');
+  const [sort, setSort] = useState('new');
   const [ltePrice, setLtePrice] = useState(5000);
   const [gtePrice, setGtePrice] = useState(0);
   const [search, setSearch] = useState('');
@@ -23,11 +23,11 @@ export default function AllProducts() {
   const { addToCartContext } = useContext(CartContext);
   const productsPerPage = 12;
   const typedElement = useRef(null);
+  const role = userData?.role;
 
   // Fetch products based on filters
   const fetchProducts = async () => {
     const params = {
-      status: 'Active',
       page: currentPage,
       sort,
       search,
@@ -38,13 +38,23 @@ export default function AllProducts() {
     if (categoryFilter !== 'all') {
       params.categoryId = categoryFilter;
     }
+    if(role === 'User'){
+      params.status= 'Active';
+    }
+    // if(categoryFilter === 'all' && role === "User"){
+    //   `${import.meta.env.VITE_API_URL}product/getAll`
+    // }else if(categoryFilter === 'all' && role === "admin"){
+    //   `${import.meta.env.VITE_API_URL}product/getallStatus/664c8ae88c57dbaf72c3974f`
+    // }else{
+    //   `${import.meta.env.VITE_API_URL}product/getActive`
+    // }
 
-    const endpoint = categoryFilter === 'all'
-      ? `${import.meta.env.VITE_API_URL}product/getAll`
-      : `${import.meta.env.VITE_API_URL}product/getActive`;
+    // const endpoint = role === 'User' ?
+    //    `${import.meta.env.VITE_API_URL}product/getActive`
+    //   : `${import.meta.env.VITE_API_URL}product/getallStatus/664c8ae88c57dbaf72c3974f`;
 
     try {
-      const { data } = await axios.get(endpoint, { params });
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}product/getActive`, { params });
       console.log(data)
       setProducts(data.products.reverse());
     } catch (error) {
@@ -114,7 +124,7 @@ export default function AllProducts() {
                 <ul className="dropdown-menu">
                   <li><button className="dropdown-item" onClick={() => setSort('name')}>الاسم</button></li>
                   <li><button className="dropdown-item" onClick={() => setSort('price')}>السعر</button></li>
-                  <li><button className="dropdown-item" onClick={() => setSort('rating')}>الأعلى تقييم</button></li>
+                  <li><button className="dropdown-item" onClick={() => setSort('new')}> الأحدث</button></li>
                 </ul>
               </div>
 
