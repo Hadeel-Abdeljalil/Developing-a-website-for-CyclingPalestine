@@ -109,8 +109,8 @@ export default function UpdateCategory({ category, userToken }) {
           onChange={(e) => setStatus(e.target.value)}
           required
         >
-          <option value="Active">نشط</option>
-          <option value="notActive">غير نشط</option>
+          <option value="Active">مفعل</option>
+          <option value="notActive">غير مفعل</option>
         </select>
       </div>
       <div className='d-flex justify-content-end mt-3'>
