@@ -68,7 +68,7 @@ export default function Trips() {
 
   return (
     <div className="container mt-3">
-      <h1 className='mb-3'>اضافة رحلة جديدة</h1>
+      <h1 className='mb-3  text-end'>اضافة رحلة جديدة</h1>
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
         <div className="row">
           <div className="col-lg-6 mb-3 d-flex">

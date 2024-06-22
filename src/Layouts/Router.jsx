@@ -31,6 +31,7 @@ import ProfileHome from '../Components/Web/Profile/ProfileHome.jsx';
 import AdminProtectedRouter from '../Components/Web/ProtectedRoute/AdminProtectedRouter.jsx';
 import Post from '../Components/Dashboard/Home/Post/Post.jsx';
 import News from '../Components/Dashboard/Home/news/News.jsx';
+import Coupon from '../Components/Dashboard/Coupon/Coupon.jsx';
 
 export const router = createBrowserRouter([
 
@@ -176,6 +177,10 @@ export const router = createBrowserRouter([
       {
         path:'products',
         element:<ProductsA/>
+      },
+      {
+        path:'coupon',
+        element:<Coupon/>
       },
       {
         path:'news',

@@ -8,6 +8,7 @@ export default function UserOrders() {
 
     const getUserOrders = async () => {
         const res = await getUserOrdersContext();
+        console.log(res)
         return res.orders;
     }
     const { data, isLoading } = useQuery('order-content', getUserOrders);
@@ -18,6 +19,13 @@ export default function UserOrders() {
         </div>
     }
     let counter = 0;
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
 
     return (
         <div className=" border rounded-2 mt-5 shadowx">
@@ -26,29 +34,32 @@ export default function UserOrders() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">العنوان</th>
-                            <th scope="col"> نوع الدفع</th>
-                            <th scope="col"> موعد الطلب</th>
-                            <th scope="col">الحالة</th>
-                            <th scope="col">السعر النهائي</th>
-                            <th scope="col">اسم الكوبون</th>
-                            <th scope="col">تفاصيل</th>
+                            <th className='text-center'>#</th>
+                            <th className='text-center '>المنتجات</th>
+                            <th className='text-center'>العنوان</th>
+                            <th className='text-center'>الدفع</th>
+                            <th className='text-center'> الموعد</th>
+                            <th className='text-center bg-warning-subtle'>الحالة</th>
+                            <th className='text-center'>السعر النهائي</th>
                         </tr>
                     </thead>
                     <tbody>
                         {data?.length ? data.map((order) =>
                             <React.Fragment key={order._id}>
                                 <tr>
-                                    <td>{counter++}</td>
-                                    <td>{order.address}</td>
-                                    <td>{order.paymentType}</td>
-                                    <td>{order.createdAt}</td>
-                                    <td>{order.status}</td>
-                                    <td>{order.finalPrice}شيكل</td>
-                                    <td>{order.couponName}</td>
-                                    <td><Link to='orderDetails'></Link></td>
-
+                                    <td className='text-center'>{counter++}</td>
+                                    <td className='text-center '> <ul>
+                                        {order.products.map((product) => (
+                                            <li>{product.productName}/
+                                                <span className='text-danger '>الكمية(<span className='text-dark'>{product.quantity}</span>)</span>
+                                            </li>
+                                        ))}
+                                    </ul></td>
+                                    <td className='text-center'>{order.address}</td>
+                                    <td className='text-center'>{order.paymentType}</td>
+                                    <td className='text-center px-4'>{formatDate(order.createdAt)}</td>
+                                    <td className='text-center bg-warning-subtle'>{order.status}</td>
+                                    <td className='text-center '>{order.amount}شيكل</td>
                                 </tr>
                             </React.Fragment>
                         ) : <h2>لا يوجد طلبات</h2>}

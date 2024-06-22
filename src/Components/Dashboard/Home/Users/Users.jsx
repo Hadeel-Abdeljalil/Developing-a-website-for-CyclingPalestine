@@ -129,7 +129,7 @@ export default function Users() {
   return (
     <Root sx={{ maxWidth: '100%' }}>
       <div className='d-flex justify-content-between mb-4'>
-        <h1 className=''>المستخدمين</h1>
+        <h1 className='text-end'>المستخدمين</h1>
         <div className='d-flex align-items-center w-50'>
           <input
             type="text"

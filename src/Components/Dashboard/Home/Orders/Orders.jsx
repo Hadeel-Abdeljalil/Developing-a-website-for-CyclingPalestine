@@ -95,7 +95,7 @@ export default function Orders() {
 
   return (
     <Root>
-      <h1>الطلبات</h1>
+      <h1 className='mb-3 text-end'>الطلبات</h1>
       <table className="table table-bordered users-table">
         <thead>
           <tr>

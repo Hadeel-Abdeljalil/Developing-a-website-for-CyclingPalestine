@@ -137,7 +137,7 @@ export default function Post() {
 
   return (
     <div className="container mt-3">
-      <h1 className='mb-3'>اضافة رحلة سابقة</h1>
+      <h1 className='mb-3 text-end'>اضافة رحلة سابقة</h1>
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
         <div className="row mb-3">
           <div className="col-lg-6 d-flex">

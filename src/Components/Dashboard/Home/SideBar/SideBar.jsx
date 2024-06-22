@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { BsCart, BsHouse, BsListCheck, BsPerson } from 'react-icons/bs';
 import { UserContext } from '../../../Web/Context/FeatureUser.jsx';
 import { FaRoute, FaUsers } from 'react-icons/fa';
-import { BiCategory } from 'react-icons/bi';
+import { BiCategory, BiSolidCoupon } from 'react-icons/bi';
 import { Newspaper } from '@mui/icons-material';
 
 export default function SideBar() {
@@ -75,6 +75,12 @@ export default function SideBar() {
                             <Link to='/dashboard/products' className="nav-link align-middle ps-5 p-2">
                                 <BsCart className="ms-1 d-none d-sm-inline " />
                                 <span className="ms-1 d-none d-sm-inline">  المنتجات </span>
+                            </Link>
+                        </li>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'coupon' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('coupon')}>
+                            <Link to='/dashboard/coupon' className="nav-link align-middle ps-5 p-2">
+                                <BiSolidCoupon className="ms-1 d-none d-sm-inline " />
+                                <span className="ms-1 d-none d-sm-inline">  كوبون </span>
                             </Link>
                         </li>
                         <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'news' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('news')}>

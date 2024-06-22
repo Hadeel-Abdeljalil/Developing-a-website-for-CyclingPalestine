@@ -188,7 +188,7 @@ export default function Products() {
 
   return (
     <div className="container mt-3">
-      <h1 className='mb-3'>اضافة منتج جديد</h1>
+      <h1 className='mb-3 text-end'>اضافة منتج جديد</h1>
       <form onSubmit={handleSubmit} className='border shadow p-3 py-5'>
         <div className="row mb-3">
           <div className="col-lg-6 d-flex">
