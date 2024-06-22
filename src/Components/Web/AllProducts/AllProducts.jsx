@@ -8,8 +8,10 @@ import Stack from '@mui/material/Stack';
 import { BsHeart, BsCartPlus, BsEye } from 'react-icons/bs';
 import { CartContext } from '../Context/FeatureCart.jsx';
 import './AllProducts.css';
+import { UserContext } from '../Context/FeatureUser.jsx';
 
 export default function AllProducts() {
+  const {userToken} =useContext(UserContext)
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -44,7 +46,7 @@ export default function AllProducts() {
     try {
       const { data } = await axios.get(endpoint, { params });
       console.log(data)
-      setProducts(data.products);
+      setProducts(data.products.reverse());
     } catch (error) {
       console.error(error);
     }
