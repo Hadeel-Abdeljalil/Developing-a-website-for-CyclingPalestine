@@ -63,7 +63,7 @@ export default function Order() {
             if (data.message === 'success') {
                 clearCart();
                 toast.success('تم تأكيد الطلب بنجاح', toastConfig);
-                navigate('/success');
+                navigate('/');
             }
         } catch (error) {
             console.error(error);

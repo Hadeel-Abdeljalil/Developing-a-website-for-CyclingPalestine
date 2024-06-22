@@ -77,16 +77,16 @@ export default function SideBar() {
                                 <span className="ms-1 d-none d-sm-inline">  المنتجات </span>
                             </Link>
                         </li>
-                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'coupon' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('coupon')}>
-                            <Link to='/dashboard/coupon' className="nav-link align-middle ps-5 p-2">
-                                <BiSolidCoupon className="ms-1 d-none d-sm-inline " />
-                                <span className="ms-1 d-none d-sm-inline">  كوبون </span>
-                            </Link>
-                        </li>
                         <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'news' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('news')}>
                             <Link to='/dashboard/news' className="nav-link align-middle ps-5 p-2">
                                 <Newspaper className="ms-1 d-none d-sm-inline " />
                                 <span className="ms-1 d-none d-sm-inline">  أخبار </span>
+                            </Link>
+                        </li>
+                        <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'coupon' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('coupon')}>
+                            <Link to='/dashboard/coupon' className="nav-link align-middle ps-5 p-2">
+                                <BiSolidCoupon className="ms-1 d-none d-sm-inline " />
+                                <span className="ms-1 d-none d-sm-inline">  كوبون </span>
                             </Link>
                         </li>
                         <li className={`rounded-end-1  mb-1  nav-item sidebar-text ${activeItem === 'home' ? 'activesidebar' : ''}`} onClick={() => handleItemClick('home')}>
