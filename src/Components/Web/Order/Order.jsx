@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { useFormik } from 'formik';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,11 +15,11 @@ export default function Order() {
         couponCode: '',
     });
 
-    const handleChange = e => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
+        setFormData((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: value,
         }));
     };
 
@@ -55,9 +54,18 @@ export default function Order() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('userToken');
+
+        // Construct payload
+        const payload = {
+            phone: formData.phone,
+            address: formData.address,
+            ...(formData.couponCode && { couponCode: formData.couponCode }), // Include couponCode only if it's not empty
+        };
+
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}order/create`, formData,
+                `${import.meta.env.VITE_API_URL}order/create`,
+                payload,
                 { headers: { Authorization: `Rufaidah__${token}` } }
             );
             if (data.message === 'success') {
@@ -67,7 +75,14 @@ export default function Order() {
             }
         } catch (error) {
             console.error(error);
-            toast.error('حدث خطأ أثناء تأكيد الطلب', toastConfig);
+            const errorMessage = error.response?.data?.message || 'حدث خطأ أثناء تأكيد الطلب';
+            if (errorMessage === 'coupon not found!') {
+                toast.error('الكوبون الذي قمت بإدخاله غير موجود !', toastConfig);
+            } else if (errorMessage === 'validation error') {
+                toast.error('يجب أن يكون كود الكوبون 3 رموز على الأقل !', toastConfig);
+            } else {
+                toast.error(errorMessage, toastConfig);
+            }
         }
     };
 
@@ -80,7 +95,6 @@ export default function Order() {
             </div>
         );
     }
-
     return (
         <div className='container my-5 pt-5'>
             <h2 className='dir'>أكمل الطلب</h2>

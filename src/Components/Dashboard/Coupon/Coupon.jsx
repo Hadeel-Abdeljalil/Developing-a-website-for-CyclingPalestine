@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { UserContext } from '../../Web/Context/FeatureUser.jsx';
 import Popup from 'reactjs-popup';
 import Swal from 'sweetalert2';
+import UpdateCoupon from './UpdateCoupon'
 
 export default function Coupon() {
   const { userToken } = useContext(UserContext);
@@ -109,9 +110,7 @@ export default function Coupon() {
       if (confirmation.isConfirmed) {
     try {
       const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}coupon/delete/${id}`, {
-        headers: {
-          Authorization: `Rufaidah__${userToken}`
-        }
+        headers: { Authorization: `Rufaidah__${userToken}`}
       });
       if (data && data.message === "coupon deleted successfully") {
         toast.success('تم حذف الكوبون بنجاح', toastConfig);
@@ -216,9 +215,12 @@ export default function Coupon() {
                   </button>}
                   position='center center'
                 >
-                  <div>
-                    {/* Place your update form or component here */}
-                  </div>
+                <div className="ms-5">
+                <UpdateCoupon
+                    coupon={coupon}
+                    userToken={userToken}
+                  />
+                </div>
                 </Popup>
               </td>
             </tr>
